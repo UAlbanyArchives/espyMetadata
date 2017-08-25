@@ -1,0 +1,44 @@
+<%= form_with(model: index_card, local: true) do |form| %>
+  <% if index_card.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(index_card.errors.count, "error") %> prohibited this index_card from being saved:</h2>
+
+      <ul>
+      <% index_card.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <table class="table">
+
+      <tbody>
+        <tr>
+          <td><strong><%= form.label :state_abbreviation %></strong></td>
+          <td><%= form.text_field :state_abbreviation, id: :index_card_state_abbreviation %></td>
+          <td><strong><%= form.label :used_check %></strong></td>
+          <td><%= form.check_box :used_check, id: :index_card_used_check %></td>
+        </tr>
+        <tr>
+          <td><strong><%= form.label :root_filename %></strong></td>
+          <td colspan="3" class="fullTextArea"><%= form.text_field :root_filename, id: :index_card_root_filename %></td>
+        </tr>
+        <tr>
+           <td><strong><%= form.label :file_group %></strong></td>
+           <td colspan="3" class="fullTextArea"><%= form.text_field :file_group, id: :index_card_file_group %></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="fullTextArea"><%= form.text_area :ocr_text, id: :index_card_ocr_text %></td>
+        </tr>
+        <tr>
+            <td colspan="4" class="actions">
+              <div class="text-center">
+                <%= form.button '<i class="fa fa-check"></i> Update Index Card'.html_safe, class: "btn btn-success" %>
+              </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+
+<% end %>

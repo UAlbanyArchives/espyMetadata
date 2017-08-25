@@ -1,0 +1,112 @@
+<%= form_with(model: icpsr_record, local: true) do |form| %>
+  <% if icpsr_record.errors.any? %>
+    <tr id="error_explanation">
+      <h2><%= pluralize(icpsr_record.errors.count, "error") %> prohibited this icpsr_record from being saved:</h2>
+
+      <ul>
+      <% icpsr_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </tr>
+  <% end %>
+  <table class="table table-sm">
+
+  <tr class="field">
+    <td><%= form.label :used_check %></td>
+    <td><%= form.check_box :used_check, id: :icpsr_record_used_check %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :icpsr_id %></td>
+    <td><%= form.number_field :icpsr_id, id: :icpsr_record_icpsr_id %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :name %></td>
+    <td><%= form.text_field :name, id: :icpsr_record_name %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :date_execution %></td>
+    <td><%= form.text_field :date_execution, id: :icpsr_record_date_execution %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :age %></td>
+    <td><%= form.number_field :age, id: :icpsr_record_age %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :race %></td>
+    <td><%= form.text_field :race, id: :icpsr_record_race %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :sex %></td>
+    <td><%= form.text_field :sex, id: :icpsr_record_sex %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :occupation %></td>
+    <td><%= form.text_field :occupation, id: :icpsr_record_occupation %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :crime %></td>
+    <td><%= form.text_field :crime, id: :icpsr_record_crime %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :execution_method %></td>
+    <td><%= form.text_field :execution_method, id: :icpsr_record_execution_method %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :location_execution %></td>
+    <td><%= form.text_field :location_execution, id: :icpsr_record_location_execution %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :jurisdiction %></td>
+    <td><%= form.text_field :jurisdiction, id: :icpsr_record_jurisdiction %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :state %></td>
+    <td><%= form.text_field :state, id: :icpsr_record_state %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :state_abbreviation %></td>
+    <td><%= form.text_field :state_abbreviation, id: :icpsr_record_state_abbreviation %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :county_code %></td>
+    <td><%= form.number_field :county_code, id: :icpsr_record_county_code %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :county_name %></td>
+    <td><%= form.text_field :county_name, id: :icpsr_record_county_name %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :compensation_case %></td>
+    <td><%= form.check_box :compensation_case, id: :icpsr_record_compensation_case %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :icpsr_state %></td>
+    <td><%= form.number_field :icpsr_state, id: :icpsr_record_icpsr_state %></td>
+  </tr>
+
+  <tr class="actions">
+    <td  colspan="2" class="text-center">
+      <%= form.button '<i class="fa fa-check"></i> Update Index Card'.html_safe, class: "btn btn-success" %>
+    </td>
+  </tr>
+
+</table>
+<% end %>

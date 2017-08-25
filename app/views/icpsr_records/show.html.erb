@@ -1,0 +1,107 @@
+<% provide(:section, "View ICPSR Record") %>
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-success" role="alert"><%= notice %></p>
+  </div>
+<% end %>
+
+<div class="row padded-row">
+
+    <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <table class="table table-sm">
+
+          <tbody>
+            <tr>
+              <td><strong>Name:</strong></td>
+              <td><%= @icpsr_record.name %></td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Icpsr:</strong>
+                <%= @icpsr_record.icpsr_id %>
+              </td>
+              <td>
+                <strong>Used check:</strong>
+                <% if @icpsr_record.used_check == true %>
+                 <i class="fa fa-check fa-2x text-success"></i>
+                <% else %>
+                 <i class="fa fa-times fa-2x text-danger"></i>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Date execution:</strong></td>
+              <td><%= @icpsr_record.date_execution %></td>
+            </tr>
+            <tr>
+              <td><strong>Age:</strong></td>
+              <td><%= @icpsr_record.age %></td>
+            </tr>
+            <tr>
+              <td><strong>Race:</strong></td>
+              <td><%= @icpsr_record.race %></td>
+            </tr>
+            <tr>
+              <td><strong>Sex:</strong></td>
+              <td><%= @icpsr_record.sex %></td>
+            </tr>
+            <tr>
+              <td><strong>Occupation:</strong></td>
+              <td><%= @icpsr_record.occupation %></td>
+            </tr>
+            <tr>
+              <td><strong>Crime:</strong></td>
+              <td><%= @icpsr_record.crime %></td>
+            </tr>
+            <tr>
+              <td><strong>Execution method:</strong></td>
+              <td><%= @icpsr_record.execution_method %></td>
+            </tr>
+            <tr>
+              <td><strong>Location execution:</strong></td>
+              <td><%= @icpsr_record.location_execution %></td>
+            </tr>
+            <tr>
+              <td><strong>Jurisdiction:</strong></td>
+              <td><%= @icpsr_record.jurisdiction %></td>
+            </tr>
+            <tr>
+              <td><strong>State:</strong></td>
+              <td><%= @icpsr_record.state %></td>
+            </tr>
+            <tr>
+              <td><strong>State abbreviation:</strong></td>
+              <td><%= @icpsr_record.state_abbreviation %></td>
+            </tr>
+            <tr>
+              <td><strong>County code:</strong></td>
+              <td><%= @icpsr_record.county_code %></td>
+            </tr>
+            <tr>
+              <td><strong>County name:</strong></td>
+              <td><%= @icpsr_record.county_name %></td>
+            </tr>
+            <tr>
+              <td><strong>Compensation case:</strong></td>
+              <td><%= @icpsr_record.compensation_case %></td>
+            </tr>
+            <tr>
+              <td><strong>Icpsr state:</strong></td>
+              <td><%= @icpsr_record.icpsr_state %></td>
+            </tr>
+          </tbody>
+
+        </table>
+
+
+  </div>
+</div>
+<div class="container">
+  <div class="text-center">
+    <div class="btn-group col-md-auto">
+      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, icpsr_records_path, class: "btn btn-secondary"%>
+      <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_icpsr_record_path(@icpsr_record), class: "btn btn-info"%>
+      <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @icpsr_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+    </div>
+  </div>
+</div>

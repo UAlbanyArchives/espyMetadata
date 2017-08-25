@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  state_abbreviation: MyString
+  root_filename: MyString
+  file_group: MyString
+  ocr_text: MyText
+  used_check: false
+
+two:
+  state_abbreviation: MyString
+  root_filename: MyString
+  file_group: MyString
+  ocr_text: MyText
+  used_check: false

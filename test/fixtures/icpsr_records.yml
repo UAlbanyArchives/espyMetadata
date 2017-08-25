@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  used_check: false
+  icpsr_id: 1
+  name: MyString
+  date_execution: MyString
+  age: 1
+  race: MyString
+  sex: MyString
+  occupation: MyString
+  crime: MyString
+  execution_method: MyString
+  location_execution: MyString
+  jurisdiction: MyString
+  state: MyString
+  state_abbreviation: MyString
+  county_code: 1
+  county_name: MyString
+  compensation_case: false
+  icpsr_state: 1
+
+two:
+  used_check: false
+  icpsr_id: 1
+  name: MyString
+  date_execution: MyString
+  age: 1
+  race: MyString
+  sex: MyString
+  occupation: MyString
+  crime: MyString
+  execution_method: MyString
+  location_execution: MyString
+  jurisdiction: MyString
+  state: MyString
+  state_abbreviation: MyString
+  county_code: 1
+  county_name: MyString
+  compensation_case: false
+  icpsr_state: 1
