@@ -19,6 +19,13 @@ class IcpsrRecordsController < ApplicationController
   # GET /icpsr_records/1
   # GET /icpsr_records/1.json
   def show
+    @icpsr_record = IcpsrRecord.find(params[:id])
+    respond_to do |format|
+
+    format.html # show.html.erb
+    format.json { render json: @icpsr_record }
+
+   end
   end
 
   # GET /icpsr_records/new
@@ -28,6 +35,10 @@ class IcpsrRecordsController < ApplicationController
 
   # GET /icpsr_records/1/edit
   def edit
+  end
+
+  def find
+    render json: IcpsrRecord.find(params[:id])
   end
 
   # POST /icpsr_records

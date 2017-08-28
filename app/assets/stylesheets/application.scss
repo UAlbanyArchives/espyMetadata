@@ -11,8 +11,8 @@
  * It is generally better to create a new file per style scope.
  *
  *= require font-awesome
+ *= require jquery-ui
  */
-
 
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 @import "bootstrap";
@@ -24,7 +24,7 @@ body { padding-top: 55px; }
 
 .jumbotron-small { padding-top: 15px; padding-bottom: 1px;}
 
-img {width: 100%; margin-bottom: 1rem;}
+img {width: 80%; margin-bottom: 1rem;}
 
 .smallTableFont { font-size: .7rem; }
 
@@ -42,3 +42,30 @@ img {width: 100%; margin-bottom: 1rem;}
   }
 }
 
+.glowing-border img {
+    border: 5px solid #dadada;
+    border-radius: 7px;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
+.side-arrows {
+	width: 9%;
+}
+
+#carouselExampleControls {
+	width: 80%;
+	vertical-align: middle;
+}
+
+#carouselExampleControls img {
+	width: 100%;
+}
+
+.thirds { width: 32%; display: inline-block; vertical-align: top; }
+.thirds-top { text-align:center }
+.ocr-fix { margin: 25px; width: 90%; }
+
+.espyTable input:not([type=checkbox]){ width: 100%; }
+.espyTable input[type=checkbox]{ vertical-align: middle; }

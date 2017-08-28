@@ -40,6 +40,10 @@ gem 'font-awesome-rails'
 
 # jquery
 gem 'jquery-rails'
+gem 'jquery-ui-rails', '~> 6.0.1'
+
+#redis for autocomplete
+gem 'redis', '~> 3.0.7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

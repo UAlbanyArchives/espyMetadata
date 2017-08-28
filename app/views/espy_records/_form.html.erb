@@ -1,0 +1,257 @@
+<%= form_with(model: espy_record, local: true) do |form| %>
+  <% if espy_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(espy_record.errors.count, "error") %> prohibited this espy_record from being saved:</h2>
+
+      <ul>
+      <% espy_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
+
+  <div class="thirds">
+    <div class="thirds-top">
+      <!--<%= link_to "/make?card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+        <i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+      <% end %>-->
+      <%= render 'layouts/show_cards', this: @this %>
+      <!--<%= link_to "/make?card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+        <i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+      <% end %>-->
+
+      <div class="field">
+        <!--<%= form.label :ocr_text %>-->
+        <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "15" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="thirds">
+
+    <div style="margin-bottom: 10px;">
+      <div class="btn-group col-md-auto">
+        <%= link_to '<i class="fa fa-arrow-left"></i> Back'.html_safe, "/make?card=" + @this.id.to_s, class: "btn btn-secondary"%>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :uuid, id: :espy_record_uuid, :value => SecureRandom.uuid %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :icpsr_record_id, id: :espy_record_icpsr_record_id %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :index_card, id: :espy_record_index_card, :checked => "checked" %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :big_card, id: :espy_record_big_card %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :big_card_id, id: :espy_record_big_card_id %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :big_card_files, id: :espy_record_big_card_files %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :reference_material, id: :espy_record_reference_material %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :reference_material_id, id: :espy_record_reference_material_id %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files %>
+    </div>
+
+    <table class="table table-sm espyTable">
+    <thead><th colspan="6" class="text-center"><strong>Espy Record</strong></th></thead>
+      <tbody>
+
+        <tr>
+          <td class="field" colspan="1">
+            <strong><%= form.label :icpsr_id %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.number_field :icpsr_id, id: :espy_record_icpsr_id, value: @record.icpsr_id %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field" colspan="1">
+            <strong><%= form.label :name %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :name, id: :espy_record_name, value: @record.name %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :date_execution %></strong>
+          </td>
+          <td class="field" colspan="4">
+            <%= form.date_select :date_execution, id: :espy_record_date_execution, value: @record.date_execution %>
+          </td>
+          <td class="field">
+            <strong>Circa</strong>
+            <%= form.check_box :circa_date_execution, id: :espy_record_circa_date_execution %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :date_crime %></strong>
+          </td>
+          <td class="field" colspan="4">
+            <%= form.date_select :date_crime, id: :espy_record_date_crime %>
+          </td>
+          <td class="field">
+            <strong>Circa</strong>
+            <%= form.check_box :circa_date_crime, id: :espy_record_circa_date_crime %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :age %></strong>
+          </td>
+          <td class="field" colspan="2">
+            <% if @record.age != nil %>
+              <%= form.number_field :age, id: :espy_record_age, value: @record.age %>
+            <% else %>
+              <%= form.number_field :age, id: :espy_record_age %>
+            <% end %>
+          </td>
+          <td class="field">
+            <strong><%= form.label :sex %></strong>
+          </td>
+          <td class="field" colspan="2">
+            <%= form.text_field :sex, id: :espy_record_sex, value: @record.sex %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :race %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :age, id: :espy_record_race, value: @record.race %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :occupation %></strong>
+          </td>
+          <td class="field" colspan="5">
+             <%= form.text_field :occupation, id: :espy_record_occupation, value: @record.occupation %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :crime %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :crime, id: :espy_record_crime, value: @record.crime %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :execution_method %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :execution_method, id: :espy_record_execution_method, value: @record.execution_method %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :location_execution %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :location_execution, id: :espy_record_location_execution, value: @record.location_execution %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :jurisdiction %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, value: @record.jurisdiction %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :state %></strong>
+          </td>
+          <td class="field" colspan="3">
+            <%= form.text_field :state, id: :espy_record_state, value: @record.state %>
+          </td>
+          <td class="field">
+            <strong>Abbr</strong>
+          </td>
+          <td class="field">
+            <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, value: @record.state_abbreviation %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :county_code %></strong>
+          </td>
+          <td class="field" colspan="3">
+            <%= form.number_field :county_code, id: :espy_record_county_code, value: @record.county_code %>
+          </td>
+          <td class="field text-center" colspan="2">
+            <% @county_url = @record.county_name.gsub(" ", "+") + "+County,+" + @record.state_abbreviation %>
+            <a class="btn btn-info" target="_blank" href="https://www.google.com/maps/place/<%= @county_url %>"><i class="fa fa-globe" aria-hidden="true"></i>
+ County Check</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :county_name %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :county_name, id: :espy_record_county_name, value: @record.county_name %>
+          </td>
+        <tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :compensation_case %></strong>
+          </td>
+          <td class="field">
+            <%= form.check_box :compensation_case, id: :espy_record_compensation_case, value: @record.compensation_case %>
+          </td>
+          <td class="field">
+            <strong><%= form.label :icpsr_state %></strong>
+          </td>
+          <td class="field" colspan="3">
+            <%= form.number_field :icpsr_state, id: :espy_record_icpsr_state, value: @record.icpsr_state %>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="text-center">
+      <%= form.button '<i class="fa fa-check"></i> Make Espy Record'.html_safe, class: "btn btn-success" %>
+    </div> 
+  </div>
+<% end %>

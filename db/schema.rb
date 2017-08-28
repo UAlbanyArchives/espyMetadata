@@ -10,7 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823203626) do
+ActiveRecord::Schema.define(version: 20170828135952) do
+
+  create_table "espy_records", force: :cascade do |t|
+    t.string "uuid"
+    t.boolean "icpsr_record"
+    t.integer "icpsr_record_id"
+    t.boolean "index_card"
+    t.integer "index_card_id"
+    t.string "index_card_files"
+    t.boolean "big_card"
+    t.integer "big_card_id"
+    t.string "big_card_files"
+    t.boolean "reference_material"
+    t.integer "reference_material_id"
+    t.string "reference_material_files"
+    t.text "ocr_text"
+    t.integer "icpsr_id"
+    t.string "name"
+    t.date "date_crime"
+    t.boolean "circa_date_crime"
+    t.integer "age"
+    t.string "race"
+    t.string "sex"
+    t.string "occupation"
+    t.string "crime"
+    t.string "execution_method"
+    t.string "location_execution"
+    t.string "jurisdiction"
+    t.string "state"
+    t.string "state_abbreviation"
+    t.integer "county_code"
+    t.string "county_name"
+    t.boolean "compensation_case"
+    t.integer "icpsr_state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "date_execution"
+    t.boolean "circa_date_execution"
+  end
 
   create_table "icpsr_records", force: :cascade do |t|
     t.boolean "used_check"

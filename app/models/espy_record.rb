@@ -1,0 +1,2 @@
+class EspyRecord < ApplicationRecord
+end

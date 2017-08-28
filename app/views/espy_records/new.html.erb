@@ -1,0 +1,52 @@
+<% provide(:section, "Make Espy Record") %>
+
+<% if params.has_key?(:card) %>
+	<% @card = params[:card].to_i %>
+	<% if @card == 0 %>
+		<% @previous = nil %>
+	<% else %>
+		<% @previous = @index_card.find(@card - 1) %>
+	<% end %>
+	<% @this = @index_card.find(@card) %>
+	<% if @card >= @index_card.count %>
+		<% @next = nil %>
+	<% else %>
+		<% @next = @index_card.find(@card + 1) %>
+	<% end %>
+<% else %>
+	<% @previous = nil %>
+	<% @stop = false %>
+	<% @card_index = 0 %>
+	<% @next = nil %>
+	<% @index_card.each_with_index do |card, index| %>
+		<% if @stop == true %>
+			<% if index == @card_index %>
+				<% @next = card %>
+			<% end %>
+		<% else %>
+			<% if card.used_check == true %>
+				<% @this = card %>
+				<% @stop = true %>
+				<% @card_index = index + 1 %>
+			<% else %>
+				<% @previous = card %>
+			<% end %>
+		<% end %>
+	<% end %>
+<% end %>
+
+<div class="row padded-row">
+
+	<%= render 'form', espy_record: @espy_record, previous: @previous, this: @this, next: @next %>
+
+</div>
+
+
+
+<div class="container">
+  <div class="text-center">
+    <div class="btn-group col-md-auto">
+      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path, class: "btn btn-secondary"%>
+    </div>
+  </div>
+</div>

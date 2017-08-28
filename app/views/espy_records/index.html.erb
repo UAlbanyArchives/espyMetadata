@@ -1,0 +1,89 @@
+<% provide(:section, "List Espy Records") %>
+
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Uuid</th>
+      <th>Icpsr record</th>
+      <th>Icpsr record</th>
+      <th>Index card</th>
+      <th>Index card</th>
+      <th>Index card files</th>
+      <th>Big card</th>
+      <th>Big card</th>
+      <th>Big card files</th>
+      <th>Reference material</th>
+      <th>Reference material</th>
+      <th>Reference material files</th>
+      <th>Ocr text</th>
+      <th>Icpsr</th>
+      <th>Name</th>
+      <th>Date execution</th>
+      <th>Circa date execution</th>
+      <th>Date crime</th>
+      <th>Circa date crime</th>
+      <th>Age</th>
+      <th>Race</th>
+      <th>Sex</th>
+      <th>Occupation</th>
+      <th>Crime</th>
+      <th>Execution method</th>
+      <th>Location execution</th>
+      <th>Jurisdiction</th>
+      <th>State</th>
+      <th>State abbreviation</th>
+      <th>County code</th>
+      <th>County name</th>
+      <th>Compensation case</th>
+      <th>Icpsr state</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @espy_records.each do |espy_record| %>
+      <tr>
+        <td><%= espy_record.uuid %></td>
+        <td><%= espy_record.icpsr_record %></td>
+        <td><%= espy_record.icpsr_record_id %></td>
+        <td><%= espy_record.index_card %></td>
+        <td><%= espy_record.index_card_id %></td>
+        <td><%= espy_record.index_card_files %></td>
+        <td><%= espy_record.big_card %></td>
+        <td><%= espy_record.big_card_id %></td>
+        <td><%= espy_record.big_card_files %></td>
+        <td><%= espy_record.reference_material %></td>
+        <td><%= espy_record.reference_material_id %></td>
+        <td><%= espy_record.reference_material_files %></td>
+        <td><%= espy_record.ocr_text %></td>
+        <td><%= espy_record.icpsr_id %></td>
+        <td><%= espy_record.name %></td>
+        <td><%= espy_record.date_execution %></td>
+        <td><%= espy_record.circa_date_execution %></td>
+        <td><%= espy_record.date_crime %></td>
+        <td><%= espy_record.circa_date_crime %></td>
+        <td><%= espy_record.age %></td>
+        <td><%= espy_record.race %></td>
+        <td><%= espy_record.sex %></td>
+        <td><%= espy_record.occupation %></td>
+        <td><%= espy_record.crime %></td>
+        <td><%= espy_record.execution_method %></td>
+        <td><%= espy_record.location_execution %></td>
+        <td><%= espy_record.jurisdiction %></td>
+        <td><%= espy_record.state %></td>
+        <td><%= espy_record.state_abbreviation %></td>
+        <td><%= espy_record.county_code %></td>
+        <td><%= espy_record.county_name %></td>
+        <td><%= espy_record.compensation_case %></td>
+        <td><%= espy_record.icpsr_state %></td>
+        <td><%= link_to 'Show', espy_record %></td>
+        <td><%= link_to 'Edit', edit_espy_record_path(espy_record) %></td>
+        <td><%= link_to 'Destroy', espy_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

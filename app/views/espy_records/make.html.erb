@@ -1,0 +1,102 @@
+<% provide(:section, "Make Espy Record") %>
+
+<% if params.has_key?(:card) %>
+	<% @card = params[:card].to_i %>
+	<% if @card == 0 %>
+		<% @previous = nil %>
+	<% else %>
+		<% @previous = @index_card.find(@card - 1) %>
+	<% end %>
+	<% @this = @index_card.find(@card) %>
+	<% if @card >= @index_card.count %>
+		<% @next = nil %>
+	<% else %>
+		<% @next = @index_card.find(@card + 1) %>
+	<% end %>
+<% else %>
+	<% @previous = nil %>
+	<% @stop = false %>
+	<% @card_index = 0 %>
+	<% @next = nil %>
+	<% @index_card.each_with_index do |card, index| %>
+		<% if @stop == true %>
+			<% if index == @card_index %>
+				<% @next = card %>
+			<% end %>
+		<% else %>
+			<% if card.used_check == true %>
+				<% @this = card %>
+				<% @stop = true %>
+				<% @card_index = index + 1 %>
+			<% else %>
+				<% @previous = card %>
+			<% end %>
+		<% end %>
+	<% end %>
+<% end %>
+
+<div class="row padded-row">
+
+	<div class="col-lg-6 col-md-12">
+	  <%= link_to "/make?card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+	    <i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+	  <% end %>
+	    <%= render 'layouts/show_cards', this: @this %>
+	  <%= link_to "/make?card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+	    <i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+	  <% end %>
+
+	</div>
+
+    <div class="col-lg-6 col-md-12">
+
+	  <div class="col-md-12">
+	    <form class="search-form">
+	    <%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+	    </form>
+	    <script type="text/javascript">
+	      $('.search-field').autocomplete({
+	        source: "/search_suggestions",
+	        select: function (event, ui) {
+			   var label = ui.item.label;
+			   console.log(ui.item);
+			   $.ajax({
+			        'url': '/search_suggestions?name=' + label,
+			        'type' : 'GET',
+			        'success' : function(data) { 
+			        	var icpsr = $(".icpsr-field");
+			   			icpsr.val(data['icpsr_id']);             
+			        },
+			    });
+			}
+	      });
+	    </script>
+
+	  </div>
+
+	  <div class="col-md-12">
+
+
+		<%= form_tag(new_espy_record_path, method: "get") do %>
+
+		  <%= text_field_tag :icpsr, "", class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
+		  <%= hidden_field_tag :card, @this.id.to_s %>
+
+		  <%= submit_tag("Search", class: "btn btn-primary") %>
+		<% end %>
+
+
+
+	  </div>
+
+	</div>
+
+
+
+<div class="container">
+  <div class="text-center">
+    <div class="btn-group col-md-auto">
+      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path, class: "btn btn-secondary"%>
+    </div>
+  </div>
+</div>

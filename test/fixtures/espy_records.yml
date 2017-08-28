@@ -1,0 +1,67 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  uuid: MyString
+  icpsr_record: false
+  icpsr_record_id: 1
+  index_card: false
+  index_card_id: 1
+  index_card_files: MyString
+  big_card: false
+  big_card_id: 1
+  big_card_files: MyString
+  reference_material: false
+  reference_material_id: 1
+  reference_material_files: MyString
+  ocr_text: MyText
+  icpsr_id: 1
+  name: MyString
+  date_crime: 2017-08-25
+  circa_date_crime: false
+  age: 1
+  race: MyString
+  sex: MyString
+  occupation: MyString
+  crime: MyString
+  execution_method: MyString
+  location_execution: MyString
+  jurisdiction: MyString
+  state: MyString
+  state_abbreviation: MyString
+  county_code: 1
+  county_name: MyString
+  compensation_case: false
+  icpsr_state: 1
+
+two:
+  uuid: MyString
+  icpsr_record: false
+  icpsr_record_id: 1
+  index_card: false
+  index_card_id: 1
+  index_card_files: MyString
+  big_card: false
+  big_card_id: 1
+  big_card_files: MyString
+  reference_material: false
+  reference_material_id: 1
+  reference_material_files: MyString
+  ocr_text: MyText
+  icpsr_id: 1
+  name: MyString
+  date_crime: 2017-08-25
+  circa_date_crime: false
+  age: 1
+  race: MyString
+  sex: MyString
+  occupation: MyString
+  crime: MyString
+  execution_method: MyString
+  location_execution: MyString
+  jurisdiction: MyString
+  state: MyString
+  state_abbreviation: MyString
+  county_code: 1
+  county_name: MyString
+  compensation_case: false
+  icpsr_state: 1

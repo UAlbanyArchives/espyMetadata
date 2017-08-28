@@ -17,3 +17,10 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+
+//= require jquery-ui.js
+
+
+function getRecord(name){
+  alert(name);
+}
