@@ -1,7 +1,8 @@
 class SearchSuggestionsController < ApplicationController
   def index
   	if params.has_key?(:name)
-  		render json: IcpsrRecord.find_by_name(params[:name].split.map(&:capitalize).join(' '))
+  		t = IcpsrRecord.arel_table
+		render json: IcpsrRecord.find_by(t[:name].matches params[:name])
   	else
     	render json: SearchSuggestion.terms_for(params[:term])
 	end

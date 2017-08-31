@@ -11,27 +11,21 @@
     </div>
   <% end %>
 
-  <% @this = IndexCard.find(espy_record.espy_record_index_card_id) %>
-
+  <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
 
   <div class="thirds">
     <div class="thirds-top">
-      <% if false %>
-      <%= link_to "/make?card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+      <!--<%= link_to "/make?card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
         <i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
-      <% end %>
-
+      <% end %>-->
       <%= render 'layouts/show_cards', this: @this %>
-
-      <% if false %>
-      <%= link_to "/make?card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+      <!--<%= link_to "/make?card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
         <i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
-      <% end %>
-      <% end %>
+      <% end %>-->
 
       <div class="field">
         <!--<%= form.label :ocr_text %>-->
-        <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "15" %>
+        <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "15" %>
       </div>
     </div>
   </div>
@@ -101,7 +95,7 @@
             <strong><%= form.label :icpsr_id %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.number_field :icpsr_id, id: :espy_record_icpsr_id, class: "form-control" %>
+            <%= form.number_field :icpsr_id, id: :espy_record_icpsr_id, value: @record.icpsr_id, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -109,7 +103,7 @@
             <strong><%= form.label :name %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :name, id: :espy_record_name, class: "form-control" %>
+            <%= form.text_field :name, id: :espy_record_name, value: @record.name, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -119,10 +113,10 @@
           <td class="field" colspan="4">
             <% begin %>
                <% Date.parse(@record.date_execution) %>
-               <%= form.text_field :date_execution, id: :espy_record_date_execution, class: "form-control" %>
+               <%= form.text_field :date_execution, id: :espy_record_date_execution, value: @record.date_execution, class: "form-control" %>
             <% rescue %>
               <div class="form-group has-danger" style="color: red">
-               <%= form.text_field :date_execution, id: :espy_record_date_execution, class: "form-control form-control-danger" %>
+               <%= form.text_field :date_execution, id: :espy_record_date_execution, value: @record.date_execution, class: "form-control form-control-danger" %>
                </div>
                <small class="form-control-feedback">Invalid Date</small>
             <% end %>
@@ -151,13 +145,17 @@
             <strong><%= form.label :age %></strong>
           </td>
           <td class="field" colspan="2">
-            <%= form.number_field :age, id: :espy_record_age, class: "form-control" %>
+            <% if @record.age != nil %>
+              <%= form.number_field :age, id: :espy_record_age, value: @record.age, class: "form-control" %>
+            <% else %>
+              <%= form.number_field :age, id: :espy_record_age, class: "form-control" %>
+            <% end %>
           </td>
           <td class="field">
             <strong><%= form.label :sex %></strong>
           </td>
           <td class="field" colspan="2">
-            <%= form.text_field :sex, id: :espy_record_sex, class: "form-control" %>
+            <%= form.text_field :sex, id: :espy_record_sex, value: @record.sex, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -165,7 +163,7 @@
             <strong><%= form.label :race %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :age, id: :espy_record_race, class: "form-control" %>
+            <%= form.text_field :age, id: :espy_record_race, value: @record.race, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -173,7 +171,7 @@
             <strong><%= form.label :occupation %></strong>
           </td>
           <td class="field" colspan="5">
-             <%= form.text_field :occupation, id: :espy_record_occupation, class: "form-control" %>
+             <%= form.text_field :occupation, id: :espy_record_occupation, value: @record.occupation, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -181,7 +179,7 @@
             <strong><%= form.label :crime %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :crime, id: :espy_record_crime, class: "form-control" %>
+            <%= form.text_field :crime, id: :espy_record_crime, value: @record.crime, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -189,7 +187,7 @@
             <strong><%= form.label :execution_method %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :execution_method, id: :espy_record_execution_method, class: "form-control" %>
+            <%= form.text_field :execution_method, id: :espy_record_execution_method, value: @record.execution_method, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -197,7 +195,7 @@
             <strong><%= form.label :location_execution %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :location_execution, id: :espy_record_location_execution, class: "form-control" %>
+            <%= form.text_field :location_execution, id: :espy_record_location_execution, value: @record.location_execution, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -205,7 +203,7 @@
             <strong><%= form.label :jurisdiction %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, class: "form-control" %>
+            <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, value: @record.jurisdiction, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -213,13 +211,13 @@
             <strong><%= form.label :state %></strong>
           </td>
           <td class="field" colspan="3">
-            <%= form.text_field :state, id: :espy_record_state, class: "form-control" %>
+            <%= form.text_field :state, id: :espy_record_state, value: @record.state, class: "form-control" %>
           </td>
           <td class="field">
             <strong>Abbr</strong>
           </td>
           <td class="field">
-            <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+            <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, value: @record.state_abbreviation, class: "form-control" %>
           </td>
         </tr>
         <tr>
@@ -227,11 +225,10 @@
             <strong><%= form.label :county_code %></strong>
           </td>
           <td class="field" colspan="3">
-            <%= form.number_field :county_code, id: :espy_record_county_code, class: "form-control" %>
+            <%= form.number_field :county_code, id: :espy_record_county_code, value: @record.county_code, class: "form-control" %>
           </td>
           <td class="field text-center" colspan="2">
-            <% @county_url = espy_record.county_name.gsub(" ", "+") + "+County,+" + espy_record.state_abbreviation %>
-
+            <% @county_url = @record.county_name.gsub(" ", "+") + "+County,+" + @record.state_abbreviation %>
             <a class="btn btn-info" target="_blank" href="https://www.google.com/maps/place/<%= @county_url %>"><i class="fa fa-globe" aria-hidden="true"></i>
  County Check</a>
           </td>
@@ -241,7 +238,7 @@
             <strong><%= form.label :county_name %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :county_name, id: :espy_record_county_name, class: "form-control" %>
+            <%= form.text_field :county_name, id: :espy_record_county_name, value: @record.county_name, class: "form-control" %>
           </td>
         <tr>
         <tr>
@@ -249,13 +246,13 @@
             <strong><%= form.label :compensation_case %></strong>
           </td>
           <td class="field">
-            <%= form.check_box :compensation_case, id: :espy_record_compensation_case %>
+            <%= form.check_box :compensation_case, id: :espy_record_compensation_case, value: @record.compensation_case %>
           </td>
           <td class="field">
             <strong><%= form.label :icpsr_state %></strong>
           </td>
           <td class="field" colspan="3">
-            <%= form.number_field :icpsr_state, id: :espy_record_icpsr_state, class: "form-control" %>
+            <%= form.number_field :icpsr_state, id: :espy_record_icpsr_state, value: @record.icpsr_state, class: "form-control" %>
           </td>
         </tr>
 

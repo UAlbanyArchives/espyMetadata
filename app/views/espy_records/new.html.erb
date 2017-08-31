@@ -37,7 +37,11 @@
 
 <div class="row padded-row">
 
-	<%= render 'form', espy_record: @espy_record, previous: @previous, this: @this, next: @next %>
+	<% if params.has_key?(:icpsr) %>
+		<%= render 'icpsr_form', espy_record: @espy_record, previous: @previous, this: @this, next: @next %>
+	<% else %>
+		<%= render 'form', espy_record: @espy_record, previous: @previous, this: @this, next: @next %>
+	<% end %>
 
 </div>
 

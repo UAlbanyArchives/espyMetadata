@@ -34,6 +34,12 @@ img {width: 80%; margin-bottom: 1rem;}
 
 .stateForm * { margin: 12px !important; }
 
+.title-card {
+  margin-bottom: 50px;
+}
+
+.title-card h4 { margin-top: 0.5rem; }
+
 #error_explanation {
   color: #f00;
   ul {
@@ -52,6 +58,7 @@ img {width: 80%; margin-bottom: 1rem;}
 
 .side-arrows {
 	width: 9%;
+  text-align: center;
 }
 
 #carouselExampleControls {
@@ -69,3 +76,28 @@ img {width: 80%; margin-bottom: 1rem;}
 
 .espyTable input:not([type=checkbox]){ width: 100%; }
 .espyTable input[type=checkbox]{ vertical-align: middle; }
+
+.previewTable input { width: auto; display: inline; }
+
+.has-danger .form-control-feedback {
+  color: red;
+}
+.has-danger input {
+  border-color: red;
+}
+.has-danger {
+  margin-bottom: 0px;
+}
+
+.card-block {
+  padding: 1.7rem;
+}
+
+
+[data-toggle="collapse"] i.progressDrop:before{   
+  content: "\f077";
+}
+
+[data-toggle="collapse"].collapsed i.progressDrop:before{
+  content: "\f078";
+}

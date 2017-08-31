@@ -12,9 +12,34 @@
   <body>
   	<%= render 'layouts/header' %>
 
-  	<div class="jumbotron">
-    	<h3>Espy Metadata Creation Tool</h3>
-    	<p class="lead"><%= yield(:section) %></p>
+  	<div class="card title-card">
+      <% if content_for?(:state) %>
+       <div class="card-header collapsed" data-toggle="collapse" data-target="#collapseProgress" aria-expanded="false" aria-controls="collapseProgress">
+        <h4>
+         <i class="fa progressDrop" aria-hidden="true"></i> <%= yield(:section) %> - <%= yield(:state) %>
+        </h4>
+        </div>
+       <% else %>
+        <div class="card-header">
+         <h4><%= yield(:section) %>
+        </div>
+       <% end %>
+      <% if content_for?(:state) %>
+        <div class="card-block collapse" id="collapseProgress">
+          <div class="">
+            <h4 class="card-title"><%= yield(:state) %> Used</h4>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" style="width: <%= yield(:state_pct) %>%" aria-valuenow="<%= yield(:state_pct) %>" aria-valuemin="0" aria-valuemax="100"><%= yield(:state_pct) %>%</div>
+            </div>
+             <p><%= yield(:state_used) %> of <%= yield(:state_total) %></p>
+             <h4 class="card-title">Total Used</h4>
+             <div class="progress">
+              <div class="progress-bar" role="progressbar" style="width: <%= yield(:total_pct) %>%" aria-valuenow="<%= yield(:total_pct) %>" aria-valuemin="0" aria-valuemax="100"><%= yield(:total_pct) %>%</div>
+            </div>
+             <p><%= yield(:used) %> of <%= yield(:total) %></p>
+            </div>
+        </div>
+      <% end %>
     </div>
 
     <%= yield %>

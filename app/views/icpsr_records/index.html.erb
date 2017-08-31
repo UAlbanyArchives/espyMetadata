@@ -13,6 +13,24 @@
   </form>
 </div>
 
+<% provide(:state, params[:state]) %>
+
+<% if params[:state] %>
+  <% @state_used = @icpsr_records.where(used_check: true).count %>
+  <% @state_total = @icpsr_records.count %>
+  <% @used = IcpsrRecord.where(used_check: true).count %>
+  <% @total = IcpsrRecord.count %>
+  <% @state_pct = @state_used.to_f / @state_total.to_f %>
+  <% @total_pct = @used.to_f / @total.to_f %>
+
+  <% provide(:state_used, @state_used.to_s) %>
+  <% provide(:state_total, @state_total.to_s) %>
+  <% provide(:state_pct, number_to_percentage(@state_pct * 100, precision: 0).chop) %>
+  <% provide(:used, @used.to_s) %>
+  <% provide(:total, @total.to_s) %>
+  <% provide(:total_pct, number_to_percentage(@total_pct * 100, precision: 0).chop) %>
+
+<% end %>
 
 <table class="table table-hover table-sm">
   <thead>
