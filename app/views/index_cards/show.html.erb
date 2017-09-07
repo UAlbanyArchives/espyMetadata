@@ -39,6 +39,10 @@
           <td colspan="3" class="smallTableFont"><%= @index_card.file_group %></td>
         </tr>
         <tr>
+          <td><strong>ASpace ID:</strong></td>
+          <td colspan="3"><%= @index_card.aspace %></td>
+        </tr>
+        <tr>
           <td><strong>OCR Text:</strong></td>
           <td colspan="3"><%= @index_card.ocr_text %></td>
         </tr>
@@ -53,7 +57,6 @@
       <div class="btn-group col-md-auto">
         <%= link_to '<i class="fa fa-list"></i> List'.html_safe, index_cards_path, class: "btn btn-secondary"%>
         <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_index_card_path(@index_card), class: "btn btn-info"%>
-        <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @index_card, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
       </div>
     </div>
   </div>

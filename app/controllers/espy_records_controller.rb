@@ -4,7 +4,16 @@ class EspyRecordsController < ApplicationController
   # GET /espy_records
   # GET /espy_records.json
   def index
-    @espy_records = EspyRecord.all
+    if params[:state]
+      if params[:state] == "*"
+        @espy_records = EspyRecord.all
+      else
+        limiter = "state_abbreviation = '" + params[:state].upcase + "'"
+        @espy_records = EspyRecord.all.where(limiter)
+      end
+    else
+      @espy_records = EspyRecord.none
+    end
   end
 
   # GET /espy_records/1
@@ -34,7 +43,23 @@ class EspyRecordsController < ApplicationController
 
     respond_to do |format|
       if @espy_record.save
-        format.html { redirect_to @espy_record, notice: 'Espy record was successfully created.' }
+        if @espy_record.icpsr_id.blank?
+          @espy_record.update_attribute :icpsr_record, false
+          @espy_record.update_attribute :icpsr_record_id, nil
+        else
+          @espy_record.update_attribute :icpsr_record, true
+        end
+
+        if @espy_record.index_card == true
+          @index_card = IndexCard.find(@espy_record.index_card_id)
+          @index_card.update_attribute :used_check, true
+        end
+        if @espy_record.icpsr_record == true
+          @icpsr_record = IcpsrRecord.find(@espy_record.icpsr_record_id)
+          @icpsr_record.update_attribute :used_check, true
+        end
+
+        format.html { redirect_to '/make?state=' + @espy_record.state_abbreviation }
         format.json { render :show, status: :created, location: @espy_record }
       else
         format.html { render :new }
@@ -48,6 +73,14 @@ class EspyRecordsController < ApplicationController
   def update
     respond_to do |format|
       if @espy_record.update(espy_record_params)
+        if @espy_record.icpsr_id.blank?
+          @espy_record.update_attribute :icpsr_record, false
+          @espy_record.update_attribute :icpsr_record_id, nil
+        else
+          @espy_record.update_attribute :icpsr_record, true
+          @find_id = IcpsrRecord.find_by_icpsr_id(@espy_record.icpsr_id)
+          @espy_record.update_attribute :icpsr_record_id, @find_id.id
+        end
         format.html { redirect_to @espy_record, notice: 'Espy record was successfully updated.' }
         format.json { render :show, status: :ok, location: @espy_record }
       else
@@ -62,7 +95,17 @@ class EspyRecordsController < ApplicationController
   def destroy
     @espy_record.destroy
     respond_to do |format|
-      format.html { redirect_to espy_records_url, notice: 'Espy record was successfully destroyed.' }
+
+      if @espy_record.icpsr_record == true
+        @icpsr_record = IcpsrRecord.find(@espy_record.icpsr_record_id)
+        @icpsr_record.update_attribute :used_check, false
+      end
+      if @espy_record.index_card == true
+        @index_card = IndexCard.find(@espy_record.index_card_id)
+        @index_card.update_attribute :used_check, false
+      end
+
+      format.html { redirect_to espy_records_url + "?state=" + @espy_record.state_abbreviation, notice: 'Espy record was successfully destroyed. Any linked index cards or Icpsr records were marked as unused.' }
       format.json { head :no_content }
     end
   end

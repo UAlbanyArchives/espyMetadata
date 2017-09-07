@@ -51,7 +51,15 @@ class IndexCardsController < ApplicationController
   def update
     respond_to do |format|
       if @index_card.update(index_card_params)
-        format.html { redirect_to @index_card, notice: 'Index card was successfully updated.' }
+        if params[:state]
+          if params[:card]
+            format.html { redirect_to "/make?state=" + params[:state] + "&card=" + params[:card]}
+          else
+            format.html { redirect_to "/make?state=" + params[:state]}
+          end
+        else
+          format.html { redirect_to @index_card, notice: 'Index card was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @index_card }
       else
         format.html { render :edit }
@@ -78,6 +86,6 @@ class IndexCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def index_card_params
-      params.require(:index_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :used_check)
+      params.require(:index_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :used_check, :aspace)
     end
 end

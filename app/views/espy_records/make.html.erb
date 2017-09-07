@@ -3,8 +3,11 @@
 <div class="container">
   <form class="form-inline stateForm">
     <label for="selectState"><strong>Select a State: </strong></label>
-    <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'make?state=' + this.value") %>
-    <a href="/make?state=*" class="btn btn-info">All States</a>
+    <% if params.has_key?(:state) %>
+    	<%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'make?state=' + this.value") %>
+   	<% else %>
+   		<%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'make?state=' + this.value") %>
+   	<% end %>
   </form>
 </div>
 <% @index_card = IndexCard.where(state_abbreviation: params[:state]) %>
@@ -17,7 +20,11 @@
 		<% if @card == 0 %>
 			<% @previous = nil %>
 		<% else %>
-			<% @previous = @index_card.find(@card - 1) %>
+			<% if @index_card.exists?(id: @card - 1) %>
+				<% @previous = @index_card.find(@card - 1) %>
+			<% else %>
+				<% @previous = nil %>
+			<% end %>
 		<% end %>
 		<% @this = @index_card.find(@card) %>
 		<% if @index_card.exists?(id: @card + 1) %>
@@ -36,7 +43,7 @@
 					<% @next = card %>
 				<% end %>
 			<% else %>
-				<% if card.used_check == true %>
+				<% if card.used_check == false %>
 					<% @this = card %>
 					<% @stop = true %>
 					<% @next_index = index + 1 %>
@@ -72,6 +79,31 @@
 	<div class="row padded-row">
 
 		<div class="col-lg-6 col-md-12">
+
+			<div class="col-lg-10 mx-auto">
+				<table class="table table-sm">
+					<tbody>
+						<tr>
+							<td><strong>Used:</strong></td>
+							<td>
+								<% if @this.used_check == true %>
+						           <i class="fa fa-check fa-2x text-success"></i>
+						        <% else %>
+						           <i class="fa fa-times fa-2x text-danger"></i>
+						        <% end %>
+							</td>
+							<td>
+								<% if params[:card] %>
+									<%= link_to("<i class='fa fa-times' aria-hidden='true'></i> Ignore".html_safe, index_card_path(@this.id, "index_card[used_check]"  => true, "state" => params[:state], "card" => params[:card]), :method => :put, data: { confirm: 'Are you sure?' }, class: "btn btn-warning") %> 
+								<% else %>
+									<%= link_to("<i class='fa fa-times' aria-hidden='true'></i> Ignore".html_safe, index_card_path(@this.id, "index_card[used_check]"  => true, "state" => params[:state]), :method => :put, data: { confirm: 'Are you sure?' }, class: "btn btn-warning") %>
+								<% end %>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
 
 		  	<% if @previous != nil %>
 		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
@@ -113,7 +145,11 @@
 					   			} else {
 					   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
 					   			}
-					   			$("#name").empty().append(data['name']);
+					   			if (data['name'].indexOf(" ") >= 1) {
+					   				$("#name").empty().append(data['name'].split(' ')[1] + " " + data['name'].split(' ')[0]);
+					   			} else {
+					   				$("#name").empty().append(data['name']);
+					   			}
 					   			$("#date_execution").empty().append(data['date_execution']);
 					   			$("#age").empty().append(data['age']);
 					   			$("#race").empty().append(data['race']);
@@ -133,10 +169,10 @@
 
 			<%= form_tag(new_espy_record_path, method: "get") do %>
 				<div class="form-group">
-					<%= button_tag(type: "submit", class: "btn btn-primary") do %>
+					<%= button_tag(type: "submit", class: "btn btn-primary submit-btn") do %>
 					    <i class="fa fa-thumbs-up"></i> Select
 					<% end %>
-					<%= link_to '<i class="fa fa-thumbs-down"></i> No Record'.html_safe, "/new?card=" + @this.id.to_s, class: "btn btn-warning pull-right"%>
+					<%= link_to '<i class="fa fa-thumbs-down"></i> No Record'.html_safe, "/espy_records/new?state=" + params[:state] + "&card=" + @this.id.to_s, class: "btn btn-secondary pull-right"%>
 				</div>
 				
 				<table class="table table-sm">
@@ -145,7 +181,7 @@
 		            <tr>
 		              <td>
 		                <strong>Icpsr:</strong>
-		                <%= text_field_tag :icpsr, "", class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
+		                <%= text_field_tag :icpsr, "", class: "form-control icpsr-field", placeholder: 'ICPSR Record', required: true %>
 		               	<% if @this != nil %>
 		                	<%= hidden_field_tag :card, @this.id.to_s %>
 		                <% end %>

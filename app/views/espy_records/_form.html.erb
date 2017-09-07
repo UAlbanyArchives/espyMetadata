@@ -11,27 +11,24 @@
     </div>
   <% end %>
 
-  <% @this = IndexCard.find(espy_record.espy_record_index_card_id) %>
+  <% if params.has_key?(:card) %>
+    <% @this = IndexCard.find(params[:card]) %>
+  <% else %>
+    <% @this = IndexCard.find(espy_record.index_card_id) %>
+  <% end %>
 
 
   <div class="thirds">
     <div class="thirds-top">
-      <% if false %>
-      <%= link_to "/make?card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
-        <i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
-      <% end %>
 
       <%= render 'layouts/show_cards', this: @this %>
 
-      <% if false %>
-      <%= link_to "/make?card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
-        <i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
-      <% end %>
-      <% end %>
-
       <div class="field">
-        <!--<%= form.label :ocr_text %>-->
-        <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "15" %>
+        <% if params.has_key?(:card) %>
+          <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "15" %>
+        <% else %>
+          <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "15" %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -40,7 +37,7 @@
 
     <div style="margin-bottom: 10px;">
       <div class="btn-group col-md-auto">
-        <%= link_to '<i class="fa fa-arrow-left"></i> Back'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary"%>
+        <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary"%>
       </div>
     </div>
 
@@ -49,7 +46,11 @@
     </div>
 
     <div class="field">
-      <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record %>
+      <% if espy_record.icpsr_id.blank? %>
+        <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record, :value => false %>
+      <% else %>
+        <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record, :value => true %>
+      <% end %>
     </div>
 
     <div class="field">
@@ -57,7 +58,7 @@
     </div>
 
     <div class="field">
-      <%= form.hidden_field :index_card, id: :espy_record_index_card, :checked => "checked" %>
+      <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
     </div>
 
     <div class="field">
@@ -118,7 +119,7 @@
           </td>
           <td class="field" colspan="4">
             <% begin %>
-               <% Date.parse(@record.date_execution) %>
+               <% Date.parse(espy_record.date_execution.to_s) %>
                <%= form.text_field :date_execution, id: :espy_record_date_execution, class: "form-control" %>
             <% rescue %>
               <div class="form-group has-danger" style="color: red">
@@ -157,7 +158,11 @@
             <strong><%= form.label :sex %></strong>
           </td>
           <td class="field" colspan="2">
-            <%= form.text_field :sex, id: :espy_record_sex, class: "form-control" %>
+            <% if espy_record.sex.present? %>
+              <%= form.text_field :sex, id: :espy_record_sex, class: "form-control" %>
+            <% else %>
+              <%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :class => 'form-control' }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -165,7 +170,11 @@
             <strong><%= form.label :race %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :age, id: :espy_record_race, class: "form-control" %>
+            <% if espy_record.race.present? %>
+              <%= form.text_field :race, id: :espy_record_race, class: "form-control" %>
+            <% else %>
+              <%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => 'espy_record_race' }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -181,7 +190,11 @@
             <strong><%= form.label :crime %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :crime, id: :espy_record_crime, class: "form-control" %>
+            <% if espy_record.crime.present? %>
+              <%= form.text_field :crime, id: :espy_record_crime, class: "form-control" %>
+            <% else %>
+              <%= form.select(:crime, crime_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_crime }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -189,7 +202,11 @@
             <strong><%= form.label :execution_method %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :execution_method, id: :espy_record_execution_method, class: "form-control" %>
+            <% if espy_record.execution_method.present? %>
+              <%= form.text_field :execution_method, id: :espy_record_execution_method, class: "form-control" %>
+            <% else %>
+              <%= form.select(:execution_method, ['Hanging', 'Electrocution', 'Asphyxiation-Gas', 'Shot', 'Injection', 'Pressing', 'Break on Wheel', 'Burned', 'Hung in Chains', 'Bludgeoned', 'Gibbetted', 'Other', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -197,7 +214,11 @@
             <strong><%= form.label :location_execution %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :location_execution, id: :espy_record_location_execution, class: "form-control" %>
+            <% if espy_record.location_execution.present? %>
+              <%= form.text_field :location_execution, id: :espy_record_location_execution, class: "form-control" %>
+            <% else %>
+              <%= form.select(:location_execution, place_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_location_execution }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -205,7 +226,11 @@
             <strong><%= form.label :jurisdiction %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, class: "form-control" %>
+            <% if espy_record.jurisdiction.present? %>
+             <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, class: "form-control" %>
+            <% else %>
+              <%= form.select(:jurisdiction, jurisdiction_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
+            <% end %>
           </td>
         </tr>
         <tr>
@@ -213,37 +238,77 @@
             <strong><%= form.label :state %></strong>
           </td>
           <td class="field" colspan="3">
-            <%= form.text_field :state, id: :espy_record_state, class: "form-control" %>
+            <% if espy_record.state.present? %>
+              <%= form.text_field :state, id: :espy_record_state, class: "form-control" %>
+            <% else %>
+              <% if params[:state] %>
+                <% @stateName = state_names.key(params[:state]) %>
+                <%= form.text_field :state, id: :espy_record_state, class: "form-control", value: @stateName %>
+              <% else %>
+              <%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
+              <% end %>
+            <% end %>
           </td>
           <td class="field">
             <strong>Abbr</strong>
           </td>
           <td class="field">
-            <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+            <% if espy_record.state.present? %>
+              <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+            <% else %>
+              <% if params[:state] %>
+                <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control", value: params[:state] %>
+              <% else %>
+                <%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+              <% end %>
+            <% end %>
           </td>
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :county_code %></strong>
+            <strong>County Lookup</strong>
           </td>
-          <td class="field" colspan="3">
-            <%= form.number_field :county_code, id: :espy_record_county_code, class: "form-control" %>
+          <td class="field" colspan="4">
+            <input class="form-control" id="placeInput" placeholder="Search"></input>
           </td>
-          <td class="field text-center" colspan="2">
-            <% @county_url = espy_record.county_name.gsub(" ", "+") + "+County,+" + espy_record.state_abbreviation %>
-
-            <a class="btn btn-info" target="_blank" href="https://www.google.com/maps/place/<%= @county_url %>"><i class="fa fa-globe" aria-hidden="true"></i>
- County Check</a>
+          <td class="field text-center" colspan="1">
+            <a class="btn btn-secondary" href="#" id="countyLookup">
+              <i class="fa fa-search" aria-hidden="true"></i> County Lookup
+            </a>         
           </td>
         </tr>
         <tr>
           <td class="field">
             <strong><%= form.label :county_name %></strong>
           </td>
-          <td class="field" colspan="5">
-            <%= form.text_field :county_name, id: :espy_record_county_name, class: "form-control" %>
-          </td>
+          <% if espy_record.county_name.present? %>
+            <td class="field" colspan="4">
+              <%= form.text_field :county_name, id: :espy_record_county_name, class: "form-control" %>
+            </td>
+            <td class="field text-center" colspan="1">
+                <a class="btn btn-success" href="#" id="countyBtn"><i class="fa fa-globe" aria-hidden="true"></i> County Check</a>  
+            </td>
+          <% else %>
+            <td class="field" colspan="4">
+              <%= form.text_field :county_name, id: :espy_record_county_name, class: "form-control" %>
+            </td>
+            <td class="field text-center" colspan="1">
+                <a class="btn btn-success" href="#" id="countyBtn"><i class="fa fa-globe" aria-hidden="true"></i> County Check</a>  
+            </td>
+          <% end %>
+        </tr>
         <tr>
+          <td class="field">
+            <strong><%= form.label :county_code %></strong>
+          </td>
+          <td class="field"  id="fips" colspan="3">
+            <%= form.number_field :county_code, id: :espy_record_county_code, type: "textarea", class: "form-control" %>
+          </td>
+          <td class="field text-center" colspan="2">
+            <a class="btn btn-info" target="_blank" href="#" id="fipsLookup"><i class="fa fa-info-circle" aria-hidden="true"></i> Get Code</a>      
+                   
+          </td>
+        </tr>
         <tr>
           <td class="field">
             <strong><%= form.label :compensation_case %></strong>
@@ -268,5 +333,33 @@
         <%= form.button '<i class="fa fa-check"></i> Make Espy Record'.html_safe, class: "btn btn-success" %>
       </div>
     </div> 
+
+    <div class="modal fade" id="modalMap">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">County Lookup</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="loadingBG">
+              <iframe id="mapsWindow"></iframe>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
+
+  <div class="thirds">
+  
+  </div>
+
 <% end %>

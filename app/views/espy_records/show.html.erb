@@ -1,171 +1,218 @@
 <% provide(:section, "View Espy Record") %>
 
-<p id="notice"><%= notice %></p>
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-success" role="alert"><%= notice %></tr>
+  </div>
+<% end %>
 
-<p>
-  <strong>Uuid:</strong>
-  <%= @espy_record.uuid %>
-</p>
+<div class="thirds">
 
-<p>
-  <strong>Icpsr record:</strong>
-  <%= @espy_record.icpsr_record %>
-</p>
+  <div class="container title-card ">
+    <div class="text-center">
+      <div class="btn-group col-md-auto">
+        <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path, class: "btn btn-secondary"%>
+        <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_espy_record_path(@espy_record), class: "btn btn-info"%>
+        <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
 
-<p>
-  <strong>Icpsr record:</strong>
-  <%= @espy_record.icpsr_record_id %>
-</p>
+  <div class="thirds-top">
 
-<p>
-  <strong>Index card:</strong>
-  <%= @espy_record.index_card %>
-</p>
+    <% if @espy_record.index_card_id.present? %>
+      <% @this = IndexCard.find(@espy_record.index_card_id) %>
+      <%= render 'layouts/show_cards', this: @this %>
+    <% end %>
 
-<p>
-  <strong>Index card:</strong>
-  <%= @espy_record.index_card_id %>
-</p>
+    <div class="field col-md-10 mx-auto">
+      <% if @espy_record.ocr_text.present? %>
+        <%= @espy_record.ocr_text %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Index card files:</strong>
-  <%= @espy_record.index_card_files %>
-</p>
+<div class="thirds">
 
-<p>
-  <strong>Big card:</strong>
-  <%= @espy_record.big_card %>
-</p>
+  <table class="table table-sm espyTable">
+    <thead><th colspan="6" class="text-center"><strong>Espy Record</strong></td></th></thead>
+      <tbody>
 
-<p>
-  <strong>Big card:</strong>
-  <%= @espy_record.big_card_id %>
-</p>
+        <tr>
+          <td><strong>UUID:</strong></td>
+          <td colspan="3"><%= @espy_record.uuid %></td>
+        </tr>
 
-<p>
-  <strong>Big card files:</strong>
-  <%= @espy_record.big_card_files %>
-</p>
+        <tr>
+          <td><strong>Icpsr record:</strong></td>
+          <td>
+            <% if @espy_record.icpsr_record == true %>
+             <i class="fa fa-check fa-2x text-success"></i>
+            <% else %>
+             <i class="fa fa-times fa-2x text-danger"></i>
+            <% end %>
+          </td>
+          <td><strong>Icpsr record ID:</strong></td>
+          <td><%= @espy_record.icpsr_record_id %></td>
+        </tr>
 
-<p>
-  <strong>Reference material:</strong>
-  <%= @espy_record.reference_material %>
-</p>
+        <tr>
+          <td><strong>Index card:</strong></td>
+          <td>
+            <% if @espy_record.index_card == true %>
+             <i class="fa fa-check fa-2x text-success"></i>
+            <% else %>
+             <i class="fa fa-times fa-2x text-danger"></i>
+            <% end %>
+          </td>
+          <td><strong>Index card Record ID:</strong></td>
+          <td><%= @espy_record.index_card_id %></td>
+        </tr>
 
-<p>
-  <strong>Reference material:</strong>
-  <%= @espy_record.reference_material_id %>
-</p>
+        <tr>
+          <td><strong>Index card files:</strong></td>
+          <td colspan="3"><%= @espy_record.index_card_files %></td>
+        </tr>
 
-<p>
-  <strong>Reference material files:</strong>
-  <%= @espy_record.reference_material_files %>
-</p>
+        <tr>
+          <td><strong>Big card:</strong></td>
+          <td>
+            <% if @espy_record.big_card == true %>
+             <i class="fa fa-check fa-2x text-success"></i>
+            <% else %>
+             <i class="fa fa-times fa-2x text-danger"></i>
+            <% end %>
+          </td>
+          </td>
+          <td><strong>Big card record ID:</strong></td>
+          <td><%= @espy_record.big_card_id %></td>
+        </tr>
 
-<p>
-  <strong>Ocr text:</strong>
-  <%= @espy_record.ocr_text %>
-</p>
+        <tr>
+          <td><strong>Big card files:</strong></td>
+          <td colspan="3"><%= @espy_record.big_card_files %></td>
+        </tr>
 
-<p>
-  <strong>Icpsr:</strong>
-  <%= @espy_record.icpsr_id %>
-</p>
+        <tr>
+          <td><strong>Ref material:</strong></td>
+          <td>
+          <% if @espy_record.reference_material == true %>
+             <i class="fa fa-check fa-2x text-success"></i>
+            <% else %>
+             <i class="fa fa-times fa-2x text-danger"></i>
+            <% end %>
+          </td>
+          <td><strong>Ref material ID:</strong></td>
+          <td><%= @espy_record.reference_material_id %></td>
+        </tr>
 
-<p>
-  <strong>Name:</strong>
-  <%= @espy_record.name %>
-</p>
+        <tr>
+          <td><strong>Ref material files:</strong></td>
+          <td colspan="3"><%= @espy_record.reference_material_files %></td>
+        </tr>
 
-<p>
-  <strong>Date execution:</strong>
-  <%= @espy_record.date_execution %>
-</p>
+        <tr>
+          <td><strong>Icpsr record:</strong></td>
+          <td colspan="3"><%= @espy_record.icpsr_id %></td>
+        </tr>
 
-<p>
-  <strong>Circa date execution:</strong>
-  <%= @espy_record.circa_date_execution %>
-</p>
+        <tr>
+          <td><strong>Name:</strong></td>
+          <td colspan="3"><%= @espy_record.name %></td>
+        </tr>
 
-<p>
-  <strong>Date crime:</strong>
-  <%= @espy_record.date_crime %>
-</p>
+        <tr>
+          <td><strong>Date execution:</strong></td>
+          <td><%= @espy_record.date_execution %></td>
+          <td><strong>Circa date execution:</strong></td>
+          <td><%= @espy_record.circa_date_execution %></td>
+        </tr>
 
-<p>
-  <strong>Circa date crime:</strong>
-  <%= @espy_record.circa_date_crime %>
-</p>
+        <tr>
+          <td><strong>Date crime:</strong></td>
+          <td><%= @espy_record.date_crime %></td>
+          <td><strong>Circa date crime:</strong></td>
+          <td><%= @espy_record.circa_date_crime %></td>
+        </tr>
 
-<p>
-  <strong>Age:</strong>
-  <%= @espy_record.age %>
-</p>
+        <tr>
+          <td><strong>Age:</strong></td>
+          <td><%= @espy_record.age %></td>
+          <td><strong>Sex:</strong></td>
+          <td><%= @espy_record.sex %></td>
+        </tr>
 
-<p>
-  <strong>Race:</strong>
-  <%= @espy_record.race %>
-</p>
+        <tr>
+          <td><strong>Crime:</strong></td>
+          <td><%= @espy_record.crime %></td>
+          <td><strong>Race:</strong></td>
+          <td><%= @espy_record.race %></td>
+        </tr>
 
-<p>
-  <strong>Sex:</strong>
-  <%= @espy_record.sex %>
-</p>
+        <tr>
+          <td><strong>Occupation:</strong></td>
+          <td><%= @espy_record.occupation %></td>
+          <td><strong>Execution method:</strong></td>
+          <td><%= @espy_record.execution_method %></td>
+        </tr>
 
-<p>
-  <strong>Occupation:</strong>
-  <%= @espy_record.occupation %>
-</p>
+        <tr>
+          <td><strong>Jurisdiction:</strong></td>
+          <td><%= @espy_record.jurisdiction %></td>
+          <td><strong>Location execution:</strong></td>
+          <td><%= @espy_record.location_execution %></td>
+        </tr>
 
-<p>
-  <strong>Crime:</strong>
-  <%= @espy_record.crime %>
-</p>
+        <tr>
+          <td><strong>State:</strong></td>
+          <td><%= @espy_record.state %></td>
+          <td><strong>State abbreviation:</strong></td></td>
+          <td id="espy_record_state_abbreviation"><%= @espy_record.state_abbreviation %></td>
+        </tr>
 
-<p>
-  <strong>Execution method:</strong>
-  <%= @espy_record.execution_method %>
-</p>
+        <tr>
+          <td><strong>County name:</strong></td>
+          <td colspan="3" id="espy_record_county_name"><%= @espy_record.county_name %></td>
+        </tr>
 
-<p>
-  <strong>Location execution:</strong>
-  <%= @espy_record.location_execution %>
-</p>
+        <tr>
+          <td><strong>County code:</strong></td>
+          <td><%= @espy_record.county_code %></td>
+          <td colspan="2">
+            <a class="btn btn-success" href="#" id="countyBtn"><i class="fa fa-globe" aria-hidden="true"></i> County Check</a>          
+          </td>
+        </tr>      
 
-<p>
-  <strong>Jurisdiction:</strong>
-  <%= @espy_record.jurisdiction %>
-</p>
+        <tr>
+          <td><strong>Compensation case:</strong></td>
+          <td><%= @espy_record.compensation_case %></td>
+          <td><strong>Icpsr state:</strong></td>
+          <td><%= @espy_record.icpsr_state %></td>
+        </tr>
 
-<p>
-  <strong>State:</strong>
-  <%= @espy_record.state %>
-</p>
+    </tbody>
+  </table>
 
-<p>
-  <strong>State abbreviation:</strong>
-  <%= @espy_record.state_abbreviation %>
-</p>
+  <div class="modal fade" id="modalMap">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">County Lookup</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="loadingBG">
+            <iframe id="mapsWindow"></iframe>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<p>
-  <strong>County code:</strong>
-  <%= @espy_record.county_code %>
-</p>
-
-<p>
-  <strong>County name:</strong>
-  <%= @espy_record.county_name %>
-</p>
-
-<p>
-  <strong>Compensation case:</strong>
-  <%= @espy_record.compensation_case %>
-</p>
-
-<p>
-  <strong>Icpsr state:</strong>
-  <%= @espy_record.icpsr_state %>
-</p>
-
-<%= link_to 'Edit', edit_espy_record_path(@espy_record) %> |
-<%= link_to 'Back', espy_records_path %>
+</div>

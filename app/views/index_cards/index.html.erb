@@ -9,7 +9,11 @@
 <div class="container">
   <form class="form-inline stateForm">
     <label for="selectState"><strong>Select a State: </strong></label>
-    <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
+    <% if params.has_key?(:state) && params[:state] != "*" %>
+      <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
+    <% else %>
+      <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
+    <% end %>
     <a href="/index_cards?state=*" class="btn btn-info">All States</a>
   </form>
 </div>
@@ -41,6 +45,7 @@
       <th>Used check</th>
       <th>Root filename</th>
       <th>File group</th>
+      <th>ASpace ID</th>
       <th>Ocr text</th>
     </tr>
   </thead>
@@ -52,7 +57,6 @@
           <div class="btn-group">
             <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, index_card, class: "btn btn-primary"%>
             <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_index_card_path(index_card), class: "btn btn-info"%>
-            <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, index_card, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
           </div>
         </td>
         <td><%= index_card.state_abbreviation %></td>
@@ -65,6 +69,7 @@
         </td>
         <td class="smallTableFont"><%= index_card.root_filename %></td>
         <td class="smallTableFont"><%= index_card.file_group %></td>
+        <td><%= index_card.aspace %></td>
         <td><%= index_card.ocr_text %></td>
       </tr>
     <% end %>

@@ -93,6 +93,7 @@ img {width: 80%; margin-bottom: 1rem;}
   padding: 1.7rem;
 }
 
+.submit-btn { cursor: pointer; }
 
 [data-toggle="collapse"] i.progressDrop:before{   
   content: "\f077";
@@ -100,4 +101,21 @@ img {width: 80%; margin-bottom: 1rem;}
 
 [data-toggle="collapse"].collapsed i.progressDrop:before{
   content: "\f078";
+}
+
+.td-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+}
+
+.loadingBG {
+  background:url(/loading.gif) center center no-repeat;
+}
+
+.loadingBG iframe {
+  border: 0;
+  width: 100%;
+  height: 500px;
 }
