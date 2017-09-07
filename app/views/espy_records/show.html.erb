@@ -55,11 +55,7 @@
         <tr>
           <td><strong>Icpsr record:</strong></td>
           <td>
-            <% if @espy_record.icpsr_record == true %>
-             <i class="fa fa-check fa-2x text-success"></i>
-            <% else %>
-             <i class="fa fa-times fa-2x text-danger"></i>
-            <% end %>
+            <%= render 'layouts/boolean_check', check: @espy_record.icpsr_record %>
           </td>
           <td><strong>Icpsr record ID:</strong></td>
           <td><%= @espy_record.icpsr_record_id %></td>
@@ -68,11 +64,7 @@
         <tr>
           <td><strong>Index card:</strong></td>
           <td>
-            <% if @espy_record.index_card == true %>
-             <i class="fa fa-check fa-2x text-success"></i>
-            <% else %>
-             <i class="fa fa-times fa-2x text-danger"></i>
-            <% end %>
+            <%= render 'layouts/boolean_check', check: @espy_record.index_card %>
           </td>
           <td><strong>Index card Record ID:</strong></td>
           <td><%= @espy_record.index_card_id %></td>
@@ -89,11 +81,7 @@
         <tr>
           <td><strong>Big card:</strong></td>
           <td>
-            <% if @espy_record.big_card == true %>
-             <i class="fa fa-check fa-2x text-success"></i>
-            <% else %>
-             <i class="fa fa-times fa-2x text-danger"></i>
-            <% end %>
+            <%= render 'layouts/boolean_check', check: @espy_record.big_card %>
           </td>
           </td>
           <td><strong>Big card record ID:</strong></td>
@@ -111,11 +99,7 @@
         <tr>
           <td><strong>Ref material:</strong></td>
           <td>
-          <% if @espy_record.reference_material == true %>
-           <i class="fa fa-check fa-2x text-success"></i>
-          <% else %>
-           <i class="fa fa-times fa-2x text-danger"></i>
-          <% end %>
+            <%= render 'layouts/boolean_check', check: @espy_record.reference_material %>
           </td>
           <td><strong>Ref material ID:</strong></td>
           <td><%= @espy_record.reference_material_id %></td>
@@ -151,42 +135,169 @@
 
         <tr>
           <td><strong>Date execution:</strong></td>
-          <td><%= @espy_record.date_execution %></td>
-          <td><strong>Circa date execution:</strong></td>
-          <td><%= @espy_record.circa_date_execution %></td>
+          <td>
+            <% if @espy_record.circa_date_execution == true %>
+              Circa 
+            <% end %>
+            <%= @espy_record.date_execution %>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_execution_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_execution_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_execution_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_execution_source_ref %>
+            </label>
+          </td>
         </tr>
 
         <tr>
           <td><strong>Date crime:</strong></td>
-          <td><%= @espy_record.date_crime %></td>
-          <td><strong>Circa date crime:</strong></td>
-          <td><%= @espy_record.circa_date_crime %></td>
+          <td>
+            <% if @espy_record.circa_date_crime == true %>
+              Circa 
+            <% end %>
+            <%= @espy_record.date_crime %>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_crime_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_crime_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_crime_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.date_crime_source_ref %>
+            </label>
+          </td>
         </tr>
 
         <tr>
           <td><strong>Age:</strong></td>
           <td><%= @espy_record.age %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.age_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.age_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.age_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.age_source_ref %>
+            </label>
+          </td>
+        </tr>
+
+        <tr>
           <td><strong>Sex:</strong></td>
           <td><%= @espy_record.sex %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.sex_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.sex_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.sex_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.sex_source_ref %>
+            </label>
+          </td>
+        </tr>
+
+        <tr>
+          <td><strong>Race:</strong></td>
+          <td><%= @espy_record.race %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.race_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.race_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.race_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.race_source_ref %>
+            </label>
+          </td>
         </tr>
 
         <tr>
           <td><strong>Crime:</strong></td>
           <td><%= @espy_record.crime %></td>
-          <td><strong>Race:</strong></td>
-          <td><%= @espy_record.race %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.crime_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.crime_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.crime_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.crime_source_ref %>
+            </label>
+          </td>
         </tr>
 
         <tr>
           <td><strong>Occupation:</strong></td>
           <td><%= @espy_record.occupation %></td>
-          <td><strong>Execution method:</strong></td>
-          <td><%= @espy_record.execution_method %></td>
+          <td><strong>Jurisdiction:</strong></td>
+          <td><%= @espy_record.jurisdiction %></td>
         </tr>
 
         <tr>
-          <td><strong>Jurisdiction:</strong></td>
-          <td><%= @espy_record.jurisdiction %></td>
+          <td><strong>Execution method:</strong></td>
+          <td><%= @espy_record.execution_method %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.execution_method_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.execution_method_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.execution_method_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.execution_method_source_ref %>
+            </label>
+          </td>
+        </tr>
+
+        <tr>
           <td><strong>Location execution:</strong></td>
           <td><%= @espy_record.location_execution %></td>
         </tr>
@@ -200,7 +311,23 @@
 
         <tr>
           <td><strong>County name:</strong></td>
-          <td colspan="3" id="espy_record_county_name"><%= @espy_record.county_name %></td>
+          <td id="espy_record_county_name"><%= @espy_record.county_name %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.county_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.county_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.county_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.county_source_ref %>
+            </label>
+          </td>
         </tr>
 
         <tr>
