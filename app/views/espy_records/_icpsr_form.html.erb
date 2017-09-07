@@ -17,6 +17,10 @@
     <div class="thirds-top">
       <%= render 'layouts/show_cards', this: @this %>
 
+      <div class="field ocrCheck">
+        <strong>OCR Fixed:</strong>
+        <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed, checked: true %>
+      </div>
 
       <div class="field">
         <!--<%= form.label :ocr_text %>-->
@@ -58,6 +62,10 @@
     </div>
 
     <div class="field">
+      <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
+    </div>
+
+    <div class="field">
       <%= form.hidden_field :big_card, id: :espy_record_big_card %>
     </div>
 
@@ -67,6 +75,10 @@
 
     <div class="field">
       <%= form.hidden_field :big_card_files, id: :espy_record_big_card_files %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :big_card_aspace, id: :espy_record_big_card_aspace %>
     </div>
 
     <div class="field">

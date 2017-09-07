@@ -23,6 +23,11 @@
 
       <%= render 'layouts/show_cards', this: @this %>
 
+      <div class="field ocrCheck">
+        <strong>OCR Fixed:</strong>
+        <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed, checked: true %>
+      </div>
+
       <div class="field">
         <% if params.has_key?(:card) %>
           <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "15" %>
@@ -70,6 +75,10 @@
     </div>
 
     <div class="field">
+      <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
+    </div>
+
+    <div class="field">
       <%= form.hidden_field :big_card, id: :espy_record_big_card %>
     </div>
 
@@ -82,6 +91,10 @@
     </div>
 
     <div class="field">
+      <%= form.hidden_field :big_card_aspace, id: :espy_record_big_card_aspace %>
+    </div>
+
+    <div class="field">
       <%= form.hidden_field :reference_material, id: :espy_record_reference_material %>
     </div>
 
@@ -91,6 +104,10 @@
 
     <div class="field">
       <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files %>
+    </div>
+
+    <div class="field">
+      <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace %>
     </div>
 
     <table class="table table-sm espyTable">
