@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907164219) do
+ActiveRecord::Schema.define(version: 20170907170012) do
 
   create_table "espy_records", force: :cascade do |t|
     t.string "uuid"
@@ -54,6 +54,38 @@ ActiveRecord::Schema.define(version: 20170907164219) do
     t.boolean "ocr_fixed"
     t.string "first_name"
     t.string "last_name"
+    t.boolean "date_crime_source_icpsr"
+    t.boolean "date_crime_source_index"
+    t.boolean "date_crime_source_big"
+    t.boolean "date_crime_source_ref"
+    t.boolean "date_execution_source_icpsr"
+    t.boolean "date_execution_source_index"
+    t.boolean "date_execution_source_big"
+    t.boolean "date_execution_source_ref"
+    t.boolean "age_source_icpsr"
+    t.boolean "age_source_index"
+    t.boolean "age_source_big"
+    t.boolean "age_source_ref"
+    t.boolean "race_source_icpsr"
+    t.boolean "race_source_index"
+    t.boolean "race_source_big"
+    t.boolean "race_source_ref"
+    t.boolean "sex_source_icpsr"
+    t.boolean "sex_source_index"
+    t.boolean "sex_source_big"
+    t.boolean "sex_source_ref"
+    t.boolean "crime_source_icpsr"
+    t.boolean "crime_source_index"
+    t.boolean "crime_source_big"
+    t.boolean "crime_source_ref"
+    t.boolean "execution_method_source_icpsr"
+    t.boolean "execution_method_source_index"
+    t.boolean "execution_method_source_big"
+    t.boolean "execution_method_source_ref"
+    t.boolean "county_source_icpsr"
+    t.boolean "county_source_index"
+    t.boolean "county_source_big"
+    t.boolean "county_source_ref"
   end
 
   create_table "icpsr_records", force: :cascade do |t|

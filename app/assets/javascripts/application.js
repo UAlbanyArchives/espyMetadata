@@ -80,23 +80,21 @@ function getRecord(name){
   alert(name);
 }
 
-document.addEventListener("turbolinks:load", function() {
-  $("#countyBtn").click(function(e){
-      e.preventDefault();
-      var link = "https://www.google.com/maps/embed/v1/place?q=" + $("#espy_record_county_name").val().replace(" ", "+") + "+County,+" + $("#espy_record_state_abbreviation").val() + "&zoom=9" + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
-      var frame = document.querySelector("#mapsWindow");
-      frame.src = frame.src + link;
-      $('#modalMap').modal()
-  }); 
-});
 
 document.addEventListener("turbolinks:load", function() {
   $("#countyLookup").click(function(e){
       e.preventDefault();
-      var link = "//www.google.com/maps/embed/v1/search?q=What County " + $('#placeInput').val() + " " + $('#espy_record_state').val() + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
-      var frame = document.querySelector("#mapsWindow");
-      frame.src = frame.src + link;
-      $('#modalMap').modal()
+      if ($('#placeInput').val()) {
+        var link = "//www.google.com/maps/embed/v1/search?q=What County " + $('#placeInput').val() + " " + $('#espy_record_state').val() + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
+        var frame = document.querySelector("#mapsWindow");
+        frame.src = frame.src + link;
+        $('#modalMap').modal()
+      } else {
+        var link = "https://www.google.com/maps/embed/v1/place?q=" + $("#espy_record_county_name").val().replace(" ", "+") + "+County,+" + $("#espy_record_state_abbreviation").val() + "&zoom=9" + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
+        var frame = document.querySelector("#mapsWindow");
+        frame.src = frame.src + link;
+        $('#modalMap').modal()
+      }
   }); 
 });
 
