@@ -118,6 +118,6 @@ class EspyRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def espy_record_params
-      params.require(:espy_record).permit(:uuid, :icpsr_record, :icpsr_record_id, :index_card, :index_card_id, :index_card_files, :index_card_aspace, :big_card, :big_card_id, :big_card_files, :big_card_aspace, :reference_material, :reference_material_id, :reference_material_files, :reference_material_aspace, :ocr_text, :ocr_fixed, :icpsr_id, :name, :date_crime, :circa_date_crime, :date_execution, :circa_date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state)
+      params.require(:espy_record).permit(:uuid, :icpsr_record, :icpsr_record_id, :index_card, :index_card_id, :index_card_files, :index_card_aspace, :big_card, :big_card_id, :big_card_files, :big_card_aspace, :reference_material, :reference_material_id, :reference_material_files, :reference_material_aspace, :ocr_text, :ocr_fixed, :icpsr_id, :first_name, :last_name, :date_crime, :circa_date_crime, :date_execution, :circa_date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state)
     end
 end

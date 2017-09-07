@@ -124,10 +124,16 @@
         </tr>
         <tr>
           <td class="field" colspan="1">
-            <strong><%= form.label :name %></strong>
+            <strong><%= form.label :first_name %></strong>
           </td>
-          <td class="field" colspan="5">
-            <%= form.text_field :name, id: :espy_record_name, class: "form-control" %>
+          <td class="field" colspan="2">
+            <%= form.text_field :first_name, id: :espy_record_first_name, class: "form-control" %>
+          </td>
+          <td class="field" colspan="1">
+            <strong><%= form.label :last_name %></strong>
+          </td>
+          <td class="field" colspan="2">
+            <%= form.text_field :last_name, id: :espy_record_last_name, class: "form-control" %>
           </td>
         </tr>
         <tr>

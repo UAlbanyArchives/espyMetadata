@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907163813) do
+ActiveRecord::Schema.define(version: 20170907164219) do
 
   create_table "espy_records", force: :cascade do |t|
     t.string "uuid"
@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(version: 20170907163813) do
     t.string "big_card_aspace"
     t.string "reference_material_aspace"
     t.boolean "ocr_fixed"
+    t.string "first_name"
+    t.string "last_name"
   end
 
   create_table "icpsr_records", force: :cascade do |t|
