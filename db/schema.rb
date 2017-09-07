@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907160849) do
+ActiveRecord::Schema.define(version: 20170907163813) do
 
   create_table "espy_records", force: :cascade do |t|
     t.string "uuid"
