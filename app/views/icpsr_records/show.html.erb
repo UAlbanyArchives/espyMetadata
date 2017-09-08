@@ -89,6 +89,14 @@
               <td><strong>Icpsr state:</strong></td>
               <td><%= @icpsr_record.icpsr_state %></td>
             </tr>
+          <tr>
+              <td><strong>Big Card ID:</strong></td>
+              <td><a href="/big_cards/<%= @icpsr_record.big_id %>"><%= @icpsr_record.big_id %></a></td>
+          </tr>
+          <tr>
+              <td><strong>Reference Material ID:</strong></td>
+              <td><a href="/reference_material/<%= @icpsr_record.ref_id %>"><%= @icpsr_record.ref_id %></a></td>
+          </tr>
           </tbody>
 
         </table>

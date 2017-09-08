@@ -1,4 +1,4 @@
-<% provide(:section, "View Index Card") %>
+<% provide(:section, "View Big Card") %>
 
 <% if notice %>
   <div id="notice" class="container">
@@ -10,7 +10,7 @@
 
     <div class="col-lg-6 col-md-12">
       
-      <%= render 'layouts/show_cards', this: @index_card, folder: "smallCards" %>
+      <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
       
     </div>
     <div class="col-lg-6 col-md-12">
@@ -20,25 +20,25 @@
       <tbody>
         <tr>
           <td><strong>State abbreviation:</strong></td>
-          <td><%= @index_card.state_abbreviation %></td>
+          <td><%= @big_card.state_abbreviation %></td>
           <td><strong>Used check:</strong></td>
-          <td><%= render 'layouts/boolean_check', check: @index_card.used_check %></td>
+          <td><%= render 'layouts/boolean_check', check: @big_card.used_check %></td>
         </tr>
         <tr>
           <td><strong>Root filename:</strong></td>
-          <td colspan="3" class="smallTableFont"><%= @index_card.root_filename %></td>
+          <td colspan="3" class="smallTableFont"><%= @big_card.root_filename %></td>
         </tr>
         <tr>
           <td><strong>File group:</strong></td>
-          <td colspan="3" class="smallTableFont"><%= @index_card.file_group %></td>
+          <td colspan="3" class="smallTableFont"><%= @big_card.file_group %></td>
         </tr>
         <tr>
           <td><strong>ASpace ID:</strong></td>
-          <td colspan="3"><%= @index_card.aspace %></td>
+          <td colspan="3"><%= @big_card.aspace %></td>
         </tr>
         <tr>
           <td><strong>OCR Text:</strong></td>
-          <td colspan="3"><%= @index_card.ocr_text %></td>
+          <td colspan="3"><%= @big_card.ocr_text %></td>
         </tr>
       </tbody>
     </table>
@@ -49,8 +49,8 @@
   <div class="container">
     <div class="text-center">
       <div class="btn-group col-md-auto">
-        <%= link_to '<i class="fa fa-list"></i> List'.html_safe, index_cards_path, class: "btn btn-secondary"%>
-        <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_index_card_path(@index_card), class: "btn btn-info"%>
+        <%= link_to '<i class="fa fa-list"></i> List'.html_safe, big_cards_path, class: "btn btn-secondary"%>
+        <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_big_card_path(@big_card), class: "btn btn-info"%>
       </div>
     </div>
   </div>

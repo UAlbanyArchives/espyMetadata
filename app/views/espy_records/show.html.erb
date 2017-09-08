@@ -22,7 +22,7 @@
 
     <% if @espy_record.index_card_id.present? %>
       <% @this = IndexCard.find(@espy_record.index_card_id) %>
-      <%= render 'layouts/show_cards', this: @this %>
+      <%= render 'layouts/show_cards', this: @this, folder: "smallCards"%>
     <% end %>
 
     <div class="field col-md-10 mx-auto">

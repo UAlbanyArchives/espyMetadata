@@ -86,11 +86,7 @@
 						<tr>
 							<td><strong>Used:</strong></td>
 							<td>
-								<% if @this.used_check == true %>
-						           <i class="fa fa-check fa-2x text-success"></i>
-						        <% else %>
-						           <i class="fa fa-times fa-2x text-danger"></i>
-						        <% end %>
+								<%= render 'layouts/boolean_check', check: @this.used_check %>
 							</td>
 							<td>
 								<% if params[:card] %>
@@ -111,7 +107,7 @@
 		  		<% end %>
 		  	<% end %>
 		  	<% if @this != nil %>
-		    	<%= render 'layouts/show_cards', this: @this %>
+		    	<%= render 'layouts/show_cards', this: @this, folder: "smallCards" %>
 		    <% end %>
 		    <% if @next != nil %>
 		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>

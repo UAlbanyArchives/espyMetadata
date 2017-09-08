@@ -132,3 +132,12 @@ img {width: 80%; margin-bottom: 1rem;}
 .circa {
   width: 10px;
 }
+
+.ocrFix textarea {
+  padding: 15px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.link-form { display: inline-block; }
+.link-form > * { display: inline-block; width: 300px;}

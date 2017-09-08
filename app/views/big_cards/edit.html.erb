@@ -1,0 +1,19 @@
+<% provide(:section, "Edit Big Card") %>
+
+<div class="row padded-row">
+	<div class="col-lg-6 col-md-12">
+    <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
+  </div>
+  <div class="col-lg-6 col-md-12">
+	<%= render 'form', big_card: @big_card %>
+  </div>
+</div>
+<div class="container">
+	<div class="text-center">
+		<div class="btn-group">
+	      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, big_cards_path, class: "btn btn-secondary"%>
+	      <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, @big_card, class: "btn btn-primary"%>
+	      <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @big_card, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+	    </div>
+    </div>
+</div>

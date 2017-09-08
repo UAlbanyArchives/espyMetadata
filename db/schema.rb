@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907170012) do
+ActiveRecord::Schema.define(version: 20170908203550) do
+
+  create_table "big_cards", force: :cascade do |t|
+    t.string "state_abbreviation"
+    t.string "root_filename"
+    t.string "file_group"
+    t.text "ocr_text"
+    t.boolean "used_check"
+    t.string "aspace"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "espy_records", force: :cascade do |t|
     t.string "uuid"
@@ -109,6 +120,8 @@ ActiveRecord::Schema.define(version: 20170907170012) do
     t.integer "icpsr_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "big_id"
+    t.integer "ref_id"
   end
 
   create_table "index_cards", force: :cascade do |t|

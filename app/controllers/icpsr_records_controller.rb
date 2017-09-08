@@ -89,6 +89,6 @@ class IcpsrRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def icpsr_record_params
-      params.require(:icpsr_record).permit(:used_check, :icpsr_id, :name, :date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state)
+      params.require(:icpsr_record).permit(:used_check, :icpsr_id, :name, :date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state, :big_id, :ref_id)
     end
 end

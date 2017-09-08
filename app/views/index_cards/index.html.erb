@@ -61,11 +61,7 @@
         </td>
         <td><%= index_card.state_abbreviation %></td>
         <td>
-          <% if index_card.used_check == true %>
-           <i class="fa fa-check fa-2x text-success"></i>
-          <% else %>
-           <i class="fa fa-times fa-2x text-danger"></i>
-          <% end %>
+          <%= render 'layouts/boolean_check', check: index_card.used_check %>
         </td>
         <td class="smallTableFont"><%= index_card.root_filename %></td>
         <td class="smallTableFont"><%= index_card.file_group %></td>

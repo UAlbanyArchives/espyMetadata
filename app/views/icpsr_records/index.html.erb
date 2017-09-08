@@ -56,8 +56,8 @@
       <th>State abbreviation</th>
       <th>County code</th>
       <th>County name</th>
-      <th>Compensation case</th>
-      <th>Icpsr state</th>
+      <th>Big Card ID</th>
+      <th>Reference ID</th>
       
     </tr>
   </thead>
@@ -93,8 +93,8 @@
         <td><%= icpsr_record.state_abbreviation %></td>
         <td><%= icpsr_record.county_code %></td>
         <td><%= icpsr_record.county_name %></td>
-        <td><%= icpsr_record.compensation_case %></td>
-        <td><%= icpsr_record.icpsr_state %></td>
+        <td><a href="/big_cards/<%= icpsr_record.big_id %>"><%= icpsr_record.big_id %></a></td>
+        <td><a href="/reference_material/<%= icpsr_record.ref_id %>"><%= icpsr_record.ref_id %></a></td>
 
       </tr>
     <% end %>

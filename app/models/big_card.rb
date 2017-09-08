@@ -1,0 +1,2 @@
+class BigCard < ApplicationRecord
+end

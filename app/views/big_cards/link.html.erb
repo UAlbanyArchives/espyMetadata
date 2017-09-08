@@ -1,0 +1,259 @@
+<% provide(:section, "Link Big Cards") %>
+
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-danger" role="alert"><%= notice %></p>
+  </div>
+<% end %>
+
+<% if not params[:state] %>
+	<div class="container">
+	  <form class="form-inline stateForm">
+	    <label for="selectState"><strong>Select a State: </strong></label>
+	    <% if params.has_key?(:state) %>
+	    	<%= collection_select(:state, :state_abbreviation, BigCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'link_big_cards?state=' + this.value") %>
+	   	<% else %>
+	   		<%= collection_select(:state, :state_abbreviation, BigCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'link_big_cards?state=' + this.value") %>
+	   	<% end %>
+	  </form>
+	</div>
+<% end %>
+
+<% @big_card = BigCard.where(state_abbreviation: params[:state]) %>
+<% provide(:state, params[:state]) %>
+
+<% if params[:state] %>
+
+	<% if params.has_key?(:card) %>
+		<% @card = params[:card].to_i %>
+		<% if @card == 0 %>
+			<% @previous = nil %>
+		<% else %>
+			<% if @big_card.exists?(id: @card - 1) %>
+				<% @previous = @big_card.find(@card - 1) %>
+			<% else %>
+				<% @previous = nil %>
+			<% end %>
+		<% end %>
+		<% @this = @big_card.find(@card) %>
+		<% if @big_card.exists?(id: @card + 1) %>
+			<% @next = @big_card.find(@card + 1) %>
+		<% else %>
+			<% @next = nil %>
+		<% end %>
+	<% else %>
+		<% @previous = nil %>
+		<% @stop = false %>
+		<% @next_index = 0 %>
+		<% @next = nil %>
+		<% @big_card.each_with_index do |card, index| %>
+			<% if @stop == true %>
+				<% if index == @next_index %>
+					<% @next = card %>
+				<% end %>
+			<% else %>
+				<% if card.used_check == false %>
+					<% @this = card %>
+					<% @stop = true %>
+					<% @next_index = index + 1 %>
+				<% else %>
+					<% @previous = card %>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if @stop == false %>
+			<% @previous = nil %>
+			<% @this = @big_card.first %>
+			<% @next = @big_card.second %>
+		<% end %>
+	<% end %>
+
+
+	<% @state_used = @big_card.where(used_check: true).count %>
+	<% @state_total = @big_card.count %>
+	<% @used = BigCard.where(used_check: true).count %>
+	<% @total = BigCard.count %>
+	<% @state_pct = @state_used.to_f / @state_total.to_f %>
+	<% @total_pct = @used.to_f / @total.to_f %>
+
+	<% provide(:state_used, @state_used.to_s) %>
+	<% provide(:state_total, @state_total.to_s) %>
+	<% provide(:state_pct, number_to_percentage(@state_pct * 100, precision: 0).chop) %>
+	<% provide(:used, @used.to_s) %>
+	<% provide(:total, @total.to_s) %>
+	<% provide(:total_pct, number_to_percentage(@total_pct * 100, precision: 0).chop) %>
+
+	<div class="row padded-row">
+
+		<div class="col-lg-6 col-md-12">
+
+		  	<% if @previous != nil %>
+		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+		    		<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+		  		<% end %>
+		  	<% end %>
+		  	<% if @this != nil %>
+		    	<%= render 'layouts/show_cards', this: @this, folder: "bigCards" %>
+		    <% end %>
+		    <% if @next != nil %>
+		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+		    		<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+		    	<% end %>
+		 	<% end %>
+
+		 	<div class="col-lg-10 mx-auto">
+				<table class="table table-sm">
+					<tbody>
+						<tr>
+							<td><strong>Used:</strong></td>
+							<td>
+								<%= render 'layouts/boolean_check', check: @this.used_check %>
+							</td>
+							<td>
+								<% if params[:card] %>
+									<%= link_to("<i class='fa fa-times' aria-hidden='true'></i> Ignore".html_safe, big_card_path(@this.id, "big_card[used_check]"  => true, "state" => params[:state], "card" => params[:card]), :method => :put, data: { confirm: 'Are you sure?' }, class: "btn btn-warning") %> 
+								<% else %>
+									<%= link_to("<i class='fa fa-times' aria-hidden='true'></i> Ignore".html_safe, big_card_path(@this.id, "big_card[used_check]"  => true, "state" => params[:state]), :method => :put, data: { confirm: 'Are you sure?' }, class: "btn btn-warning") %>
+								<% end %>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		 </div>
+
+		 <div class="col-lg-6 col-md-12">
+
+			<%= form_with(model: @this, local: true) do |form| %>
+
+			  <div class="col-lg-12 mx-auto ocrFix">
+			    <%= form.text_area :ocr_text, id: :big_card_ocr_text, rows: "15" %>
+			  </div>
+
+			  <div class="form-group col-md-12">
+			    <div class="search-form link-form">
+			    		<%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+			    	<div class="text-center">
+			    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
+			    		<%= form.hidden_field :state, :value => params[:state] %>
+			    		<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
+			    	</div>
+			    </div>
+			    <script type="text/javascript">
+			      $('.search-field').autocomplete({
+			        source: "/search_suggestions",
+			        select: function (event, ui) {
+					   var label = ui.item.label;
+					   console.log(ui.item);
+					   $.ajax({
+					        'url': '/search_suggestions?name=' + label,
+					        'type' : 'GET',
+					        'success' : function(data) { 
+					        	var icpsr = $(".icpsr-field");
+					   			icpsr.val(data['icpsr_id']); 
+					   			if (data['used_check'] == true) {
+					   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
+					   			} else {
+					   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
+					   			}
+					   			if (data['name'].indexOf(" ") >= 1) {
+					   				$("#firstName").val(data['name'].split(' ')[1]);
+					   				$("#lastName").val(data['name'].split(' ')[0]);
+					   			} else {
+					   				$("#firstName").val(data['name']);
+					   			}
+					   			$("#date_execution").empty().append(data['date_execution']);
+					   			$("#age").empty().append(data['age']);
+					   			$("#race").empty().append(data['race']);
+					   			$("#sex").empty().append(data['sex']);
+					   			$("#execution_method").empty().append(data['execution_method']);
+					   			$("#state").empty().append(data['state']);
+					   			$("#state_abbreviation").empty().append(data['state_abbreviation']);
+					   			$("#county_name").empty().append(data['county_name']);     
+					        },
+					    });
+					}
+			      });
+			    </script>
+			    
+				</div>
+
+				<div class="col-md-8 mx-auto previewTable">	  					
+					<table class="table table-sm">
+			          <tbody>
+			            <tr>
+			              <td>
+			                <strong>Icpsr:</strong>
+			                <%= form.text_field :icpsr, id: :big_card_icpsr, class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
+			                <% if @this != nil %>
+			                	<%= hidden_field_tag :card, @this.id.to_s %>
+			                <% end %>
+			              </td>
+			              <td>
+			                <strong>Used check:</strong>
+			                <span id="used_check"></span>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			              	<strong>First name:</strong>
+			              	<%= form.text_field :first_name, id: :firstName, class: "form-control" %>
+			              </td>
+			              <td>
+			              	<strong>Last name:</strong>
+			              	<%= form.text_field :last_name, id: :lastName, class: "form-control" %>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td><strong>Date execution:</strong></td>
+			              <td id="date_execution"></td>
+			            </tr>
+			            <tr>
+			              <td><strong>Race:</strong></td>
+			              <td id="race"></td>
+			            </tr>
+			            <tr>
+			              <td><strong>Sex:</strong></td>
+			              <td id="sex"></td>
+			            </tr>
+			            <tr>
+			              <td><strong>State:</strong></td>
+			              <td id="state"></td>
+			            </tr>
+			            <tr>
+			              <td><strong>County name:</strong></td>
+			              <td id="county_name"></td>
+			            </tr> 
+			          </tbody>
+
+			        </table>
+		  		</div>
+
+			<% end %>
+		</div>
+
+		
+
+	    <div class="col-lg-6 col-md-12">
+
+		  
+
+			
+
+
+
+		  </div>
+
+		</div>
+
+
+<% end %>
+
+<div class="container">
+  <div class="text-center">
+    <div class="btn-group col-md-auto">
+      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, big_cards_path, class: "btn btn-secondary"%>
+    </div>
+  </div>
+</div>
