@@ -385,6 +385,60 @@
         </tr>
         <tr>
           <td class="field">
+            <strong><%= form.label :compensation_case %></strong>
+          </td>
+          <td class="field">
+            <%= form.check_box :compensation_case, id: :espy_record_compensation_case %>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :comp_source_icpsr, id: :espy_record_comp_source_icpsr %>
+              <strong>Icpsr</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :comp_comp_index, id: :espy_record_comp_source_index %>
+              <strong>Index</strong>
+            </label>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :comp_source_big, id: :espy_record_comp_source_big %>
+              <strong>Big</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :comp_source_ref, id: :espy_record_comp_source_ref %>
+              <strong>Ref</strong>
+            </label>
+          </td>
+          <td class="field">
+            <strong><%= form.label :slave %></strong>
+          </td>
+          <td class="field">
+            <%= form.check_box :slave, id: :espy_record_slave %>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :slave_source_icpsr, id: :espy_record_slave_source_icpsr %>
+              <strong>Icpsr</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :slave_comp_index, id: :espy_record_slave_source_index %>
+              <strong>Index</strong>
+            </label>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :slave_source_big, id: :espy_record_slave_source_big %>
+              <strong>Big</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :slave_source_ref, id: :espy_record_slave_source_ref %>
+              <strong>Ref</strong>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
             <strong><%= form.label :execution_method %></strong>
           </td>
           <td class="field" colspan="3">
@@ -529,14 +583,6 @@
           <td class="field text-center" colspan="2">
             <a class="btn btn-info" target="_blank" href="#" id="fipsLookup"><i class="fa fa-info-circle" aria-hidden="true"></i> Get Code</a>      
                    
-          </td>
-        </tr>
-        <tr>
-          <td class="field" colspan="3">
-            <strong><%= form.label :compensation_case %></strong>
-          </td>
-          <td class="field" colspan="3">
-            <%= form.check_box :compensation_case, id: :espy_record_compensation_case %>
           </td>
         </tr>
         <tr>
