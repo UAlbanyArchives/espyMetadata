@@ -64,6 +64,11 @@
         </tr>
 
         <tr>
+          <td><strong>Record Type:</strong></td>
+          <td colspan="3"><%= @espy_record.record_type %></td>
+        </tr>
+
+        <tr>
           <td><strong>Icpsr record:</strong></td>
           <td>
             <%= render 'layouts/boolean_check', check: @espy_record.icpsr_record %>
@@ -132,15 +137,27 @@
         <tr>
           <td>
             <strong>First name:</strong>
-          </td>
-          <td>
             <%= @espy_record.first_name %>
           </td>
           <td>
             <strong>Last name:</strong>
+            <%= @espy_record.last_name %>
           </td>
           <td>
-            <%= @espy_record.last_name %>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.name_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.name_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.name_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.name_source_ref %>
+            </label>
           </td>
         </tr>
 

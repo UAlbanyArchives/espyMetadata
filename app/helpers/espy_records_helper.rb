@@ -1,5 +1,13 @@
 module EspyRecordsHelper
 
+	def type_options
+		[
+			['Sourced'],
+			['Espy Unconfirmed'],
+			['Not Executed']
+		]
+	end
+
 	def jurisdiction_options
 		[
 			['Unknown'],

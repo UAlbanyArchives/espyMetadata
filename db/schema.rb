@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911135655) do
+ActiveRecord::Schema.define(version: 20170911173122) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -100,6 +100,12 @@ ActiveRecord::Schema.define(version: 20170911135655) do
     t.boolean "county_source_ref"
     t.text "big_ocr"
     t.boolean "big_ocr_check"
+    t.string "record_type"
+    t.text "note"
+    t.boolean "name_source_icpsr"
+    t.boolean "name_source_index"
+    t.boolean "name_source_big"
+    t.boolean "name_source_ref"
   end
 
   create_table "icpsr_records", force: :cascade do |t|

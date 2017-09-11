@@ -131,6 +131,19 @@
       <tbody>
 
         <tr>
+          <td class="field">
+            <strong><%= form.label :record_type %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <% if espy_record.jurisdiction.present? %>
+              <%= form.select(:record_type, type_options, {selected: :record_type}, { :class => 'form-control', :id => :espy_record_record_type }) %>
+            <% else %>
+              <%= form.select(:record_type, type_options, {selected: "Sourced"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
+            <% end %>
+          </td>
+        </tr>
+
+        <tr>
           <td class="field" colspan="1">
             <strong><%= form.label :icpsr_id %></strong>
           </td>
@@ -142,14 +155,34 @@
           <td class="field" colspan="1">
             <strong><%= form.label :first_name %></strong>
           </td>
-          <td class="field" colspan="2">
+          <td class="field" colspan="1">
             <%= form.text_field :first_name, id: :espy_record_first_name, class: "form-control" %>
           </td>
           <td class="field" colspan="1">
             <strong><%= form.label :last_name %></strong>
           </td>
-          <td class="field" colspan="2">
+          <td class="field" colspan="1">
             <%= form.text_field :last_name, id: :espy_record_last_name, class: "form-control" %>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr %>
+              <strong>Icpsr</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :name_source_index, id: :espy_record_name_source_index %>
+              <strong>Index</strong>
+            </label>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :name_source_big, id: :espy_record_dname_source_big %>
+              <strong>Big</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :name_source_ref, id: :espy_record_name_source_ref %>
+              <strong>Ref</strong>
+            </label>
           </td>
         </tr>
         <tr>
