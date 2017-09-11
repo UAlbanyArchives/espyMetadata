@@ -4,19 +4,22 @@ module EspyRecordsHelper
 		[
 			['Sourced'],
 			['Espy Unconfirmed'],
-			['Not Executed']
+			['Not Executed'],
+			['Information']
 		]
 	end
 
 	def jurisdiction_options
 		[
-			['Unknown'],
-			['Local-Colonial'],
-			['State'],
-			['Federal'],
-			['Territorial'],
-			['Indian Tribunal'],
-			['Other-Military']
+		  ['Unknown'],
+	      ['State'],
+	      ['Federal'],
+	      ['International'],
+	      ['Local-Colonial'],
+	      ['Military'],
+	      ['Native American'],
+	      ['Territorial'],
+	      ['Other']
 		]
 	end
 

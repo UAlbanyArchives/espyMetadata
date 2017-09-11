@@ -9,7 +9,7 @@
 <% if not params[:state] %>
 	<div class="container">
 	  <form class="form-inline stateForm">
-	    <label for="selectState"><strong>Select a State: </strong></label>
+	    <label for="selectState"><strong>Select a Jurisdiction: </strong></label>
 	    <% if params.has_key?(:state) %>
 	    	<%= collection_select(:state, :state_abbreviation, BigCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'link_big_cards?state=' + this.value") %>
 	   	<% else %>
@@ -141,7 +141,7 @@
 			    	</div>
 			    	<div style="display:inline">
 			    		<strong>OCR Fixed:</strong>
-          				<%= form.check_box :ocr_check, id: :big_card_ocr_check, checked: true %>
+          				<%= form.check_box :ocr_check, id: :big_card_ocr_check %>
           			</div>
 			    </div>
 			    <script type="text/javascript">

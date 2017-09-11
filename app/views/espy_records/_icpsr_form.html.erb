@@ -19,7 +19,7 @@
 
       <div class="field ocrCheck">
         <strong>OCR Fixed:</strong>
-        <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed, checked: true %>
+        <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed %>
       </div>
 
       <div class="field">
@@ -106,20 +106,17 @@
           <td class="field">
             <strong><%= form.label :record_type %></strong>
           </td>
-          <td class="field" colspan="5">
-            <% if espy_record.jurisdiction.present? %>
+          <td class="field" colspan="2">
+            <% if espy_record.record_type.present? %>
               <%= form.select(:record_type, type_options, {selected: :record_type}, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% else %>
               <%= form.select(:record_type, type_options, {selected: "Sourced"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% end %>
           </td>
-        </tr>
-
-        <tr>
           <td class="field" colspan="1">
             <strong><%= form.label :icpsr_id %></strong>
           </td>
-          <td class="field" colspan="5">
+          <td class="field" colspan="2">
             <%= form.number_field :icpsr_id, id: :espy_record_icpsr_id, value: @record.icpsr_id, class: "form-control" %>
           </td>
         </tr>
@@ -383,18 +380,49 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :location_execution %></strong>
-          </td>
-          <td class="field" colspan="5">
-            <%= form.text_field :location_execution, id: :espy_record_location_execution, value: @record.location_execution, class: "form-control" %>
-          </td>
-        </tr>
-        <tr>
-          <td class="field">
             <strong><%= form.label :jurisdiction %></strong>
           </td>
-          <td class="field" colspan="5">
-            <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, value: @record.jurisdiction, class: "form-control" %>
+          <% if @record.jurisdiction == "Other-Military" %>
+            <% @autoJuris = "Military" %>
+          <% elsif @record.jurisdiction == "Federal" %>
+            <% @autoJuris = "Federal" %>
+          <% elsif @record.jurisdiction == "Indian Tribunal" %>
+            <% @autoJuris = "Native American" %>
+          <% elsif @record.jurisdiction == "Territorial" %>
+            <% @autoJuris = "Territorial" %>
+          <% elsif @record.jurisdiction == "Local-Colonial" %>
+            <% @autoJuris = "Local-Colonial" %>
+          <% elsif @record.jurisdiction == "State" %>
+            <% @autoJuris = "State" %>
+          <% else %>
+            <% @autoJuris = nil %>
+          <% end %>
+          <td class="field" colspan="3">
+            <% if @autoJuris == nil %>
+              <%= form.select(:jurisdiction, jurisdiction_options, {:id => :espy_record_jurisdiction }, class: "form-control") %>
+            <% else %>
+              <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, value: @autoJuris, class: "form-control" %>
+            <% end %>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :jurisdiction_source_icpsr, id: :espy_record_jurisdiction_source_icpsr, checked: true %>
+              <strong>Icpsr</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :jurisdiction_source_index, id: :espy_record_jurisdiction_source_index %>
+              <strong>Index</strong>
+            </label>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :jurisdiction_source_big, id: :espy_record_jurisdiction_source_big %>
+              <strong>Big</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :jurisdiction_source_ref, id: :espy_record_jurisdiction_source_ref %>
+              <strong>Ref</strong>
+            </label>
           </td>
         </tr>
         <tr>
@@ -429,11 +457,19 @@
             <strong><%= form.label :county_name %></strong>
           </td>
           <td class="field" colspan="3">
-            <%= form.text_field :county_name, id: :espy_record_county_name, value: @record.county_name, class: "form-control" %>
+            <% if @record.county_name == "Unknown" %>
+              <%= form.text_field :county_name, id: :espy_record_county_name, class: "form-control" %>
+            <% else %>
+              <%= form.text_field :county_name, id: :espy_record_county_name, value: @record.county_name, class: "form-control" %>
+            <% end %>
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr, checked: true %>
+              <% if @record.county_name == "Unknown" %>
+                <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr %>
+              <% else %>
+                <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -457,23 +493,35 @@
             <strong><%= form.label :county_code %></strong>
           </td>
           <td class="field" id="fips" colspan="3">
-            <% if @record.county_code.to_s.length == 4 %>
-              <% @fipsCode = "0" + @record.county_code.to_s %>
+            <% if @record.county_name == "Unknown" %>
+              <%= form.number_field :county_code, id: :espy_record_county_code, type: "textarea", class: "form-control" %>
             <% else %>
-              <% @fipsCode = @record.county_code.to_s %>
+              <% if @record.county_code.to_s.length == 4 %>
+                <% @fipsCode = "0" + @record.county_code.to_s %>
+              <% else %>
+                <% @fipsCode = @record.county_code.to_s %>
+              <% end %>
+              <%= form.number_field :county_code, id: :espy_record_county_code, type: "textarea", value: @fipsCode.to_s, class: "form-control" %>
             <% end %>
-            <%= form.number_field :county_code, id: :espy_record_county_code, type: "textarea", value: @fipsCode.to_s, class: "form-control" %>
           </td>
           <td class="field text-center" colspan="2">
               <a class="btn btn-info" target="_blank" href="#" id="fipsLookup"><i class="fa fa-info-circle" aria-hidden="true"></i> Get Code</a>         
           </td>
         <tr>
         <tr>
-          <td class="field">
+          <td class="field" colspan="3">
             <strong><%= form.label :compensation_case %></strong>
           </td>
-          <td class="field">
+          <td class="field" colspan="3">
             <%= form.check_box :compensation_case, id: :espy_record_compensation_case, value: @record.compensation_case %>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
+            <strong><%= form.label :note %></strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_area :note, id: :espy_record_note, class: "form-control" %>
           </td>
         </tr>
 

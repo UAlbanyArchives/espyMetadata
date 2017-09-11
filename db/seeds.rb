@@ -26,7 +26,7 @@ indexData.each do |row|
 end
 
 puts "There are now #{IndexCard.count} rows in the table"
-
+=end
 
 icpsr_records = File.read(Rails.root.join('lib', 'seeds', 'IcpsrRecords.csv'))
 icpsrData = CSV.parse(icpsr_records, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
@@ -68,7 +68,11 @@ icpsrData.each do |row|
   t.state_abbreviation = row['state_abbreviation']
   t.county_code = row['county_code']
   t.county_name = row['county_name']
-  t.compensation_case = true?(row['compensation_case'])
+  if row['compensation_case'] == "True"
+    t.compensation_case = true
+  else
+    t.compensation_case = false
+  end
   t.icpsr_state = row['icpsr_state']
   t.save
   puts t.errors.full_messages
@@ -76,8 +80,8 @@ icpsrData.each do |row|
 
 end
 puts "There are now #{IcpsrRecord.count} rows in the table"
-=end
 
+=begin
 big_cards = File.read(Rails.root.join('lib', 'seeds', 'bigCards.csv'))
 bigData = CSV.parse(big_cards, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 bigData.each do |row|
@@ -95,3 +99,4 @@ bigData.each do |row|
 end
 
 puts "There are now #{BigCard.count} rows in the table"
+=end

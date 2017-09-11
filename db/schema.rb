@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911173122) do
+ActiveRecord::Schema.define(version: 20170911200627) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -45,10 +45,8 @@ ActiveRecord::Schema.define(version: 20170911173122) do
     t.integer "age"
     t.string "race"
     t.string "sex"
-    t.string "occupation"
     t.string "crime"
     t.string "execution_method"
-    t.string "location_execution"
     t.string "jurisdiction"
     t.string "state"
     t.string "state_abbreviation"
@@ -106,6 +104,10 @@ ActiveRecord::Schema.define(version: 20170911173122) do
     t.boolean "name_source_index"
     t.boolean "name_source_big"
     t.boolean "name_source_ref"
+    t.boolean "jurisdiction_source_icpsr"
+    t.boolean "jurisdiction_source_index"
+    t.boolean "jurisdiction_source_big"
+    t.boolean "jurisdiction_source_ref"
   end
 
   create_table "icpsr_records", force: :cascade do |t|
