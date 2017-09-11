@@ -33,12 +33,16 @@
            <td colspan="3" class="fullTextArea"><%= form.text_field :aspace, id: :big_card_space %></td>
         </tr>
         <tr>
+          <td><strong>OCR Fixed:</strong></td>
+          <td><%= form.check_box :ocr_check, id: :big_card_ocr_check %></td>
+        </tr>
+        <tr>
           <td colspan="4" class="fullTextArea"><%= form.text_area :ocr_text, id: :big_card_ocr_text %></td>
         </tr>
         <tr>
             <td colspan="4" class="actions">
               <div class="text-center">
-                <%= form.button '<i class="fa fa-check"></i> Update Index Card'.html_safe, class: "btn btn-success" %>
+                <%= form.button '<i class="fa fa-check"></i> Update Big Card'.html_safe, class: "btn btn-success" %>
               </div>
             </td>
         </tr>

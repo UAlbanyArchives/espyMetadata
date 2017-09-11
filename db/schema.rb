@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170908203550) do
+ActiveRecord::Schema.define(version: 20170911135655) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170908203550) do
     t.string "aspace"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "ocr_check"
   end
 
   create_table "espy_records", force: :cascade do |t|
@@ -97,6 +98,8 @@ ActiveRecord::Schema.define(version: 20170908203550) do
     t.boolean "county_source_index"
     t.boolean "county_source_big"
     t.boolean "county_source_ref"
+    t.text "big_ocr"
+    t.boolean "big_ocr_check"
   end
 
   create_table "icpsr_records", force: :cascade do |t|

@@ -37,6 +37,10 @@
           <td colspan="3"><%= @big_card.aspace %></td>
         </tr>
         <tr>
+          <td><strong>OCR Fixed:</strong></td>
+          <td colspan="3"><%= render 'layouts/boolean_check', check: @big_card.ocr_check %></td>
+        </tr>
+        <tr>
           <td><strong>OCR Text:</strong></td>
           <td colspan="3"><%= @big_card.ocr_text %></td>
         </tr>

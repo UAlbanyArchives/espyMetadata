@@ -28,16 +28,27 @@
     <div class="field col-md-10 mx-auto">
       <div class="ocrCheck">
         <strong>OCR Fixed:</strong>
-        <% if @espy_record.ocr_fixed == true %>
-         <i class="fa fa-check fa-2x text-success"></i>
-        <% else %>
-         <i class="fa fa-times fa-2x text-danger"></i>
-        <% end %>
+        <%= render 'layouts/boolean_check', check: @espy_record.ocr_fixed %>
       </div>
       <% if @espy_record.ocr_text.present? %>
         <%= @espy_record.ocr_text %>
       <% end %>
     </div>
+  </div>
+  <div class="thirds-top">
+    <% if @espy_record.big_card == true%>
+      <% @big_card = BigCard.find(@espy_record.big_card_id) %>
+      <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
+      <div class="field col-md-10 mx-auto">
+        <div class="ocrCheck">
+          <strong>OCR Fixed:</strong>
+          <%= render 'layouts/boolean_check', check: @espy_record.big_ocr_check %>
+        </div>
+        <% if @espy_record.big_ocr.present? %>
+          <%= @espy_record.big_ocr %>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
 

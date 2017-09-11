@@ -45,6 +45,7 @@
       <th>Root filename</th>
       <th>File group</th>
       <th>ASpace ID</th>
+      <th>Ocr fixed</th>
       <th>Ocr text</th>
     </tr>
   </thead>
@@ -65,6 +66,7 @@
         <td class="smallTableFont"><%= big_card.root_filename %></td>
         <td class="smallTableFont"><%= big_card.file_group %></td>
         <td><%= big_card.aspace %></td>
+        <td><%= render 'layouts/boolean_check', check: big_card.ocr_check %></td>
         <td><%= big_card.ocr_text %></td>
       </tr>
     <% end %>

@@ -32,9 +32,22 @@
         <% if params.has_key?(:card) %>
           <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "8" %>
         <% else %>
-          <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "15" %>
+          <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "8" %>
         <% end %>
       </div>
+    </div>
+    <div class="thirds-top">
+      <% if espy_record.big_card == true %>
+        <% @big_card = BigCard.find(espy_record.big_card_id) %>
+        <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
+        <div class="field ocrCheck">
+          <strong>OCR Fixed:</strong>
+          <%= form.check_box :big_ocr_check, id: :espy_record_big_ocr_check, checked: espy_record.big_ocr_check %>
+        </div>
+        <div class="field">
+          <%= form.text_area :big_ocr, id: :big_card_ocr_text, :value => espy_record.big_ocr, class: "form-control ocr-fix", rows: "8" %>
+        </div>
+      <% end %>
     </div>
   </div>
 
@@ -310,14 +323,6 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :occupation %></strong>
-          </td>
-          <td class="field" colspan="5">
-             <%= form.text_field :occupation, id: :espy_record_occupation, class: "form-control" %>
-          </td>
-        </tr>
-        <tr>
-          <td class="field">
             <strong><%= form.label :crime %></strong>
           </td>
           <td class="field" colspan="3">
@@ -494,12 +499,6 @@
           </td>
           <td class="field">
             <%= form.check_box :compensation_case, id: :espy_record_compensation_case %>
-          </td>
-          <td class="field">
-            <strong><%= form.label :icpsr_state %></strong>
-          </td>
-          <td class="field" colspan="3">
-            <%= form.number_field :icpsr_state, id: :espy_record_icpsr_state, class: "form-control" %>
           </td>
         </tr>
 

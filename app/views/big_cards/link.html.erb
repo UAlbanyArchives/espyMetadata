@@ -139,6 +139,10 @@
 			    		<%= form.hidden_field :state, :value => params[:state] %>
 			    		<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
 			    	</div>
+			    	<div style="display:inline">
+			    		<strong>OCR Fixed:</strong>
+          				<%= form.check_box :ocr_check, id: :big_card_ocr_check, checked: true %>
+          			</div>
 			    </div>
 			    <script type="text/javascript">
 			      $('.search-field').autocomplete({

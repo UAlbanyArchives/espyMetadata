@@ -111,6 +111,6 @@ class BigCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def big_card_params
-      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :used_check, :aspace, :state, :icpsr, :first_name, :last_name, :card)
+      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :ocr_check, :used_check, :aspace, :state, :icpsr, :first_name, :last_name, :card)
     end
 end
