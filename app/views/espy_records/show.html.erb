@@ -60,87 +60,86 @@
 
         <tr>
           <td><strong>UUID:</strong></td>
-          <td colspan="3"><%= @espy_record.uuid %></td>
+          <td colspan="5"><%= @espy_record.uuid %></td>
         </tr>
 
         <tr>
           <td><strong>Record Type:</strong></td>
-          <td colspan="3"><%= @espy_record.record_type %></td>
+          <td colspan="2"><%= @espy_record.record_type %></td>
+          <td><strong>Icpsr record:</strong></td>
+          <td colspan="2">
+            <%= render 'layouts/boolean_check', check: @espy_record.icpsr_record %>
+          </td>
         </tr>
 
         <tr>
-          <td><strong>Icpsr record:</strong></td>
-          <td>
-            <%= render 'layouts/boolean_check', check: @espy_record.icpsr_record %>
-          </td>
           <td><strong>Icpsr record ID:</strong></td>
-          <td><%= @espy_record.icpsr_record_id %></td>
+          <td colspan="2"><%= @espy_record.icpsr_record_id %></td>
+          <td><strong>Icpsr record Number:</strong></td>
+          <td colspan="2"><%= @espy_record.icpsr_id %></td>
         </tr>
 
         <tr>
           <td><strong>Index card:</strong></td>
-          <td>
+          <td colspan="2">
             <%= render 'layouts/boolean_check', check: @espy_record.index_card %>
           </td>
           <td><strong>Index card Record ID:</strong></td>
-          <td><%= @espy_record.index_card_id %></td>
+          <td colspan="2"><%= @espy_record.index_card_id %></td>
         </tr>
         <tr>
           <td><strong>Index card files:</strong></td>
-          <td colspan="3"><%= @espy_record.index_card_files %></td>
+          <td colspan="5"><%= @espy_record.index_card_files %></td>
         </tr>
         <tr>
           <td><strong>Index card ASpace ID:</strong></td>
-          <td colspan="3"><%= @espy_record.index_card_aspace %></td>
+          <td colspan="5"><%= @espy_record.index_card_aspace %></td>
         </tr>
 
         <tr>
           <td><strong>Big card:</strong></td>
-          <td>
+          <td colspan="2">
             <%= render 'layouts/boolean_check', check: @espy_record.big_card %>
           </td>
           </td>
           <td><strong>Big card record ID:</strong></td>
-          <td><%= @espy_record.big_card_id %></td>
+          <td colspan="2"><%= @espy_record.big_card_id %></td>
         </tr>
         <tr>
           <td><strong>Big card files:</strong></td>
-          <td colspan="3"><%= @espy_record.big_card_files %></td>
+          <td colspan="5"><%= @espy_record.big_card_files %></td>
         </tr>
         <tr>
           <td><strong>Big card ASpace ID:</strong></td>
-          <td colspan="3"><%= @espy_record.big_card_aspace %></td>
+          <td colspan="5"><%= @espy_record.big_card_aspace %></td>
         </tr>
 
         <tr>
           <td><strong>Ref material:</strong></td>
-          <td>
+          <td colspan="2">
             <%= render 'layouts/boolean_check', check: @espy_record.reference_material %>
           </td>
           <td><strong>Ref material ID:</strong></td>
-          <td><%= @espy_record.reference_material_id %></td>
+          <td colspan="2"><%= @espy_record.reference_material_id %></td>
         </tr>
         <tr>
           <td><strong>Ref material files:</strong></td>
-          <td colspan="3"><%= @espy_record.reference_material_files %></td>
+          <td colspan="5"><%= @espy_record.reference_material_files %></td>
         </tr>
         <tr>
           <td><strong>Ref material ASpace ID:</strong></td>
-          <td colspan="3"><%= @espy_record.reference_material_aspace %></td>
+          <td colspan="5"><%= @espy_record.reference_material_aspace %></td>
         </tr>
 
         <tr>
-          <td><strong>Icpsr record:</strong></td>
-          <td colspan="3"><%= @espy_record.icpsr_id %></td>
-        </tr>
-
-        <tr>
+          <td><strong>First name:</strong></td>
           <td>
-            <strong>First name:</strong>
             <%= @espy_record.first_name %>
           </td>
           <td>
             <strong>Last name:</strong>
+          </td>
+          <td>
             <%= @espy_record.last_name %>
           </td>
           <td>
@@ -163,7 +162,7 @@
 
         <tr>
           <td><strong>Date execution:</strong></td>
-          <td>
+          <td colspan="3">
             <% if @espy_record.circa_date_execution == true %>
               Circa 
             <% end %>
@@ -189,7 +188,7 @@
 
         <tr>
           <td><strong>Date crime:</strong></td>
-          <td>
+          <td colspan="3">
             <% if @espy_record.circa_date_crime == true %>
               Circa 
             <% end %>
@@ -215,7 +214,7 @@
 
         <tr>
           <td><strong>Age:</strong></td>
-          <td><%= @espy_record.age %></td>
+          <td colspan="3"><%= @espy_record.age %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -236,7 +235,7 @@
 
         <tr>
           <td><strong>Sex:</strong></td>
-          <td><%= @espy_record.sex %></td>
+          <td colspan="3"><%= @espy_record.sex %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -257,7 +256,7 @@
 
         <tr>
           <td><strong>Race:</strong></td>
-          <td><%= @espy_record.race %></td>
+          <td colspan="3"><%= @espy_record.race %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -278,7 +277,7 @@
 
         <tr>
           <td><strong>Crime:</strong></td>
-          <td><%= @espy_record.crime %></td>
+          <td colspan="3"><%= @espy_record.crime %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -298,8 +297,46 @@
         </tr>
 
         <tr>
+          <td><strong>Slave:</strong><%= render 'layouts/boolean_check', check: @espy_record.slave %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.slave_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.slave_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.slave_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.slave_source_ref %>
+            </label>
+          </td>
+          <td><strong>Compensation case:</strong><%= render 'layouts/boolean_check', check: @espy_record.compensation_case %></td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.comp_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.comp_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.comp_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.comp_source_ref %>
+            </label>
+          </td>
+        </tr>
+
+
+        <tr>
           <td><strong>Execution method:</strong></td>
-          <td><%= @espy_record.execution_method %></td>
+          <td colspan="3"><%= @espy_record.execution_method %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -320,7 +357,7 @@
 
         <tr>
           <td><strong>Jurisdiction:</strong></td>
-          <td><%= @espy_record.jurisdiction %></td>
+          <td colspan="3"><%= @espy_record.jurisdiction %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -341,14 +378,14 @@
 
         <tr>
           <td><strong>State:</strong></td>
-          <td><%= @espy_record.state %></td>
-          <td><strong>State abbreviation:</strong></td></td>
+          <td colspan="2"><%= @espy_record.state %></td>
+          <td colspan="2"><strong>State abbreviation:</strong></td></td>
           <td id="espy_record_state_abbreviation"><%= @espy_record.state_abbreviation %></td>
         </tr>
 
         <tr>
           <td><strong>County name:</strong></td>
-          <td id="espy_record_county_name"><%= @espy_record.county_name %></td>
+          <td id="espy_record_county_name" colspan="3"><%= @espy_record.county_name %></td>
           <td>
             <label class="form-check-label">
               <strong>Icpsr</strong>
@@ -369,18 +406,11 @@
 
         <tr>
           <td><strong>County code:</strong></td>
-          <td><%= @espy_record.county_code %></td>
+          <td colspan="3"><%= @espy_record.county_code %></td>
           <td colspan="2">
-            <a class="btn btn-success" href="#" id="countyBtn"><i class="fa fa-globe" aria-hidden="true"></i> County Check</a>          
+            <a class="btn btn-success" href="#" id="countyLookup"><i class="fa fa-globe" aria-hidden="true"></i> County Check</a>          
           </td>
         </tr>      
-
-        <tr>
-          <td><strong>Compensation case:</strong></td>
-          <td><%= @espy_record.compensation_case %></td>
-          <td><strong>Icpsr state:</strong></td>
-          <td><%= @espy_record.icpsr_state %></td>
-        </tr>
 
     </tbody>
   </table>

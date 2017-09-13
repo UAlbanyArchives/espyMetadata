@@ -48,9 +48,9 @@
       <th>Race</th>
       <th>Sex</th>
       <th>Occupation</th>
+      <th>Comp Case</th>
       <th>Crime</th>
       <th>Execution method</th>
-      <th>Location execution</th>
       <th>Jurisdiction</th>
       <th>State</th>
       <th>State abbreviation</th>
@@ -72,11 +72,7 @@
           </div>
         </td>
         <td>
-          <% if icpsr_record.used_check == true %>
-           <i class="fa fa-check fa-2x text-success"></i>
-          <% else %>
-           <i class="fa fa-times fa-2x text-danger"></i>
-          <% end %>
+          <%= render 'layouts/boolean_check', check: icpsr_record.used_check %>
         </td>
         <td><%= icpsr_record.icpsr_id %></td>
         <td><%= icpsr_record.name %></td>
@@ -85,9 +81,9 @@
         <td><%= icpsr_record.race %></td>
         <td><%= icpsr_record.sex %></td>
         <td><%= icpsr_record.occupation %></td>
+        <td><%= render 'layouts/boolean_check', check: icpsr_record.compensation_case %></td>
         <td><%= icpsr_record.crime %></td>
         <td><%= icpsr_record.execution_method %></td>
-        <td><%= icpsr_record.location_execution %></td>
         <td><%= icpsr_record.jurisdiction %></td>
         <td><%= icpsr_record.state %></td>
         <td><%= icpsr_record.state_abbreviation %></td>

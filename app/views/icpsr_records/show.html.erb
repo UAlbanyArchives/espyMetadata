@@ -22,11 +22,7 @@
               </td>
               <td>
                 <strong>Used check:</strong>
-                <% if @icpsr_record.used_check == true %>
-                 <i class="fa fa-check fa-2x text-success"></i>
-                <% else %>
-                 <i class="fa fa-times fa-2x text-danger"></i>
-                <% end %>
+                <%= render 'layouts/boolean_check', check: @icpsr_record.used_check %>
               </td>
             </tr>
             <tr>

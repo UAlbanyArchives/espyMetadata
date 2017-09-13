@@ -83,7 +83,14 @@ class BigCardsController < ApplicationController
         end
       else
         if @big_card.update(big_card_params)
-          format.html { redirect_to @big_card, notice: 'Big card was successfully updated.' }
+          @unlink = ""
+          if @big_card.used_check == false
+            IcpsrRecord.where(big_id: @big_card.id).each do |link|
+              link.update_attribute :big_id, nil
+              @unlink = @unlink + " Unlinked Icpsr " + link.icpsr_id.to_s
+            end
+          end
+          format.html { redirect_to @big_card, notice: 'Big card was successfully updated.' + @unlink }
           format.json { render :show, status: :ok, location: @big_card }
         else
           format.html { render :edit }

@@ -90,7 +90,14 @@ document.addEventListener("turbolinks:load", function() {
         frame.src = frame.src + link;
         $('#modalMap').modal()
       } else {
-        var link = "https://www.google.com/maps/embed/v1/place?q=" + $("#espy_record_county_name").val().replace(" ", "+") + "+County,+" + $("#espy_record_state_abbreviation").val() + "&zoom=9" + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
+        if ($("#espy_record_county_name").val()) {
+            $countyName = $("#espy_record_county_name").val().replace(" ", "+")
+            $countyState = $("#espy_record_state_abbreviation").val()
+        } else {
+            $countyName = $("#espy_record_county_name").text().replace(" ", "+")
+            $countyState = $("#espy_record_state_abbreviation").text()
+        }
+        var link = "https://www.google.com/maps/embed/v1/place?q=" + $countyName + "+County,+" + $countyState + "&zoom=9" + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
         var frame = document.querySelector("#mapsWindow");
         frame.src = frame.src + link;
         $('#modalMap').modal()

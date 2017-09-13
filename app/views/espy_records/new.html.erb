@@ -18,7 +18,7 @@
 	<% @stop = false %>
 	<% @card_index = 0 %>
 	<% @next = nil %>
-	<% @index_card.each_with_index do |card, index| %>
+	<% IndexCard.all.each_with_index do |card, index| %>
 		<% if @stop == true %>
 			<% if index == @card_index %>
 				<% @next = card %>

@@ -138,6 +138,7 @@
 					   			icpsr.val(data['icpsr_id']); 
 					   			if (data['used_check'] == true) {
 					   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
+					   				$('.submit-btn').attr('data-confirm', 'This Icpsr record has already been used, are you sure you want to make another Espy record for it?');
 					   			} else {
 					   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
 					   			}
@@ -165,8 +166,14 @@
 
 			<%= form_tag(new_espy_record_path, method: "get") do %>
 				<div class="form-group">
-					<%= button_tag(type: "submit", class: "btn btn-primary submit-btn") do %>
+					<% if @this.used_check == true %>
+						<%= button_tag(type: "submit", data: {:confirm => "This index card has already been used. Are you sure you want to use it to create another Espy Record?"},class: "btn btn-primary submit-btn") do %>
 					    <i class="fa fa-thumbs-up"></i> Select
+						<% end %>
+					<% else %>
+						<%= button_tag(type: "submit", class: "btn btn-primary submit-btn") do %>
+					    <i class="fa fa-thumbs-up"></i> Select
+						<% end %>
 					<% end %>
 					<%= link_to '<i class="fa fa-thumbs-down"></i> No Record'.html_safe, "/espy_records/new?state=" + params[:state] + "&card=" + @this.id.to_s, class: "btn btn-secondary pull-right"%>
 				</div>

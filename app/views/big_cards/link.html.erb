@@ -137,7 +137,11 @@
 			    	<div class="text-center">
 			    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 			    		<%= form.hidden_field :state, :value => params[:state] %>
-			    		<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
+			    		<% if @this.used_check == true %>
+			    		<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", data: {:confirm => "This card has already been used. Are you sure you want to link it to another record?"}, class: "btn btn-success" %>
+			    		<% else %>
+			    			<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
+			    		<% end %>
 			    	</div>
 			    	<div style="display:inline">
 			    		<strong>OCR Fixed:</strong>
