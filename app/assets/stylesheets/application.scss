@@ -40,13 +40,6 @@ img {width: 80%; margin-bottom: 1rem;}
 
 .title-card h4 { margin-top: 0.5rem; }
 
-#error_explanation {
-  color: #f00;
-  ul {
-    list-style: none;
-    margin: 0 0 18px 0;
-  }
-}
 
 .glowing-border img {
     border: 5px solid #dadada;
@@ -145,3 +138,5 @@ img {width: 80%; margin-bottom: 1rem;}
 .nameLabel {width: 10% !important; display: inline-block; vertical-align: middle}
 .nameWidth {width: 38% !important; display: inline-block; vertical-align: middle}
 .espyTable label {margin-bottom:0px;}
+
+.previewTable input {width:100%;}

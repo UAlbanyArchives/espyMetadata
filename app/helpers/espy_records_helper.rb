@@ -3,9 +3,9 @@ module EspyRecordsHelper
 	def type_options
 		[
 			['Sourced'],
-			['Espy Unconfirmed'],
+			['Not Sourced'],
 			['Not Executed'],
-			['Information']
+			['Informational']
 		]
 	end
 
@@ -92,6 +92,7 @@ module EspyRecordsHelper
 	      ['District of Columbia'],
 	      ['Florida'],
 	      ['Georgia'],
+	      ['Guam'],
 	      ['Hawaii'],
 	      ['Idaho'],
 	      ['Illinois'],

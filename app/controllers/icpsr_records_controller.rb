@@ -76,6 +76,10 @@ class IcpsrRecordsController < ApplicationController
   def destroy
     @icpsr_record.destroy
     respond_to do |format|
+      if not @icpsr_record.big_id.blank?
+        @big_card = BigCard.find(@icpsr_record.big_id)
+        @big_card. update_attribute :used_check, false
+      end
       format.html { redirect_to icpsr_records_url, notice: 'Icpsr record was successfully destroyed.' }
       format.json { head :no_content }
     end

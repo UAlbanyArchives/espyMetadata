@@ -171,14 +171,13 @@
 					   			} else {
 					   				$("#firstName").val(data['name']);
 					   			}
-					   			$("#date_execution").empty().append(data['date_execution']);
-					   			$("#age").empty().append(data['age']);
-					   			$("#race").empty().append(data['race']);
-					   			$("#sex").empty().append(data['sex']);
-					   			$("#execution_method").empty().append(data['execution_method']);
-					   			$("#state").empty().append(data['state']);
-					   			$("#state_abbreviation").empty().append(data['state_abbreviation']);
-					   			$("#county_name").empty().append(data['county_name']);     
+					   			$("#date_execution").val(data['date_execution']);
+					   			$("#age").val(data['age']);
+					   			$("#race").val(data['race']);
+					   			$("#sex").val(data['sex']);
+					   			$("#espy_record_state").val(data['state']);
+					   			$('#espy_record_state').change();
+					   			$("#county_name").val(data['county_name']);     
 					        },
 					    });
 					}
@@ -191,47 +190,54 @@
 					<table class="table table-sm">
 			          <tbody>
 			            <tr>
-			              <td>
+			              <td colspan="1">
 			                <strong>Icpsr:</strong>
+			              </td>
+			              <td colspan="1">
 			                <%= form.text_field :icpsr, id: :big_card_icpsr, class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
 			                <% if @this != nil %>
 			                	<%= hidden_field_tag :card, @this.id.to_s %>
 			                <% end %>
 			              </td>
-			              <td>
+			              <td colspan="2">
 			                <strong>Used check:</strong>
 			                <span id="used_check"></span>
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td colspan="2">
 			              	<strong>First name:</strong>
 			              	<%= form.text_field :first_name, id: :firstName, class: "form-control" %>
 			              </td>
-			              <td>
+			              <td colspan="2">
 			              	<strong>Last name:</strong>
 			              	<%= form.text_field :last_name, id: :lastName, class: "form-control" %>
 			              </td>
 			            </tr>
 			            <tr>
 			              <td><strong>Date execution:</strong></td>
-			              <td id="date_execution"></td>
+			              <td colspan="3"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Race:</strong></td>
-			              <td id="race"></td>
+			              <td colspan="3"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Sex:</strong></td>
-			              <td id="sex"></td>
+			              <td colspan="3"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
 			            </tr>
 			            <tr>
-			              <td><strong>State:</strong></td>
-			              <td id="state"></td>
+			              <td colspan="1"><strong>State:</strong></td>
+			              <td colspan="2"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
+			              </td>
+			              <td colspan="1">
+			              	<%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+			              </td>
+			              <%= form.hidden_field :state_param, id: :state_param, value: params[:state] %>
 			            </tr>
 			            <tr>
 			              <td><strong>County name:</strong></td>
-			              <td id="county_name"></td>
+			              <td colspan="3"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
 			            </tr> 
 			          </tbody>
 

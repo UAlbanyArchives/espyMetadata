@@ -1,13 +1,15 @@
 <%= form_with(model: big_card, local: true) do |form| %>
   <% if big_card.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(big_card.errors.count, "error") %> prohibited this big_card from being saved:</h2>
-
-      <ul>
-      <% big_card.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <div class="container">
+      <div class="alert alert-danger" role="alert">
+      
+        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+        <ul>
+        <% espy_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 

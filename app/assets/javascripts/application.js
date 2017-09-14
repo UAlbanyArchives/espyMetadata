@@ -34,6 +34,7 @@ states_hash =
     'District of Columbia': 'DC',
     'Florida': 'FL',
     'Georgia': 'GA',
+    'Guam': 'GU',
     'Hawaii': 'HI',
     'Idaho': 'ID',
     'Illinois': 'IL',
@@ -142,4 +143,17 @@ document.addEventListener("turbolinks:load", function() {
 			});
 		}
 	});
+});
+
+document.addEventListener("turbolinks:load", function() {
+    $('#makeForm').submit(function()
+    {
+       if($('#used_check').attr('data-value') == 'used')
+       {
+          var icpsrID = $("#icpsr").val()
+          var icpsrName = $("#name").text()
+          alert("ERROR: Icpsr record " + icpsrID + " (" + icpsrName + ") has already been used to create an Espy record.");
+          return false;
+       }
+    });
 });

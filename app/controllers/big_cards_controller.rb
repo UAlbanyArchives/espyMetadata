@@ -58,11 +58,29 @@ class BigCardsController < ApplicationController
           @icpsr = IcpsrRecord.find_by_icpsr_id(big_card_params[:icpsr])
           @icpsr.update_attribute :big_id, params[:id].to_i
         else
-          if big_card_params[:first_name].present?
+          if 1 == 1
             @icpsr = IcpsrRecord.new
-            @icpsr.update_attribute :name, big_card_params[:first_name].to_s + " " + big_card_params[:last_name].to_s
-            @icpsr.update_attribute :state_abbreviation, big_card_params[:state].to_s
+            if big_card_params[:last_name].present?
+              if big_card_params[:first_name].present?
+                @newName = big_card_params[:last_name].to_s + " " + big_card_params[:first_name].to_s
+              else
+                @newName = big_card_params[:last_name].to_s
+              end
+              @icpsr.update_attribute :name, @newName
+            elsif big_card_params[:first_name].present?
+              @newName = big_card_params[:first_name].to_s
+              @icpsr.update_attribute :name, @newName
+            end
+            
+            @icpsr.update_attribute :date_execution, big_card_params[:date_execution]
+            @icpsr.update_attribute :race, big_card_params[:race]
+            @icpsr.update_attribute :sex, big_card_params[:sex]
+            @icpsr.update_attribute :state, big_card_params[:state]
+            @icpsr.update_attribute :state_abbreviation, big_card_params[:state_abbreviation]
+            @icpsr.update_attribute :county_name, big_card_params[:county_name]
             @icpsr.update_attribute :big_id, params[:id].to_i
+          
+
           else
             @big_card.update_attribute :used_check, false
             @error = true
@@ -70,15 +88,15 @@ class BigCardsController < ApplicationController
         end
         if @error == true
           if big_card_params[:card]
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state] + "&card=" + big_card_params[:card], notice: "Not enough information!"}
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card], notice: "Not enough information!"}
           else
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state]}
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
           end
         else
           if big_card_params[:card]
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state] + "&card=" + big_card_params[:card], notice: 'Not enough information!'}
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card]}
           else
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state]}
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
           end
         end
       else
@@ -90,8 +108,17 @@ class BigCardsController < ApplicationController
               @unlink = @unlink + " Unlinked Icpsr " + link.icpsr_id.to_s
             end
           end
-          format.html { redirect_to @big_card, notice: 'Big card was successfully updated.' + @unlink }
-          format.json { render :show, status: :ok, location: @big_card }
+          if params[:state]
+            if params[:card]
+              @nextCard = params[:card].to_i + 1
+              format.html { redirect_to "/link_big_cards?state=" + params[:state] + "&card=" + @nextCard.to_s}
+            else
+              format.html { redirect_to "/link_big_cards?state=" + params[:state]}
+            end
+          else
+            format.html { redirect_to @big_card, notice: 'Big card was successfully updated.' + @unlink }
+            format.json { render :show, status: :ok, location: @big_card }
+          end
         else
           format.html { render :edit }
           format.json { render json: @big_card.errors, status: :unprocessable_entity }
@@ -118,6 +145,6 @@ class BigCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def big_card_params
-      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :ocr_check, :used_check, :aspace, :state, :icpsr, :first_name, :last_name, :card)
+      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :ocr_check, :used_check, :aspace, :state, :icpsr, :first_name, :last_name, :card, :date_execution, :sex, :race, :county_name, :state_param)
     end
 end

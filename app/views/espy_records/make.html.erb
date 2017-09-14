@@ -138,16 +138,17 @@
 					   			icpsr.val(data['icpsr_id']); 
 					   			if (data['used_check'] == true) {
 					   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
-					   				$('.submit-btn').attr('data-confirm', 'This Icpsr record has already been used, are you sure you want to make another Espy record for it?');
+					   				$("#used_check").attr("data-value", "used")
 					   			} else {
 					   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
+					   				$("#used_check").attr("data-value", "unused")
 					   			}
 					   			if (data['name'].indexOf(" ") >= 1) {
 					   				$("#name").empty().append(data['name'].split(' ')[1] + " " + data['name'].split(' ')[0]);
 					   			} else {
 					   				$("#name").empty().append(data['name']);
 					   			}
-					   			$("#date_execution").empty().append(data['date_execution']);
+					   			$("#date_execution").val(data['date_execution']);
 					   			$("#age").empty().append(data['age']);
 					   			$("#race").empty().append(data['race']);
 					   			$("#sex").empty().append(data['sex']);
@@ -164,7 +165,7 @@
 			
 
 
-			<%= form_tag(new_espy_record_path, method: "get") do %>
+			<%= form_tag(new_espy_record_path, method: "get", id: "makeForm") do %>
 				<div class="form-group">
 					<% if @this.used_check == true %>
 						<%= button_tag(type: "submit", data: {:confirm => "This index card has already been used. Are you sure you want to use it to create another Espy Record?"},class: "btn btn-primary submit-btn") do %>
@@ -184,7 +185,7 @@
 		            <tr>
 		              <td>
 		                <strong>Icpsr:</strong>
-		                <%= text_field_tag :icpsr, "", class: "form-control icpsr-field", placeholder: 'ICPSR Record', required: true %>
+		                <%= text_field_tag :icpsr, "", class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
 		               	<% if @this != nil %>
 		                	<%= hidden_field_tag :card, @this.id.to_s %>
 		                <% end %>
@@ -200,7 +201,7 @@
 		            </tr>
 		            <tr>
 		              <td><strong>Date execution:</strong></td>
-		              <td id="date_execution"></td>
+		              <td><%= text_field_tag :date_execution, "", class: "form-control icpsr-field", id: "date_execution", required: true %></td>
 		            </tr>
 		            <tr>
 		              <td><strong>Age:</strong></td>

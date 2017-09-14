@@ -1,13 +1,15 @@
 <%= form_with(model: espy_record, local: true) do |form| %>
   <% if espy_record.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(espy_record.errors.count, "error") %> prohibited this espy_record from being saved:</h2>
-
-      <ul>
-      <% espy_record.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <div class="container">
+      <div class="alert alert-danger" role="alert">
+      
+        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+        <ul>
+        <% espy_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 

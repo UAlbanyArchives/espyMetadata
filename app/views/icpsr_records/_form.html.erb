@@ -1,14 +1,16 @@
 <%= form_with(model: icpsr_record, local: true) do |form| %>
   <% if icpsr_record.errors.any? %>
-    <tr id="error_explanation">
-      <h2><%= pluralize(icpsr_record.errors.count, "error") %> prohibited this icpsr_record from being saved:</h2>
-
-      <ul>
-      <% icpsr_record.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </tr>
+    <div class="container">
+      <div class="alert alert-danger" role="alert">
+      
+        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+        <ul>
+        <% espy_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
   <% end %>
   <table class="table table-sm">
 
