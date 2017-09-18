@@ -123,17 +123,11 @@
           </td>
         </tr>
         <tr>
-          <td class="field" colspan="1">
-            <strong><%= form.label :first_name %></strong>
-          </td>
-          <td class="field" colspan="2">
-            <%= form.text_field :first_name, id: :espy_record_first_name, value: @record.name.split(" ")[1], class: "form-control" %>
-          </td>
-          <td class="field" colspan="1">
-            <strong><%= form.label :last_name %></strong>
-          </td>
-          <td class="field" colspan="2">
-            <%= form.text_field :last_name, id: :espy_record_last_name, value: @record.name.split(" ")[0], class: "form-control" %>
+          <td class="field" colspan="6">
+            <strong class="nameLabel"><%= form.label :first_name %></strong>
+            <%= form.text_field :first_name, id: :espy_record_first_name, value: @record.name.split(" ")[1], class: "form-control nameWidth" %>
+            <strong class="nameLabel"><%= form.label :last_name %></strong>
+            <%= form.text_field :last_name, id: :espy_record_last_name, value: @record.name.split(" ")[0], class: "form-control nameWidth" %>
           </td>
           <td class="field">
             <label class="form-check-label">

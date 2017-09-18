@@ -26,7 +26,7 @@ indexData.each do |row|
 end
 
 puts "There are now #{IndexCard.count} rows in the table"
-=end
+
 
 icpsr_records = File.read(Rails.root.join('lib', 'seeds', 'IcpsrRecords.csv'))
 icpsrData = CSV.parse(icpsr_records, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
@@ -81,7 +81,6 @@ icpsrData.each do |row|
 end
 puts "There are now #{IcpsrRecord.count} rows in the table"
 
-=begin
 big_cards = File.read(Rails.root.join('lib', 'seeds', 'bigCards.csv'))
 bigData = CSV.parse(big_cards, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 bigData.each do |row|
@@ -100,3 +99,17 @@ end
 
 puts "There are now #{BigCard.count} rows in the table"
 =end
+
+reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference.csv'))
+reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
+reference.each do |row|
+  t = Reference.new
+  t.filename = row['filename']
+  t.used_check = false
+  t.aspace = row['aspace']
+  t.folder_name = row['folder_name']
+  t.save
+  puts t.errors.full_messages
+  puts "#{t.filename} saved"
+
+end

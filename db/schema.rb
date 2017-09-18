@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911211358) do
+ActiveRecord::Schema.define(version: 20170918205337) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 20170911211358) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "big_id"
-    t.integer "ref_id"
+    t.string "ref_id"
   end
 
   create_table "index_cards", force: :cascade do |t|
@@ -153,6 +153,15 @@ ActiveRecord::Schema.define(version: 20170911211358) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "aspace"
+  end
+
+  create_table "references", force: :cascade do |t|
+    t.string "filename"
+    t.boolean "used_check"
+    t.string "aspace"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "folder_name"
   end
 
 end

@@ -86,7 +86,7 @@ document.addEventListener("turbolinks:load", function() {
   $("#countyLookup").click(function(e){
       e.preventDefault();
       if ($('#placeInput').val()) {
-        var link = "//www.google.com/maps/embed/v1/search?q=What County " + $('#placeInput').val() + " " + $('#espy_record_state').val() + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
+        var link = "https://www.google.com/maps/embed/v1/search?q=What County " + $('#placeInput').val() + " " + $('#espy_record_state').val() + "&key=AIzaSyBDbjHsonLOLVDuZGUsLGmdf9Bh4LvyaUU";
         var frame = document.querySelector("#mapsWindow");
         frame.src = frame.src + link;
         $('#modalMap').modal()

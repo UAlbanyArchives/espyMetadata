@@ -1,0 +1,37 @@
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-success" role="alert"><%= notice %></p>
+  </div>
+<% end %>
+
+<% @folder = @reference.filename.split("_")[0] + "_" + @reference.filename.split("_")[1] %>
+<div class="row padded-row">
+
+    <div class="col-lg-6 col-md-12">
+
+    	<h2><%= @reference.folder_name %></h2>
+
+    	<img src="/images/reference/<%= @reference.filename %>"/>      
+
+      
+    </div>
+</div>
+
+
+<p>
+  <strong>Filename:</strong>
+  <%= @reference.filename %>
+</p>
+
+<p>
+  <strong>Used check:</strong>
+  <%= @reference.used_check %>
+</p>
+
+<p>
+  <strong>Aspace:</strong>
+  <%= @reference.aspace %>
+</p>
+
+<%= link_to 'Edit', edit_reference_path(@reference) %> |
+<%= link_to 'Back', references_path %>
