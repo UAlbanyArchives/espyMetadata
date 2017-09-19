@@ -1,37 +1,46 @@
+<% provide(:section, "View Reference Material") %>
 <% if notice %>
   <div id="notice" class="container">
     <p class="alert alert-success" role="alert"><%= notice %></p>
   </div>
 <% end %>
 
-<% @folder = @reference.filename.split("_")[0] + "_" + @reference.filename.split("_")[1] %>
 <div class="row padded-row">
 
-    <div class="col-lg-6 col-md-12">
+    <div class="col-lg-6 col-md-12 text-center">
 
-    	<h2><%= @reference.folder_name %></h2>
+    	<img src="/images/reference/<%= @reference.filename %>"/>
 
-    	<img src="/images/reference/<%= @reference.filename %>"/>      
-
-      
     </div>
+   	<div class="col-lg-6 col-md-12">
+
+   		<h2><%= @reference.folder_name %></h2>
+
+
+		<p>
+		  <strong>Filename:</strong>
+		  <%= @reference.filename %>
+		</p>
+
+		<p>
+		  <strong>Used check:</strong>
+		  <%= render 'layouts/boolean_check', check: @reference.used_check %>
+		</p>
+
+		<p>
+		  <strong>Aspace:</strong>
+		  <%= @reference.aspace %>
+		</p>
+
+		<div class="container">
+		  <div class="text-center">
+		    <div class="btn-group col-md-auto">
+		      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, references_path + "?folder=" + @reference.folder_name, class: "btn btn-secondary"%>
+		      <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_reference_path(@reference), class: "btn btn-info"%>
+		    </div>
+		  </div>
+		</div>
+
+	</div>
 </div>
 
-
-<p>
-  <strong>Filename:</strong>
-  <%= @reference.filename %>
-</p>
-
-<p>
-  <strong>Used check:</strong>
-  <%= @reference.used_check %>
-</p>
-
-<p>
-  <strong>Aspace:</strong>
-  <%= @reference.aspace %>
-</p>
-
-<%= link_to 'Edit', edit_reference_path(@reference) %> |
-<%= link_to 'Back', references_path %>

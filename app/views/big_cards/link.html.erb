@@ -89,7 +89,7 @@
 
 		  	<% if @previous != nil %>
 		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
-		    		<i class="fa fa-chevron-left fa-4x" aria-hidden="true"></i>
+		    		<i class="fa fa-arrow-left fa-4x" aria-hidden="true"></i>
 		  		<% end %>
 		  	<% end %>
 		  	<% if @this != nil %>
@@ -97,7 +97,7 @@
 		    <% end %>
 		    <% if @next != nil %>
 		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
-		    		<i class="fa fa-chevron-right fa-4x" aria-hidden="true"></i>
+		    		<i class="fa fa-arrow-right fa-4x" aria-hidden="true"></i>
 		    	<% end %>
 		 	<% end %>
 
@@ -184,7 +184,7 @@
 			      });
 			    </script>
 			    
-				</div>
+			    </div>
 
 				<div class="col-md-8 mx-auto previewTable">	  					
 					<table class="table table-sm">

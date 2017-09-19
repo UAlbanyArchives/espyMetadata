@@ -1,0 +1,271 @@
+<% provide(:section, "Link Reference Material") %>
+
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-danger" role="alert"><%= notice %></p>
+  </div>
+<% end %>
+
+
+<% provide(:state, params[:folder]) %>
+<% @reference = Reference.where(folder_name: params[:folder]) %>
+
+<% if params[:folder] %>
+
+	<% if params.has_key?(:item) %>
+		<% @item = params[:item].to_i %>
+		<% if @item == 0 %>
+			<% @previous = nil %>
+		<% else %>
+			<% if @reference.exists?(id: @item - 1) %>
+				<% @previous = @reference.find(@item - 1) %>
+			<% else %>
+				<% @previous = nil %>
+			<% end %>
+		<% end %>
+		<% @this = @reference.find(@item) %>
+		<% if @reference.exists?(id: @item + 1) %>
+			<% @next = @reference.find(@item + 1) %>
+		<% else %>
+			<% @next = nil %>
+		<% end %>
+	<% else %>
+		<% @previous = nil %>
+		<% @stop = false %>
+		<% @next_index = 0 %>
+		<% @next = nil %>
+		<% @reference.each_with_index do |item, index| %>
+			<% if @stop == true %>
+				<% if index == @next_index %>
+					<% @next = item %>
+				<% end %>
+			<% else %>
+				<% if item.used_check == false %>
+					<% @this = item %>
+					<% @stop = true %>
+					<% @next_index = index + 1 %>
+				<% else %>
+					<% @previous = item %>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if @stop == false %>
+			<% @previous = nil %>
+			<% @this = @reference.first %>
+			<% @next = @reference.second %>
+		<% end %>
+	<% end %>
+
+  <% @folder_used = @references.where(used_check: true).count %>
+  <% @folder_total = @references.count %>
+  <% @used = Reference.where(used_check: true).count %>
+  <% @total = Reference.count %>
+  <% @folder_pct = @folder_used.to_f / @folder_total.to_f %>
+  <% @total_pct = @used.to_f / @total.to_f %>
+
+  <% provide(:state_used, @folder_used.to_s) %>
+  <% provide(:state_total, @folder_total.to_s) %>
+  <% provide(:state_pct, number_to_percentage(@folder_pct * 100, precision: 0).chop) %>
+  <% provide(:used, @used.to_s) %>
+  <% provide(:total, @total.to_s) %>
+  <% provide(:total_pct, number_to_percentage(@total_pct * 100, precision: 0).chop) %>
+
+  <% end %>
+
+	<div class="row padded-row">
+
+	    <div class="col-lg-6 col-md-12 text-center">
+
+	    	<% if params[:folder] %>
+
+		    	<% if @previous != nil %>
+			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+			    		<i class="fa fa-arrow-left fa-4x" aria-hidden="true"></i>
+			  		<% end %>
+			  	<% else %>
+			  		<% @prevID = @this.id - 1 %>
+			  		<% if Reference.find(@prevID) %>
+			    		<% @prevFolder = Reference.find(@prevID).folder_name %>
+			  			<%= link_to "/link_pdfs?folder=" + @prevFolder + "&item=" + @prevID.to_s, class: "d-inline-block side-arrows" do %>
+			    		<i class="fa fa-hand-o-left fa-4x text-warning icon-hover-warning" aria-hidden="true"></i>
+			  			<% end %>
+			  		<% end %>
+			  	<% end %>
+				<% if @this != nil %>
+		    		<img src="/images/reference/<%= @this.filename %>"/>
+		    	<% end %>
+		    	<% if @next != nil %>
+			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+			    		<i class="fa fa-arrow-right fa-4x" aria-hidden="true"></i>
+			    	<% end %>
+			    <% else %>
+			    	<% @nextID = @this.id + 1 %>
+			    	<% @nextFolder = Reference.find(@nextID).folder_name %>
+			    	<%= link_to "/link_pdfs?folder=" + @nextFolder  + "&item=" + @nextID.to_s, class: "d-inline-block side-arrows" do %>
+			    		<i class="fa fa-hand-o-right fa-4x text-success icon-hover-success" aria-hidden="true"></i>
+			    	<% end %>
+			 	<% end %>
+			<% end %>
+
+	    </div>
+	   	<div class="col-lg-6 col-md-12">
+
+	   		<form class="form-inline stateForm">
+			    <label for="selectState"><h3><strong>Folder: </strong></h3></label>
+			    <% if params.has_key?(:folder) && params[:folder] != "*" %>
+			      <%= collection_select(:folder, :folder_name, Reference.all.uniq{|x| x.folder_name} , :folder_name, :folder_name, {:prompt => true, :selected => params[:folder]}, class: 'form-control', :onchange => "location.href = 'link_pdfs?folder=' + this.value") %>
+			    <% else %>
+			      <%= collection_select(:folder, :folder_name, Reference.all.uniq{|x| x.folder_name} , :folder_name, :folder_name, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'link_pdfs?folder=' + this.value") %>
+			    <% end %>
+			</form>
+
+			<% if params[:folder] %>
+
+
+				<p>
+				  <strong>Filename:</strong>
+				  <%= @this.filename %>
+				</p>
+
+				<p>
+				  <strong>Used check:</strong>
+				  <%= render 'layouts/boolean_check', check: @this.used_check %>
+				</p>
+				<%= form_with(model: @this, local: true) do |form| %>
+
+				<div class="col-md-12 mx-auto form-group">
+
+			    	<%= link_to "/add_file?item=" + @this.id.to_s, method: :put, class: "" do %>
+			    		<i class="fa fa-share fa-4x text-success icon-hover-success" aria-hidden="true"></i>
+			    	<% end %>
+
+					<ul class="list-group addFile">
+						<% Reference.where(active: true).each do |active| %>
+							<li class="list-group-item justify-content-between">
+								<%= active.filename %>
+								<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "" do %>
+					    			<i class="fa fa-times text-danger" aria-hidden="true"></i>
+					    		<% end %>
+							</li>
+						<% end %>
+					</ul>
+				</div>
+
+				
+
+				<div class="form-group col-md-12">
+				    <div class="search-form link-form">
+				    		<%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+				    	<div class="text-center">
+				    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
+				    		<%= form.hidden_field :state, :value => params[:state] %>
+				    		<% if @this.used_check == true %>
+				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => "This card has already been used. Are you sure you want to link it to another record?"}, class: "btn btn-success" %>
+				    		<% else %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
+				    		<% end %>
+				    	</div>
+				    </div>
+				    <script type="text/javascript">
+				      $('.search-field').autocomplete({
+				        source: "/search_suggestions",
+				        select: function (event, ui) {
+						   var label = ui.item.label;
+						   console.log(ui.item);
+						   $.ajax({
+						        'url': '/search_suggestions?name=' + label,
+						        'type' : 'GET',
+						        'success' : function(data) { 
+						        	var icpsr = $(".icpsr-field");
+						   			icpsr.val(data['icpsr_id']); 
+						   			if (data['used_check'] == true) {
+						   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
+						   			} else {
+						   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
+						   			}
+						   			if (data['name'].indexOf(" ") >= 1) {
+						   				$("#firstName").val(data['name'].split(' ')[1]);
+						   				$("#lastName").val(data['name'].split(' ')[0]);
+						   			} else {
+						   				$("#firstName").val(data['name']);
+						   			}
+						   			$("#date_execution").val(data['date_execution']);
+						   			$("#age").val(data['age']);
+						   			$("#race").val(data['race']);
+						   			$("#sex").val(data['sex']);
+						   			$("#espy_record_state").val(data['state']);
+						   			$('#espy_record_state').change();
+						   			$("#county_name").val(data['county_name']);     
+						        },
+						    });
+						}
+				      });
+				    </script>
+				    
+				</div>
+				<div class="col-md-8 mx-auto previewTable">	  					
+					<table class="table table-sm">
+			          <tbody>
+			            <tr>
+			              <td colspan="1">
+			                <strong>Icpsr:</strong>
+			              </td>
+			              <td colspan="1">
+			                <%= form.text_field :icpsr, id: :big_card_icpsr, class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
+			                <% if @this != nil %>
+			                	<%= hidden_field_tag :card, @this.id.to_s %>
+			                <% end %>
+			              </td>
+			              <td colspan="2">
+			                <strong>Used check:</strong>
+			                <span id="used_check"></span>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td colspan="2">
+			              	<strong>First name:</strong>
+			              	<%= form.text_field :first_name, id: :firstName, class: "form-control" %>
+			              </td>
+			              <td colspan="2">
+			              	<strong>Last name:</strong>
+			              	<%= form.text_field :last_name, id: :lastName, class: "form-control" %>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td><strong>Date execution:</strong></td>
+			              <td colspan="3"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
+			            </tr>
+			            <tr>
+			              <td><strong>Race:</strong></td>
+			              <td colspan="3"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
+			            </tr>
+			            <tr>
+			              <td><strong>Sex:</strong></td>
+			              <td colspan="3"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
+			            </tr>
+			            <tr>
+			              <td colspan="1"><strong>State:</strong></td>
+			              <td colspan="2"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
+			              </td>
+			              <td colspan="1">
+			              	<%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
+			              </td>
+			              <%= form.hidden_field :state_param, id: :state_param, value: params[:state] %>
+			            </tr>
+			            <tr>
+			              <td><strong>County name:</strong></td>
+			              <td colspan="3"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
+			            </tr> 
+			          </tbody>
+
+			        </table>
+		  		</div>
+				<% end %>
+
+
+
+
+			<% end %>
+
+		</div>
+	</div>

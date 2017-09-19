@@ -140,3 +140,20 @@ img {width: 80%; margin-bottom: 1rem;}
 .espyTable label {margin-bottom:0px;}
 
 .previewTable input {width:100%;}
+
+.icon-hover-success:hover {
+  cursor: pointer;
+  color: #218838 !important;
+}
+.icon-hover-warning:hover {
+  cursor: pointer;
+  color: #EC971F !important;
+}
+
+.addFile {
+  vertical-align: middle;
+  display: inline-block;
+}
+ul.addFile {
+  width: 80%;
+}

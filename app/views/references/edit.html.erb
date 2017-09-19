@@ -1,6 +1,28 @@
-<h1>Editing Reference</h1>
+<% provide(:section, "Edit Reference Material") %>
 
-<%= render 'form', reference: @reference %>
+<div class="row padded-row">
 
-<%= link_to 'Show', @reference %> |
-<%= link_to 'Back', references_path %>
+	<div class="col-lg-6 col-md-12 text-center">
+
+		<% @folder = @reference.filename.split("_")[0] + "_" + @reference.filename.split("_")[1] %>
+
+		<img src="/images/reference/<%= @reference.filename %>"/>
+
+	</div>
+	<div class="col-lg-6 col-md-12">
+
+	<%= render 'form', reference: @reference %>
+
+		<div class="container">
+		  <div class="text-center">
+		    <div class="btn-group col-md-auto">
+		      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, references_path + "?folder=" + @reference.folder_name, class: "btn btn-secondary"%>
+		      <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, @reference, class: "btn btn-primary"%>
+		      <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+		    </div>
+		  </div>
+		</div>
+
+	</div>
+
+</div>

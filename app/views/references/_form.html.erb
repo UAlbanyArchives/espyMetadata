@@ -1,32 +1,45 @@
 <%= form_with(model: reference, local: true) do |form| %>
   <% if reference.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(reference.errors.count, "error") %> prohibited this reference from being saved:</h2>
-
-      <ul>
-      <% reference.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <div class="container">
+      <div class="alert alert-danger" role="alert">
+      
+        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+        <ul>
+        <% espy_record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :filename %>
-    <%= form.text_field :filename, id: :reference_filename %>
-  </div>
+  <table class="table table-sm">
 
-  <div class="field">
-    <%= form.label :used_check %>
-    <%= form.check_box :used_check, id: :reference_used_check %>
-  </div>
+  <tr class="field">
+    <td><%= form.label :filename %></td>
+    <td><%= form.text_field :filename, id: :reference_filename %></td>
+  </tr>
 
-  <div class="field">
-    <%= form.label :aspace %>
-    <%= form.text_field :aspace, id: :reference_aspace %>
-  </div>
+  <tr class="field">
+    <td><%= form.label :folder_name %>
+    <td><%= form.text_field :folder_name, id: :reference_folder_name %></td>
+  </tr>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <tr class="field">
+    <td><%= form.label :used_check %>
+    <td><%= form.check_box :used_check, id: :reference_used_check %></td>
+  </tr>
+
+  <tr class="field">
+    <td><%= form.label :aspace %>
+    <td><%= form.text_field :aspace, id: :reference_aspace %></td>
+  </tr>
+
+  <tr class="actions">
+    <td  colspan="2" class="text-center">
+      <%= form.button '<i class="fa fa-check"></i> Update Reference Record'.html_safe, class: "btn btn-success" %>
+    </td>
+  </tr>
+
+  </table>
 <% end %>

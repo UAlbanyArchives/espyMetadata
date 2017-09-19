@@ -5,11 +5,26 @@ class ReferencesController < ApplicationController
   # GET /references.json
   def index
     @references = Reference.all
+    if params[:folder]
+      if params[:folder] == "*"
+        @references = Reference.all
+      else
+        limiter = "folder_name = '" + params[:folder] + "'"
+        @references = Reference.all.where(limiter)
+      end
+    else
+      @references = Reference.none
+    end
   end
 
   # GET /references/1
   # GET /references/1.json
   def show
+  end
+
+  # GET /big_cards/link
+  def link
+    @references = Reference.all
   end
 
   # GET /references/new
@@ -19,6 +34,26 @@ class ReferencesController < ApplicationController
 
   # GET /references/1/edit
   def edit
+  end
+
+  def add_file
+    @item = Reference.find(params[:item].to_i)
+    @item.active = true
+    @item.save
+    respond_to do |format|
+      @folder = @item.folder_name
+      format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item] }
+    end
+  end
+
+  def remove_file
+    @item = Reference.find(params[:item].to_i)
+    @item.active = false
+    @item.save
+    respond_to do |format|
+      @reload = Reference.find(params[:reload].to_i)
+      format.html { redirect_to "/link_pdfs?folder=" + @reload.folder_name + "&item=" + params[:reload] }
+    end
   end
 
   # POST /references
@@ -69,6 +104,6 @@ class ReferencesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def reference_params
-      params.require(:reference).permit(:filename, :used_check, :aspace)
+      params.require(:reference).permit(:filename, :folder_name, :used_check, :aspace, :folder, :item)
     end
 end

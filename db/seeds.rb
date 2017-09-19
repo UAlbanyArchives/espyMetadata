@@ -108,6 +108,7 @@ reference.each do |row|
   t.used_check = false
   t.aspace = row['aspace']
   t.folder_name = row['folder_name']
+  t.active = false
   t.save
   puts t.errors.full_messages
   puts "#{t.filename} saved"
