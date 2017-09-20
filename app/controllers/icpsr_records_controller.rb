@@ -57,6 +57,16 @@ class IcpsrRecordsController < ApplicationController
     end
   end
 
+  def remove_link
+    @ref = Reference.find(params[:ref])
+    @ref.used_check = false
+    @ref.save
+    IcpsrRecord.find(params[:id]).references.delete(@ref)
+    respond_to do |format|
+      format.html { redirect_to "/icpsr_records/" + params[:id].to_s + "/edit", notice: 'Reference Link was Removed.' }
+    end
+  end
+
   # PATCH/PUT /icpsr_records/1
   # PATCH/PUT /icpsr_records/1.json
   def update

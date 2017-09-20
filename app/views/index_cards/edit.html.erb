@@ -2,7 +2,7 @@
 
 <div class="row padded-row">
 	<div class="col-lg-6 col-md-12">
-    <%= render 'layouts/show_cards', this: @index_card, folder: "smallCards" %>
+    <%= render 'layouts/show_cards', file_group: @index_card.file_group, folder: "smallCards" %>
   </div>
   <div class="col-lg-6 col-md-12">
 	<%= render 'form', index_card: @index_card %>

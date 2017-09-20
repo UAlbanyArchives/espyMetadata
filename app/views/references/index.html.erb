@@ -43,6 +43,8 @@
       <th>Folder Name</th>
       <th>Filename</th>
       <th>Used check</th>
+      <th>Active?</th>
+      <th>Links</th>
       <th>ASpace ID</th>
     </tr>
   </thead>
@@ -61,6 +63,12 @@
         <td><%= reference.filename %></td>
         <td>
           <%= render 'layouts/boolean_check', check: reference.used_check %>
+        </td>
+        <td><%= render 'layouts/boolean_check', check: reference.active %></td>
+        <td>
+          <% reference.icpsr_records.each do |link | %>
+            <p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
+          <% end %>
         </td>
         <td><%= reference.aspace %></td>
       </tr>

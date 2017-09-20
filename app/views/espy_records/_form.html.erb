@@ -20,10 +20,10 @@
   <% end %>
 
 
-  <div class="thirds">
+  <div class="col">
     <div class="thirds-top">
 
-      <%= render 'layouts/show_cards', this: @this, folder: "smallCards" %>
+      <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
 
       <div class="field ocrCheck">
         <strong>OCR Fixed:</strong>
@@ -41,7 +41,7 @@
     <div class="thirds-top">
       <% if espy_record.big_card == true %>
         <% @big_card = BigCard.find(espy_record.big_card_id) %>
-        <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
+        <%= render 'layouts/show_cards', file_group: @big_card.file_group, folder: "bigCards" %>
         <div class="field ocrCheck">
           <strong>OCR Fixed:</strong>
           <%= form.check_box :big_ocr_check, id: :espy_record_big_ocr_check, checked: espy_record.big_ocr_check %>
@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <div class="thirds">
+  <div class="col">
 
     <div class="field">
       <%= form.hidden_field :uuid, id: :espy_record_uuid, :value => SecureRandom.uuid %>
@@ -616,8 +616,38 @@
 
   </div>
 
-  <div class="thirds">
-  
+  <div class="col">
+    <% if @record.references.length > 1 %>
+      <% @splitter = "; " %>
+    <% else %>
+      <% @splitter = "; " %>
+    <% end %>
+
+    <% @refSwitch = false %>
+    <% @refIDs = "" %>
+    <% @refGroup = "" %>
+    <% @refASpace = "" %>
+
+    <% @record.references.each do |ref| %>
+      <% @refSwitch = true %>
+      <% @refIDs = @refIDs + ref.id.to_s + @splitter %>
+      <% @refGroup = @refGroup + ref.filename + @splitter %>
+      <% if not @refASpace.include? ref.aspace %>
+        <% @refASpaceCount = @refASpaceCount + 1 %>
+        <%if @refASpaceCount > 1 %>
+          <% @refASpace = @refASpace + @splitter + ref.aspace %>
+        <% else %>
+          <% @refASpace = @refASpace + ref.aspace %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= render 'layouts/show_cards', file_group: @refGroup, folder: "reference" %>
+
+    <%= form.hidden_field :reference_material, id: :espy_record_reference_material, :value => @refSwitch %>
+    <%= form.hidden_field :reference_material_id, id: :espy_record_reference_material_id, :value => @refIDs %>
+    <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files, :value => @refGroup %>
+    <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace, :value => @refASpace %>
   </div>
 
 <% end %>

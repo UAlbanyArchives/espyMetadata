@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
+  match '/icpsr_records/:id/:ref', to: 'icpsr_records#remove_link', via: :delete
   match '/add_file', to: 'references#add_file', via: :put
   match '/remove_file', to: 'references#remove_file', via: :put
   match '/search_suggestions', to: 'search_suggestions#index', via: :get

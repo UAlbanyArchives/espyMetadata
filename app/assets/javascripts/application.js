@@ -157,3 +157,12 @@ document.addEventListener("turbolinks:load", function() {
        }
     });
 });
+
+
+document.addEventListener("turbolinks:load", function() {
+  $(".modalPreview").click(function(e){
+    e.preventDefault();
+    $('#previewWindow').attr("src", "/images/" + $(this).attr("data-preview"))
+    $('#modalPreview').modal()
+  });
+});

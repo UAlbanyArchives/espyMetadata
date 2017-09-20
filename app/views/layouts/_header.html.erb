@@ -6,14 +6,35 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item"><%= link_to "Make", "/make", class: "nav-link" %></li>
-      <li class="nav-item"><%= link_to "Espy Records", "/espy_records", class: "nav-link" %></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Espy Records
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/make">Make</a>
+          <a class="dropdown-item" href="/espy_records">List</a>
+        </div>
+      </li>
       <li class="nav-item"><%= link_to "ICPSR", "/icpsr_records", class: "nav-link" %></li>
       <li class="nav-item"><%= link_to "Index Cards", "/index_cards", class: "nav-link" %></li>
-      <li class="nav-item"><%= link_to "Link Big", "/link_big_cards", class: "nav-link" %></li>
-      <li class="nav-item"><%= link_to "Big Cards", "/big_cards", class: "nav-link" %></li>
-      <li class="nav-item"><%= link_to "Link PDFs", "/link_pdfs", class: "nav-link" %></li>
-      <li class="nav-item"><%= link_to "PDFs", "/references", class: "nav-link" %></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Big Cards
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/link_big_cards">Link</a>
+          <a class="dropdown-item" href="/big_cards">List</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          PDFs
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/link_pdfs">Link</a>
+          <a class="dropdown-item" href="/references">List</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>

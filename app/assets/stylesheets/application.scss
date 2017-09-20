@@ -24,7 +24,9 @@ body { padding-top: 55px; }
 
 .jumbotron-small { padding-top: 15px; padding-bottom: 1px;}
 
-img {width: 80%; margin-bottom: 1rem;}
+img {width: 100%; margin-bottom: 1rem;}
+
+.plainImg {width: 80%; margin-bottom: 1rem;}
 
 .smallTableFont { font-size: .7rem; }
 
@@ -55,7 +57,7 @@ img {width: 80%; margin-bottom: 1rem;}
 }
 
 .carousel {
-	width: 80%;
+	width: 95%;
 	vertical-align: middle;
 }
 
@@ -64,7 +66,10 @@ img {width: 80%; margin-bottom: 1rem;}
 }
 
 .thirds { width: 32%; display: inline-block; vertical-align: top; }
+
+
 .thirds-top { text-align:center; margin-bottom: 20px; }
+
 .ocr-fix { margin-left: 25px; width: 90%; }
 
 .espyTable input:not([type=checkbox]){ width: 100%; }
@@ -144,16 +149,24 @@ img {width: 80%; margin-bottom: 1rem;}
 .icon-hover-success:hover {
   cursor: pointer;
   color: #218838 !important;
+  text-decoration: none !important;
 }
 .icon-hover-warning:hover {
   cursor: pointer;
   color: #EC971F !important;
 }
+.closeBtn:hover {
+  color: #c9302c !important;
+}
+.closeBtn {
+  font-size: 25px;
+}
 
 .addFile {
   vertical-align: middle;
   display: inline-block;
+  margin-left: 60px;
+  margin-right: 60px;
 }
-ul.addFile {
-  width: 80%;
-}
+#previewWindow {width: 100%; margin-bottom: 0px;}
+

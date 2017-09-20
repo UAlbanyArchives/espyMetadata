@@ -90,8 +90,12 @@
               <td><a href="/big_cards/<%= @icpsr_record.big_id %>"><%= @icpsr_record.big_id %></a></td>
           </tr>
           <tr>
-              <td><strong>Reference Material ID:</strong></td>
-              <td><a href="/reference_material/<%= @icpsr_record.ref_id %>"><%= @icpsr_record.ref_id %></a></td>
+              <td><strong>Reference Material:</strong></td>
+              <td>
+                <% @icpsr_record.references.each do |ref| %>
+                  <p><a href="/references/<%= ref.id %>"><%= ref.filename %></a></p>
+                <% end %>
+              </td>
           </tr>
           </tbody>
 

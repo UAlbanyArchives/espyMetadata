@@ -24,7 +24,11 @@ class ReferencesController < ApplicationController
 
   # GET /big_cards/link
   def link
-    @references = Reference.all
+    if params[:folder]
+      @references = Reference.all.where(folder_name: params[:folder])
+    else
+      @references = Reference.all
+    end
   end
 
   # GET /references/new
@@ -38,11 +42,18 @@ class ReferencesController < ApplicationController
 
   def add_file
     @item = Reference.find(params[:item].to_i)
-    @item.active = true
-    @item.save
-    respond_to do |format|
-      @folder = @item.folder_name
-      format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item] }
+    if @item.active == true
+      respond_to do |format|
+        @folder = @item.folder_name
+        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item], alert: 'This item has already been added.' }
+      end
+    else
+      @item.active = true
+      @item.save
+      respond_to do |format|
+        @folder = @item.folder_name
+        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item] }
+      end
     end
   end
 
@@ -75,13 +86,56 @@ class ReferencesController < ApplicationController
   # PATCH/PUT /references/1
   # PATCH/PUT /references/1.json
   def update
-    respond_to do |format|
-      if @reference.update(reference_params)
-        format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
-        format.json { render :show, status: :ok, location: @reference }
+    if reference_params[:first_name]
+      @item = Reference.find(params[:id].to_i)
+      @folder = @item.folder_name
+      if reference_params[:icpsr].present?
+          @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
+          Reference.where(active: true).each do |active|
+            @icpsr.references << active
+            active.used_check = true
+            active.active = false
+            active.save
+          end
       else
-        format.html { render :edit }
-        format.json { render json: @reference.errors, status: :unprocessable_entity }
+          @icpsr = IcpsrRecord.new
+          if reference_params[:last_name].present?
+            if reference_params[:first_name].present?
+              @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
+            else
+              @newName = reference_params[:last_name].to_s
+            end
+            @icpsr.update_attribute :name, @newName
+          elsif reference_params[:first_name].present?
+            @newName = reference_params[:first_name].to_s
+            @icpsr.update_attribute :name, @newName
+          end
+          
+          @icpsr.update_attribute :date_execution, reference_params[:date_execution]
+          @icpsr.update_attribute :race, reference_params[:race]
+          @icpsr.update_attribute :sex, reference_params[:sex]
+          @icpsr.update_attribute :state, reference_params[:state]
+          @icpsr.update_attribute :state_abbreviation, reference_params[:state_abbreviation]
+          @icpsr.update_attribute :county_name, reference_params[:county_name]
+          Reference.where(active: true).each do |active|
+            @icpsr.references << active
+            active.used_check = true
+            active.active = false
+            active.save
+          end
+      end
+      respond_to do |format|
+        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsr.name + '.' }
+      end
+    else
+      respond_to do |format|
+        if @reference.update(reference_params)
+          format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
+          format.json { render :show, status: :ok, location: @reference }
+        else
+          format.html { render :edit }
+          format.json { render json: @reference.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -104,6 +158,6 @@ class ReferencesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def reference_params
-      params.require(:reference).permit(:filename, :folder_name, :used_check, :aspace, :folder, :item)
+      params.require(:reference).permit(:filename, :folder_name, :used_check, :aspace, :folder, :item, :state, :icpsr, :first_name, :last_name, :date_execution, :sex, :race, :county_name, :state_abbreviation)
     end
 end

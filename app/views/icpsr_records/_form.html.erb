@@ -108,8 +108,15 @@
     <td><%= form.number_field :big_id, id: :icpsr_record_big_id %></td>
   </tr>
   <tr class="field">
-    <td><%= form.label :ref_id %></td>
-    <td><%= form.number_field :ref_id, id: :icpsr_record_ref_id %></td>
+    <td>Reference Material:</td>
+    <td>
+      <% icpsr_record.references.each do |ref| %>
+        <p>
+          <a href="/references/<%= ref.id %>"><%= ref.filename %></a>
+          <%= link_to "<i class='fa fa-minus fa-2x text-danger closeBtn'></i>".html_safe, ref.id.to_s, method: :delete %>
+        </p>
+      <% end %>
+    </td>
   </tr>
 
   <tr class="actions">

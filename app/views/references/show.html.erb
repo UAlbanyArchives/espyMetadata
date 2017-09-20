@@ -9,7 +9,7 @@
 
     <div class="col-lg-6 col-md-12 text-center">
 
-    	<img src="/images/reference/<%= @reference.filename %>"/>
+    	<img class="plainImg" src="/images/reference/<%= @reference.filename %>"/>
 
     </div>
    	<div class="col-lg-6 col-md-12">
@@ -26,6 +26,10 @@
 		  <strong>Used check:</strong>
 		  <%= render 'layouts/boolean_check', check: @reference.used_check %>
 		</p>
+
+		<% @reference.icpsr_records.each do |link | %>
+            <p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
+         <% end %>
 
 		<p>
 		  <strong>Aspace:</strong>

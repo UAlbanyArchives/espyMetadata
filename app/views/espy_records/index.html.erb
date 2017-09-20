@@ -83,7 +83,8 @@
            <i class="fa fa-times fa-2x text-danger"></i>
           <% end %>
         </td>
-        <td><%= espy_record.big_card_id %></td>
+        <td>
+          <a href="/big_cards/<%= espy_record.big_card_id %>"><%= espy_record.big_card_id %></a>
         <td>
           <% if espy_record.reference_material == true %>
            <i class="fa fa-check fa-2x text-success"></i>
@@ -91,7 +92,11 @@
            <i class="fa fa-times fa-2x text-danger"></i>
           <% end %>
         </td>
-        <td><%= espy_record.reference_material_id %></td>
+        <td>
+          <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
+            <a href="/references/<%= refID %>"><%= refID %></a>
+          <% end %>  
+        </td>
         <td>
           <% if espy_record.ocr_fixed == true %>
            <i class="fa fa-check fa-2x text-success"></i>

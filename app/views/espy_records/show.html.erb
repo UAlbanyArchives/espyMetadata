@@ -6,7 +6,9 @@
   </div>
 <% end %>
 
-<div class="thirds">
+<div class="row">
+
+<div class="col">
 
   <div class="container title-card ">
     <div class="text-center">
@@ -22,7 +24,7 @@
 
     <% if @espy_record.index_card_id.present? %>
       <% @this = IndexCard.find(@espy_record.index_card_id) %>
-      <%= render 'layouts/show_cards', this: @this, folder: "smallCards"%>
+      <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards"%>
     <% end %>
 
     <div class="field col-md-10 mx-auto">
@@ -38,7 +40,7 @@
   <div class="thirds-top">
     <% if @espy_record.big_card == true%>
       <% @big_card = BigCard.find(@espy_record.big_card_id) %>
-      <%= render 'layouts/show_cards', this: @big_card, folder: "bigCards" %>
+      <%= render 'layouts/show_cards', file_group: @big_card.file_group, folder: "bigCards" %>
       <div class="field col-md-10 mx-auto">
         <div class="ocrCheck">
           <strong>OCR Fixed:</strong>
@@ -52,7 +54,7 @@
   </div>
 </div>
 
-<div class="thirds">
+<div class="col">
 
   <table class="table table-sm espyTable">
     <thead><th colspan="6" class="text-center"><strong>Espy Record</strong></td></th></thead>
@@ -435,5 +437,11 @@
       </div>
     </div>
   </div>
+
+</div>
+
+<div class="col">
+  <%= render 'layouts/show_cards', file_group: @espy_record.reference_material_files, folder: "reference" %>
+</div>
 
 </div>

@@ -1,17 +1,21 @@
 
-<% if this.file_group.include? "; " %>
+<% if file_group.split('; ').length > 1 %>
 
   <div id="<%= folder %>Controls" class="carousel slide glowing-border d-inline-block" data-ride="carousel" data-interval="false">
     <div class="carousel-inner" role="listbox">
 
-    <% this.file_group.split('; ').each_with_index do |file, index| %>
+    <% file_group.split('; ').each_with_index do |file, index| %>
       <% if index == 0 %>
         <div class="carousel-item active">
-          <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file %>">
+            <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          </a>
         </div>
       <% else %>
         <div class="carousel-item">
-          <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file %>">
+            <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          </a>
         </div>
       <% end %>
     <% end %>
@@ -27,5 +31,17 @@
   </div>
 
 <% else %>
-  <img src="/images/<%= folder %>/<%= this.root_filename %>"/>
+  <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file_group.split('; ')[0] %>">
+    <img class="plainImg" src="/images/<%= folder %>/<%= file_group.split('; ')[0] %>"/>
+  </a>
 <% end %>
+
+<div class="modal fade" id="modalPreview">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img id="previewWindow" />
+      </div>
+    </div>
+  </div>
+</div>

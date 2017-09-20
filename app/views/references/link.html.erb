@@ -2,10 +2,9 @@
 
 <% if notice %>
   <div id="notice" class="container">
-    <p class="alert alert-danger" role="alert"><%= notice %></p>
+    <p class="alert alert-success" role="alert"><%= notice %></p>
   </div>
 <% end %>
-
 
 <% provide(:state, params[:folder]) %>
 <% @reference = Reference.where(folder_name: params[:folder]) %>
@@ -84,7 +83,7 @@
 			  		<% end %>
 			  	<% else %>
 			  		<% @prevID = @this.id - 1 %>
-			  		<% if Reference.find(@prevID) %>
+			  		<% if Reference.find_by_id(@prevID) %>
 			    		<% @prevFolder = Reference.find(@prevID).folder_name %>
 			  			<%= link_to "/link_pdfs?folder=" + @prevFolder + "&item=" + @prevID.to_s, class: "d-inline-block side-arrows" do %>
 			    		<i class="fa fa-hand-o-left fa-4x text-warning icon-hover-warning" aria-hidden="true"></i>
@@ -92,7 +91,9 @@
 			  		<% end %>
 			  	<% end %>
 				<% if @this != nil %>
-		    		<img src="/images/reference/<%= @this.filename %>"/>
+					<a class="modalPreview" href="#" data-preview="reference/<%= @this.filename %>">
+		    			<img class="plainImg" src="/images/reference/<%= @this.filename %>"/>
+		    		</a>
 		    	<% end %>
 		    	<% if @next != nil %>
 			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
@@ -100,9 +101,11 @@
 			    	<% end %>
 			    <% else %>
 			    	<% @nextID = @this.id + 1 %>
-			    	<% @nextFolder = Reference.find(@nextID).folder_name %>
-			    	<%= link_to "/link_pdfs?folder=" + @nextFolder  + "&item=" + @nextID.to_s, class: "d-inline-block side-arrows" do %>
-			    		<i class="fa fa-hand-o-right fa-4x text-success icon-hover-success" aria-hidden="true"></i>
+			    	<% if Reference.find_by_id(@nextID) %>
+				    	<% @nextFolder = Reference.find(@nextID).folder_name %>
+				    	<%= link_to "/link_pdfs?folder=" + @nextFolder  + "&item=" + @nextID.to_s, class: "d-inline-block side-arrows" do %>
+				    		<i class="fa fa-hand-o-right fa-4x text-success icon-hover-success" aria-hidden="true"></i>
+				    	<% end %>
 			    	<% end %>
 			 	<% end %>
 			<% end %>
@@ -111,7 +114,7 @@
 	   	<div class="col-lg-6 col-md-12">
 
 	   		<form class="form-inline stateForm">
-			    <label for="selectState"><h3><strong>Folder: </strong></h3></label>
+			    <label for="selectState"><h4><strong>Folder: </strong></h4></label>
 			    <% if params.has_key?(:folder) && params[:folder] != "*" %>
 			      <%= collection_select(:folder, :folder_name, Reference.all.uniq{|x| x.folder_name} , :folder_name, :folder_name, {:prompt => true, :selected => params[:folder]}, class: 'form-control', :onchange => "location.href = 'link_pdfs?folder=' + this.value") %>
 			    <% else %>
@@ -133,22 +136,29 @@
 				</p>
 				<%= form_with(model: @this, local: true) do |form| %>
 
-				<div class="col-md-12 mx-auto form-group">
+				<div class="col-lg-12 form-group">
+					<div class="row">
+				    	<%= link_to "/add_file?item=" + @this.id.to_s, method: :put, class: "" do %>
+				    		<i class="fa fa-plus fa-4x text-success icon-hover-success" aria-hidden="true"></i>
+				    	<% end %>
 
-			    	<%= link_to "/add_file?item=" + @this.id.to_s, method: :put, class: "" do %>
-			    		<i class="fa fa-share fa-4x text-success icon-hover-success" aria-hidden="true"></i>
-			    	<% end %>
+						<ul class="list-group addFile">
+							<% Reference.where(active: true).each do |active| %>
+								<li class="list-group-item justify-content-between">
+									<a class="modalPreview" href="/references/<%= active.id %>" data-preview="reference/<%= active.filename %>" target="_blank"><%= active.filename %></a>
+									<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "icon-hover-success" do %>
+						    			<i class="fa fa-minus text-danger pull-right closeBtn" aria-hidden="true"></i>
+						    		<% end %>
+								</li>
+							<% end %>
+						</ul>
 
-					<ul class="list-group addFile">
-						<% Reference.where(active: true).each do |active| %>
-							<li class="list-group-item justify-content-between">
-								<%= active.filename %>
-								<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "" do %>
-					    			<i class="fa fa-times text-danger" aria-hidden="true"></i>
-					    		<% end %>
-							</li>
+						<% if alert %>
+						  <div id="alert" class="d-inline-block">
+						    <p class="alert alert-info" role="alert"><%= alert %></p>
+						  </div>
 						<% end %>
-					</ul>
+					</div>
 				</div>
 
 				
@@ -159,8 +169,14 @@
 				    	<div class="text-center">
 				    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 				    		<%= form.hidden_field :state, :value => params[:state] %>
-				    		<% if @this.used_check == true %>
-				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => "This card has already been used. Are you sure you want to link it to another record?"}, class: "btn btn-success" %>
+				    		<% @activeCount = 0 %>
+				    		<% Reference.where(active: true).each do |active| %>
+				    			<% if active.used_check == true %>
+				    				<% @activeCount = @activeCount + 1 %>
+				    			<% end %>
+				    		<% end %>
+				    		<% if @activeCount > 0 %>
+				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success" %>
 				    		<% else %>
 				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
 				    		<% end %>
@@ -203,7 +219,7 @@
 				    </script>
 				    
 				</div>
-				<div class="col-md-8 mx-auto previewTable">	  					
+				<div class="col-xl-8 col-lg-12 previewTable">	  					
 					<table class="table table-sm">
 			          <tbody>
 			            <tr>
@@ -250,7 +266,6 @@
 			              <td colspan="1">
 			              	<%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
 			              </td>
-			              <%= form.hidden_field :state_param, id: :state_param, value: params[:state] %>
 			            </tr>
 			            <tr>
 			              <td><strong>County name:</strong></td>
@@ -269,3 +284,14 @@
 
 		</div>
 	</div>
+
+
+	<div class="modal fade" id="modalPreview">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <img id="previewWindow" />
+          </div>
+        </div>
+      </div>
+    </div>
