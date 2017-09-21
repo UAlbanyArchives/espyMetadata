@@ -1,21 +1,39 @@
 
 <% if file_group.split('; ').length > 1 %>
 
-  <div id="<%= folder %>Controls" class="carousel slide glowing-border d-inline-block" data-ride="carousel" data-interval="false">
+  <div id="<%= folder %>Controls" class="carousel slide d-inline-block" data-ride="carousel" data-interval="false">
     <div class="carousel-inner" role="listbox">
 
     <% file_group.split('; ').each_with_index do |file, index| %>
       <% if index == 0 %>
         <div class="carousel-item active">
-          <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file %>">
-            <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          <a class="modalPreview" href="#" data-preview="<%= file.split(".")[0] %>">
+            <img class="d-block img-fluid glowing-border active" src="/images/<%= folder %>/<%= file %>">
           </a>
+        </div>
+        <div class="modal fade" id="<%= file.split(".")[0] %>">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <img class="previewWindow glowing-border" id="preview<%= file.split(".")[0] %>" src="/images/<%= folder %>/<%= file %>"  data_file="/images/<%= folder %>/<%= file %>"/>
+              </div>
+            </div>
+          </div>
         </div>
       <% else %>
         <div class="carousel-item">
-          <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file %>">
-            <img class="d-block img-fluid active" src="/images/<%= folder %>/<%= file %>"">
+          <a class="modalPreview" href="#" data-preview="<%= file.split(".")[0] %>">
+            <img class="d-block img-fluid glowing-border active" src="/images/<%= folder %>/<%= file %>">
           </a>
+        </div>
+        <div class="modal fade" id="<%= file.split(".")[0] %>">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <img class="previewWindow" id="preview<%= file.split(".")[0] %>" src="/images/<%= folder %>/<%= file %>" data-file="/images/<%= folder %>/<%= file %>" />
+              </div>
+            </div>
+          </div>
         </div>
       <% end %>
     <% end %>
@@ -31,17 +49,17 @@
   </div>
 
 <% else %>
-  <a class="modalPreview" href="#" data-preview="<%= folder %>/<%= file_group.split('; ')[0] %>">
+  <a class="modalPreview" href="#" data-preview="<%= file_group.split('; ')[0].split(".")[0] %>">
     <img class="plainImg" src="/images/<%= folder %>/<%= file_group.split('; ')[0] %>"/>
   </a>
-<% end %>
-
-<div class="modal fade" id="modalPreview">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <img id="previewWindow" />
+  <div class="modal fade" id="<%= file_group.split('; ')[0].split(".")[0] %>">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img class="previewWindow" id="preview<%= file_group.split('; ')[0].split(".")[0] %>" src="/images/<%= folder %>/<%= file_group.split('; ')[0] %>" data-file="/images/<%= folder %>/<%= file_group.split('; ')[0] %>" />
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>
+

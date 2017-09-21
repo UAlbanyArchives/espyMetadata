@@ -18,7 +18,9 @@
 		    <div class="btn-group col-md-auto">
 		      <%= link_to '<i class="fa fa-list"></i> List'.html_safe, references_path + "?folder=" + @reference.folder_name, class: "btn btn-secondary"%>
 		      <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, @reference, class: "btn btn-primary"%>
-		      <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+		      <% if false %>
+		      	<%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @reference, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+		      <% end %>
 		    </div>
 		  </div>
 		</div>

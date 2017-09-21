@@ -113,7 +113,7 @@
       <% icpsr_record.references.each do |ref| %>
         <p>
           <a href="/references/<%= ref.id %>"><%= ref.filename %></a>
-          <%= link_to "<i class='fa fa-minus fa-2x text-danger closeBtn'></i>".html_safe, ref.id.to_s, method: :delete %>
+          <%= link_to "<i class='fa fa-minus fa-2x text-danger closeBtn back-link'></i>".html_safe, ref.id.to_s, method: :delete %>
         </p>
       <% end %>
     </td>

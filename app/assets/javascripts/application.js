@@ -20,6 +20,8 @@
 
 //= require jquery-ui.js
 
+//= require wheelzoom.js
+
 
 states_hash =
   {
@@ -162,7 +164,45 @@ document.addEventListener("turbolinks:load", function() {
 document.addEventListener("turbolinks:load", function() {
   $(".modalPreview").click(function(e){
     e.preventDefault();
-    $('#previewWindow').attr("src", "/images/" + $(this).attr("data-preview"))
-    $('#modalPreview').modal()
+    var image = $(this).attr("data-preview")
+    $('#' + image).modal()
+    $('#preview' + image).addClass("zoom")
   });
+});
+
+document.addEventListener("turbolinks:load", function() {
+  $('.modal').on('shown.bs.modal', function (e) {
+    wheelzoom(document.querySelector('img.zoom'));
+    $('.zoom').attr("src", $('.zoom').attr("data-file"))
+  })
+});
+
+document.addEventListener("turbolinks:load", function() {
+  $('.modal').on('hide.bs.modal', function (e) {
+    $('.previewWindow').removeClass("zoom")
+  })
+});
+
+document.addEventListener("turbolinks:load", function() {
+    $('.focus-field').focus()
+});
+
+document.addEventListener("turbolinks:load", function() {
+  $(document).keydown(function(e){
+      var go = ""
+      if (e.keyCode == 37) { 
+        var go = $(".left-link").attr("href")
+      } else if (e.keyCode == 39) { 
+        var go = $(".right-link").attr("href")
+      } else if (e.keyCode == 112) {
+        $(".add-link")[0].click();
+      } else if (e.keyCode == 13) {
+        $(".go-link")[0].click();
+      } else if (e.keyCode == 113) {
+        $(".back-link")[0].click();
+      } 
+      if (go.length > 0) {
+        window.location = go
+      }
+});
 });

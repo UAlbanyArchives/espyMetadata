@@ -102,7 +102,7 @@
 
 
 		  	<% if @previous != nil %>
-		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows left-link" do %>
 		    		<i class="fa fa-arrow-left fa-4x" aria-hidden="true"></i>
 		  		<% end %>
 		  	<% end %>
@@ -110,7 +110,7 @@
 		    	<%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
 		    <% end %>
 		    <% if @next != nil %>
-		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+		  		<%= link_to "/make?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows right-link" do %>
 		    		<i class="fa fa-arrow-right fa-4x" aria-hidden="true"></i>
 		    	<% end %>
 		 	<% end %>
@@ -122,7 +122,7 @@
 		  <div class="col-md-8 previewTable">
 		  	<div class="form-group">
 			    <form class="search-form">
-			    <%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+			    <%= search_field_tag 'search', nil, class: 'form-control search-field focus-field', placeholder: 'Find'  %>
 			    </form>
 			    <script type="text/javascript">
 			      $('.search-field').autocomplete({
@@ -168,11 +168,11 @@
 			<%= form_tag(new_espy_record_path, method: "get", id: "makeForm") do %>
 				<div class="form-group">
 					<% if @this.used_check == true %>
-						<%= button_tag(type: "submit", data: {:confirm => "This index card has already been used. Are you sure you want to use it to create another Espy Record?"},class: "btn btn-primary submit-btn") do %>
+						<%= button_tag(type: "submit", data: {:confirm => "This index card has already been used. Are you sure you want to use it to create another Espy Record?"},class: "btn btn-primary submit-btn go-link") do %>
 					    <i class="fa fa-thumbs-up"></i> Select
 						<% end %>
 					<% else %>
-						<%= button_tag(type: "submit", class: "btn btn-primary submit-btn") do %>
+						<%= button_tag(type: "submit", class: "btn btn-primary submit-btn go-link") do %>
 					    <i class="fa fa-thumbs-up"></i> Select
 						<% end %>
 					<% end %>

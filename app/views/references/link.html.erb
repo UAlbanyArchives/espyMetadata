@@ -78,32 +78,32 @@
 	    	<% if params[:folder] %>
 
 		    	<% if @previous != nil %>
-			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @previous.id.to_s, class: "d-inline-block side-arrows left-link" do %>
 			    		<i class="fa fa-arrow-left fa-4x" aria-hidden="true"></i>
 			  		<% end %>
 			  	<% else %>
 			  		<% @prevID = @this.id - 1 %>
 			  		<% if Reference.find_by_id(@prevID) %>
 			    		<% @prevFolder = Reference.find(@prevID).folder_name %>
-			  			<%= link_to "/link_pdfs?folder=" + @prevFolder + "&item=" + @prevID.to_s, class: "d-inline-block side-arrows" do %>
+			  			<%= link_to "/link_pdfs?folder=" + @prevFolder + "&item=" + @prevID.to_s, class: "d-inline-block side-arrows left-link" do %>
 			    		<i class="fa fa-hand-o-left fa-4x text-warning icon-hover-warning" aria-hidden="true"></i>
 			  			<% end %>
 			  		<% end %>
 			  	<% end %>
 				<% if @this != nil %>
-					<a class="modalPreview" href="#" data-preview="reference/<%= @this.filename %>">
+					<a class="modalPreview" href="#" data-preview="<%= @this.filename.split(".")[0] %>">
 		    			<img class="plainImg" src="/images/reference/<%= @this.filename %>"/>
 		    		</a>
 		    	<% end %>
 		    	<% if @next != nil %>
-			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+			  		<%= link_to "/link_pdfs?folder=" + params[:folder] + "&item=" + @next.id.to_s, class: "d-inline-block side-arrows right-link" do %>
 			    		<i class="fa fa-arrow-right fa-4x" aria-hidden="true"></i>
 			    	<% end %>
 			    <% else %>
 			    	<% @nextID = @this.id + 1 %>
 			    	<% if Reference.find_by_id(@nextID) %>
 				    	<% @nextFolder = Reference.find(@nextID).folder_name %>
-				    	<%= link_to "/link_pdfs?folder=" + @nextFolder  + "&item=" + @nextID.to_s, class: "d-inline-block side-arrows" do %>
+				    	<%= link_to "/link_pdfs?folder=" + @nextFolder  + "&item=" + @nextID.to_s, class: "d-inline-block side-arrows right-link" do %>
 				    		<i class="fa fa-hand-o-right fa-4x text-success icon-hover-success" aria-hidden="true"></i>
 				    	<% end %>
 			    	<% end %>
@@ -138,18 +138,27 @@
 
 				<div class="col-lg-12 form-group">
 					<div class="row">
-				    	<%= link_to "/add_file?item=" + @this.id.to_s, method: :put, class: "" do %>
+				    	<%= link_to "/add_file?item=" + @this.id.to_s, method: :put, class: "add-link" do %>
 				    		<i class="fa fa-plus fa-4x text-success icon-hover-success" aria-hidden="true"></i>
 				    	<% end %>
 
 						<ul class="list-group addFile">
-							<% Reference.where(active: true).each do |active| %>
+							<% Reference.where(active: true).order(:updated_at).reverse.each do |active| %>
 								<li class="list-group-item justify-content-between">
-									<a class="modalPreview" href="/references/<%= active.id %>" data-preview="reference/<%= active.filename %>" target="_blank"><%= active.filename %></a>
-									<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "icon-hover-success" do %>
+									<a class="modalPreview" href="#" data-preview="<%= active.filename.split(".")[0] %>"><%= active.filename %></a>
+									<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "icon-hover-success back-link" do %>
 						    			<i class="fa fa-minus text-danger pull-right closeBtn" aria-hidden="true"></i>
 						    		<% end %>
 								</li>
+								<div class="modal fade" id="<%= active.filename.split(".")[0] %>">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<img class="previewWindow" id="preview<%= active.filename.split(".")[0] %>" src="/images/reference/<%= active.filename %>" data-file="/images/reference/<%= active.filename %>" />
+											</div>
+										</div>
+									</div>
+								</div>
 							<% end %>
 						</ul>
 
@@ -165,7 +174,7 @@
 
 				<div class="form-group col-md-12">
 				    <div class="search-form link-form">
-				    		<%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+				    		<%= search_field_tag 'search', nil, class: 'form-control search-field focus-field', placeholder: 'Find'  %>
 				    	<div class="text-center">
 				    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 				    		<%= form.hidden_field :state, :value => params[:state] %>
@@ -176,7 +185,7 @@
 				    			<% end %>
 				    		<% end %>
 				    		<% if @activeCount > 0 %>
-				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success" %>
+				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success go-link" %>
 				    		<% else %>
 				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
 				    		<% end %>
@@ -277,7 +286,15 @@
 		  		</div>
 				<% end %>
 
-
+				<div class="modal fade" id="<%= @this.filename.split(".")[0] %>">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-body">
+								<img class="previewWindow" id="preview<%= @this.filename.split(".")[0] %>" src="/images/reference/<%= @this.filename %>" data-file="/images/reference/<%= @this.filename %>" />
+							</div>
+						</div>
+					</div>
+				</div>
 
 
 			<% end %>
@@ -286,12 +303,5 @@
 	</div>
 
 
-	<div class="modal fade" id="modalPreview">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <img id="previewWindow" />
-          </div>
-        </div>
-      </div>
-    </div>
+
+	

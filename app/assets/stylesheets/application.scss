@@ -43,12 +43,20 @@ img {width: 100%; margin-bottom: 1rem;}
 .title-card h4 { margin-top: 0.5rem; }
 
 
-.glowing-border img {
+.glowing-border {
     border: 5px solid #dadada;
     border-radius: 7px;
     outline: none;
     border-color: #9ecaed;
     box-shadow: 0 0 10px #9ecaed;
+}
+
+.modal-body .glowing-border {
+    border: 0px solid #dadada;
+    border-radius: 7px;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 00px #9ecaed;
 }
 
 .side-arrows {
@@ -170,3 +178,4 @@ img {width: 100%; margin-bottom: 1rem;}
 }
 #previewWindow {width: 100%; margin-bottom: 0px;}
 
+.modal-lg {max-width: 1000px;}

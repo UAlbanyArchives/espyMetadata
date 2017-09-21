@@ -1,4 +1,4 @@
-<%= form_with(model: espy_record, local: true) do |form| %>
+<%= form_with(model: espy_record, local: true, class: "row") do |form| %>
   <% if espy_record.errors.any? %>
     <div class="container">
       <div class="alert alert-danger" role="alert">
@@ -617,37 +617,40 @@
   </div>
 
   <div class="col">
-    <% if @record.references.length > 1 %>
-      <% @splitter = "; " %>
-    <% else %>
-      <% @splitter = "; " %>
-    <% end %>
+    <% if not @record == nil %>
+      <% if @record.references.length > 1 %>
+        <% @splitter = "; " %>
+      <% else %>
+        <% @splitter = "; " %>
+      <% end %>
 
-    <% @refSwitch = false %>
-    <% @refIDs = "" %>
-    <% @refGroup = "" %>
-    <% @refASpace = "" %>
+      <% @refSwitch = false %>
+      <% @refIDs = "" %>
+      <% @refGroup = "" %>
+      <% @refASpace = "" %>
+      <% @refASpaceCount = 0 %>
 
-    <% @record.references.each do |ref| %>
-      <% @refSwitch = true %>
-      <% @refIDs = @refIDs + ref.id.to_s + @splitter %>
-      <% @refGroup = @refGroup + ref.filename + @splitter %>
-      <% if not @refASpace.include? ref.aspace %>
-        <% @refASpaceCount = @refASpaceCount + 1 %>
-        <%if @refASpaceCount > 1 %>
-          <% @refASpace = @refASpace + @splitter + ref.aspace %>
-        <% else %>
-          <% @refASpace = @refASpace + ref.aspace %>
+      <% @record.references.each do |ref| %>
+        <% @refSwitch = true %>
+        <% @refIDs = @refIDs + ref.id.to_s + @splitter %>
+        <% @refGroup = @refGroup + ref.filename + @splitter %>
+        <% if not @refASpace.include? ref.aspace %>
+          <% @refASpaceCount = @refASpaceCount + 1 %>
+          <%if @refASpaceCount > 1 %>
+            <% @refASpace = @refASpace + @splitter + ref.aspace %>
+          <% else %>
+            <% @refASpace = @refASpace + ref.aspace %>
+          <% end %>
         <% end %>
       <% end %>
+
+      <%= render 'layouts/show_cards', file_group: @refGroup, folder: "reference" %>
+
+      <%= form.hidden_field :reference_material, id: :espy_record_reference_material, :value => @refSwitch %>
+      <%= form.hidden_field :reference_material_id, id: :espy_record_reference_material_id, :value => @refIDs %>
+      <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files, :value => @refGroup %>
+      <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace, :value => @refASpace %>
     <% end %>
-
-    <%= render 'layouts/show_cards', file_group: @refGroup, folder: "reference" %>
-
-    <%= form.hidden_field :reference_material, id: :espy_record_reference_material, :value => @refSwitch %>
-    <%= form.hidden_field :reference_material_id, id: :espy_record_reference_material_id, :value => @refIDs %>
-    <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files, :value => @refGroup %>
-    <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace, :value => @refASpace %>
   </div>
 
 <% end %>
