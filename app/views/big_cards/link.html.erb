@@ -6,6 +6,14 @@
   </div>
 <% end %>
 
+<% if flash[:error] %>
+  <div id="notice" class="container">
+    <p class="alert alert-danger" role="alert">
+    	<%= flash[:error].html_safe %>
+    </p>
+  </div>
+<% end %>
+
 <% if not params[:state] %>
 	<div class="container">
 	  <form class="form-inline stateForm">
@@ -85,18 +93,18 @@
 
 	<div class="row padded-row">
 
-		<div class="col-lg-6 col-md-12">
+		<div class="col-lg-6 col-md-12 narrowCard">
 
 		  	<% if @previous != nil %>
-		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows" do %>
+		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @previous.id.to_s, class: "d-inline-block side-arrows left-link" do %>
 		    		<i class="fa fa-arrow-left fa-4x" aria-hidden="true"></i>
 		  		<% end %>
 		  	<% end %>
 		  	<% if @this != nil %>
-		    	<%= render 'layouts/show_cards', this: @this, folder: "bigCards" %>
+		    	<%= render 'layouts/show_cards', file_group: @this.file_group, folder: "bigCards" %>
 		    <% end %>
 		    <% if @next != nil %>
-		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows" do %>
+		  		<%= link_to "/link_big_cards?state=" + params[:state] + "&card=" + @next.id.to_s, class: "d-inline-block side-arrows right-link" do %>
 		    		<i class="fa fa-arrow-right fa-4x" aria-hidden="true"></i>
 		    	<% end %>
 		 	<% end %>
@@ -133,10 +141,11 @@
 
 			  <div class="form-group col-md-12">
 			    <div class="search-form link-form">
-			    		<%= search_field_tag 'search', nil, class: 'form-control search-field', placeholder: 'Find'  %>
+			    		<%= search_field_tag 'search', nil, class: 'form-control search-field focus-field', placeholder: 'Find'  %>
 			    	<div class="text-center">
 			    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 			    		<%= form.hidden_field :state, :value => params[:state] %>
+			    		<%= form.hidden_field :card, :value => params[:card] %>
 			    		<% if @this.used_check == true %>
 			    		<%= form.button '<i class="fa fa-link"></i> Link Card'.html_safe, style: "cursor:pointer", data: {:confirm => "This card has already been used. Are you sure you want to link it to another record?"}, class: "btn btn-success" %>
 			    		<% else %>

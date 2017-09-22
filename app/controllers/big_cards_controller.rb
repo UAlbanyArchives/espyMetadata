@@ -49,79 +49,89 @@ class BigCardsController < ApplicationController
   # PATCH/PUT /big_cards/1
   # PATCH/PUT /big_cards/1.json
   def update
-    respond_to do |format|
-      if big_card_params[:state]
-        @error = false
+    if big_card_params[:state]
+      
+      @big_card.update_attribute :ocr_text, big_card_params[:ocr_text]
+      if big_card_params[:icpsr].present?
+        @icpsr = IcpsrRecord.find_by_icpsr_id(big_card_params[:icpsr])
+        @icpsr.update_attribute :big_id, params[:id].to_i
         @big_card.update_attribute :used_check, big_card_params[:used_check]
-        @big_card.update_attribute :ocr_text, big_card_params[:ocr_text]
-        if big_card_params[:icpsr].present?
-          @icpsr = IcpsrRecord.find_by_icpsr_id(big_card_params[:icpsr])
-          @icpsr.update_attribute :big_id, params[:id].to_i
-        else
-          if 1 == 1
-            @icpsr = IcpsrRecord.new
-            if big_card_params[:last_name].present?
-              if big_card_params[:first_name].present?
-                @newName = big_card_params[:last_name].to_s + " " + big_card_params[:first_name].to_s
-              else
-                @newName = big_card_params[:last_name].to_s
-              end
-              @icpsr.update_attribute :name, @newName
-            elsif big_card_params[:first_name].present?
-              @newName = big_card_params[:first_name].to_s
-              @icpsr.update_attribute :name, @newName
-            end
-            
-            @icpsr.update_attribute :date_execution, big_card_params[:date_execution]
-            @icpsr.update_attribute :race, big_card_params[:race]
-            @icpsr.update_attribute :sex, big_card_params[:sex]
-            @icpsr.update_attribute :state, big_card_params[:state]
-            @icpsr.update_attribute :state_abbreviation, big_card_params[:state_abbreviation]
-            @icpsr.update_attribute :county_name, big_card_params[:county_name]
-            @icpsr.update_attribute :big_id, params[:id].to_i
-          
-
-          else
-            @big_card.update_attribute :used_check, false
-            @error = true
-          end
-        end
-        if @error == true
-          if big_card_params[:card]
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card], notice: "Not enough information!"}
-          else
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
-          end
-        else
-          if big_card_params[:card]
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card]}
-          else
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
-          end
+        respond_to do |format|
+          format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
         end
       else
-        if @big_card.update(big_card_params)
-          @unlink = ""
-          if @big_card.used_check == false
-            IcpsrRecord.where(big_id: @big_card.id).each do |link|
-              link.update_attribute :big_id, nil
-              @unlink = @unlink + " Unlinked Icpsr " + link.icpsr_id.to_s
+        @checkValid = false
+        if big_card_params[:first_name].present? or big_card_params[:last_name].present?
+          @checkValid = true
+        elsif big_card_params[:date_execution].present?
+          @checkValid = true
+        end         
+        
+        if @checkValid == true
+          @icpsr = IcpsrRecord.new
+          if big_card_params[:last_name].present?
+            if big_card_params[:first_name].present?
+              @newName = big_card_params[:last_name].to_s + " " + big_card_params[:first_name].to_s
+            else
+              @newName = big_card_params[:last_name].to_s
+            end
+            @icpsr.update_attribute :name, @newName
+          elsif big_card_params[:first_name].present?
+            @newName = big_card_params[:first_name].to_s
+            @icpsr.update_attribute :name, @newName
+          end
+          
+          @icpsr.update_attribute :date_execution, big_card_params[:date_execution]
+          @icpsr.update_attribute :race, big_card_params[:race]
+          @icpsr.update_attribute :sex, big_card_params[:sex]
+          @icpsr.update_attribute :state, big_card_params[:state]
+          @icpsr.update_attribute :state_abbreviation, big_card_params[:state_abbreviation]
+          @icpsr.update_attribute :county_name, big_card_params[:county_name]
+          @icpsr.update_attribute :big_id, params[:id].to_i
+          @big_card.update_attribute :used_check, big_card_params[:used_check]
+
+          respond_to do |format|
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
+          end
+        else
+          respond_to do |format|
+            if big_card_params[:card]
+              format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card], :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or an execution date. Please find or make a complete record and try again." }}
+            else
+              format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param], :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or an execution date. Please find or make a complete record and try again." }}
             end
           end
-          if params[:state]
+        end 
+        
+      end
+    else
+      if @big_card.update(big_card_params)
+        @unlink = ""
+        if @big_card.used_check == false
+          IcpsrRecord.where(big_id: @big_card.id).each do |link|
+            link.update_attribute :big_id, nil
+            @unlink = @unlink + " Unlinked Icpsr " + link.icpsr_id.to_s
+          end
+        end
+        if params[:state]
+          respond_to do |format|
             if params[:card]
               @nextCard = params[:card].to_i + 1
               format.html { redirect_to "/link_big_cards?state=" + params[:state] + "&card=" + @nextCard.to_s}
             else
               format.html { redirect_to "/link_big_cards?state=" + params[:state]}
             end
-          else
+          end
+        else
+          respond_to do |format|
             format.html { redirect_to @big_card, notice: 'Big card was successfully updated.' + @unlink }
             format.json { render :show, status: :ok, location: @big_card }
           end
-        else
+        end
+      else
+        respond_to do |format|
           format.html { render :edit }
-          format.json { render json: @big_card.errors, status: :unprocessable_entity }
+         format.json { render json: @big_card.errors, status: :unprocessable_entity }
         end
       end
     end

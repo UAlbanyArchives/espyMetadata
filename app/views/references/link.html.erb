@@ -6,6 +6,14 @@
   </div>
 <% end %>
 
+<% if flash[:error] %>
+  <div id="notice" class="container">
+    <p class="alert alert-danger" role="alert">
+    	<%= flash[:error].html_safe %>
+    </p>
+  </div>
+<% end %>
+
 <% provide(:state, params[:folder]) %>
 <% @reference = Reference.where(folder_name: params[:folder]) %>
 

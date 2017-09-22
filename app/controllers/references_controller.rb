@@ -97,35 +97,64 @@ class ReferencesController < ApplicationController
             active.active = false
             active.save
           end
+          respond_to do |format|
+            if @icpsr.name.present?
+              @icpsrRecord = @icpsr.name
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+            elsif @icpsr.date_execution.present?
+              @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+            end
+          end
       else
-          @icpsr = IcpsrRecord.new
-          if reference_params[:last_name].present?
-            if reference_params[:first_name].present?
-              @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
-            else
-              @newName = reference_params[:last_name].to_s
+          @checkValid = false
+          if reference_params[:first_name].present? or reference_params[:last_name].present?
+            @checkValid = true
+          elsif reference_params[:date_execution].present?
+            @checkValid = true
+          end         
+
+          if @checkValid == true
+            @icpsr = IcpsrRecord.new
+            if reference_params[:last_name].present?
+              if reference_params[:first_name].present?
+                @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
+              else
+                @newName = reference_params[:last_name].to_s
+              end
+            elsif reference_params[:first_name].present?
+              @newName = reference_params[:first_name].to_s
             end
             @icpsr.update_attribute :name, @newName
-          elsif reference_params[:first_name].present?
-            @newName = reference_params[:first_name].to_s
-            @icpsr.update_attribute :name, @newName
+            @icpsr.update_attribute :date_execution, reference_params[:date_execution]
+            @icpsr.update_attribute :race, reference_params[:race]
+            @icpsr.update_attribute :sex, reference_params[:sex]
+            @icpsr.update_attribute :state, reference_params[:state]
+            @icpsr.update_attribute :state_abbreviation, reference_params[:state_abbreviation]
+            @icpsr.update_attribute :county_name, reference_params[:county_name]
+            Reference.where(active: true).each do |active|
+              @icpsr.references << active
+              active.used_check = true
+              active.active = false
+              active.save
+            end
+            respond_to do |format|
+              if @icpsr.name.present?
+                @icpsrRecord = @icpsr.name
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              elsif @icpsr.date_execution.present?
+                @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              else
+                @icpsrRecord = "Icpsr record " + @icpsr.id.to_s
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or date, so a blank record was created! <a href='/icpsr_records?state='>Click Here to see all the blank records.</a>" }}
+              end
+            end
+          else
+            respond_to do |format|
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or an execution date. Please find or make a complete record and try again." }}
+            end
           end
-          
-          @icpsr.update_attribute :date_execution, reference_params[:date_execution]
-          @icpsr.update_attribute :race, reference_params[:race]
-          @icpsr.update_attribute :sex, reference_params[:sex]
-          @icpsr.update_attribute :state, reference_params[:state]
-          @icpsr.update_attribute :state_abbreviation, reference_params[:state_abbreviation]
-          @icpsr.update_attribute :county_name, reference_params[:county_name]
-          Reference.where(active: true).each do |active|
-            @icpsr.references << active
-            active.used_check = true
-            active.active = false
-            active.save
-          end
-      end
-      respond_to do |format|
-        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsr.name + '.' }
       end
     else
       respond_to do |format|

@@ -3,9 +3,9 @@
     <div class="container">
       <div class="alert alert-danger" role="alert">
       
-        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+        <strong>Error!</strong> <%= pluralize(icpsr_record.errors.count, "error") %>  prevented this record from being created.
         <ul>
-        <% espy_record.errors.full_messages.each do |message| %>
+        <% icpsr_record.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
         </ul>
