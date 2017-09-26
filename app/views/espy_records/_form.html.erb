@@ -1,14 +1,15 @@
 <%= form_with(model: espy_record, local: true, class: "row") do |form| %>
   <% if espy_record.errors.any? %>
-    <div class="container">
+    <div class="col-md-12">
       <div class="alert alert-danger" role="alert">
-      
-        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
-        <ul>
-        <% espy_record.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
+        <div class="container">
+          <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+          <ul>
+          <% espy_record.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       </div>
     </div>
   <% end %>
@@ -123,7 +124,7 @@
     <thead>
       <th colspan="1">
         <div class="btn-group col-md-auto">
-        <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary"%>
+        <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary", id: "makeEspy" %>
       </div>
       </th>
       <th colspan="7" class="text-center align-middle">
@@ -315,7 +316,7 @@
             <% if espy_record.race.present? %>
               <%= form.text_field :race, id: :espy_record_race, class: "form-control" %>
             <% else %>
-              <%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => 'espy_record_race' }) %>
+              <%= form.select(:race, race_options, {include_blank: ""}, { :class => 'form-control', :id => 'espy_record_race' }) %>
             <% end %>
           </td>
           <td class="field">
@@ -344,11 +345,7 @@
             <strong><%= form.label :crime %></strong>
           </td>
           <td class="field" colspan="5">
-            <% if espy_record.crime.present? %>
-              <%= form.text_field :crime, id: :espy_record_crime, class: "form-control" %>
-            <% else %>
-              <%= form.select(:crime, crime_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_crime }) %>
-            <% end %>
+            <%= form.select(:crime, crime_options, {include_blank: false}, { :class => 'form-control', :id => :espy_record_crime }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -384,7 +381,7 @@
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
-              <%= form.check_box :slave_comp_index, id: :espy_record_slave_source_index %>
+              <%= form.check_box :slave_source_index, id: :espy_record_slave_source_index %>
               <strong>Index</strong>
             </label>
           </td>
@@ -410,7 +407,7 @@
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
-              <%= form.check_box :comp_comp_index, id: :espy_record_comp_source_index %>
+              <%= form.check_box :comp_source_index, id: :espy_record_comp_source_index %>
               <strong>Index</strong>
             </label>
           </td>
@@ -433,7 +430,7 @@
             <% if espy_record.execution_method.present? %>
               <%= form.text_field :execution_method, id: :espy_record_execution_method, class: "form-control" %>
             <% else %>
-              <%= form.select(:execution_method, ['Hanging', 'Electrocution', 'Asphyxiation-Gas', 'Shot', 'Injection', 'Pressing', 'Break on Wheel', 'Burned', 'Hung in Chains', 'Bludgeoned', 'Gibbetted', 'Other', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
+              <%= form.select(:execution_method, execution_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
             <% end %>
           </td>
           <td class="field">
@@ -618,6 +615,7 @@
 
   <div class="col">
     <% if not @record == nil %>
+      <%= "TEST" %>
       <% if @record.references.length > 1 %>
         <% @splitter = "; " %>
       <% else %>
@@ -650,6 +648,10 @@
       <%= form.hidden_field :reference_material_id, id: :espy_record_reference_material_id, :value => @refIDs %>
       <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files, :value => @refGroup %>
       <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace, :value => @refASpace %>
+    <% else %>
+       <% unless @espy_record.reference_material_files.blank? %>
+        <%= render 'layouts/show_cards', file_group: @espy_record.reference_material_files, folder: "reference" %>
+      <% end %>
     <% end %>
   </div>
 

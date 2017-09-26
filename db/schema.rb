@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920203301) do
+ActiveRecord::Schema.define(version: 20170926153015) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20170920203301) do
     t.text "ocr_text"
     t.integer "icpsr_id"
     t.string "name"
-    t.date "date_crime"
+    t.string "date_crime"
     t.boolean "circa_date_crime"
     t.integer "age"
     t.string "race"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20170920203301) do
     t.integer "icpsr_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "date_execution"
+    t.string "date_execution"
     t.boolean "circa_date_execution"
     t.string "index_card_aspace"
     t.string "big_card_aspace"

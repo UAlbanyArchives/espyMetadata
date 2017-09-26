@@ -441,7 +441,9 @@
 </div>
 
 <div class="col">
-  <%= render 'layouts/show_cards', file_group: @espy_record.reference_material_files, folder: "reference" %>
+  <% unless @espy_record.reference_material_files.blank? %>
+    <%= render 'layouts/show_cards', file_group: @espy_record.reference_material_files, folder: "reference" %>
+  <% end %>
 </div>
 
 </div>

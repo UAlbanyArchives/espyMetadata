@@ -1,14 +1,15 @@
 <%= form_with(model: espy_record, local: true, class: "row") do |form| %>
   <% if espy_record.errors.any? %>
-    <div class="container">
+    <div class="col-md-12">
       <div class="alert alert-danger" role="alert">
-      
-        <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
-        <ul>
-        <% espy_record.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
+        <div class="container">
+          <strong>Error!</strong> <%= pluralize(espy_record.errors.count, "error") %>  prevented this record from being created.
+          <ul>
+          <% espy_record.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       </div>
     </div>
   <% end %>
@@ -199,7 +200,7 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :date_crime_source_icpsr, id: :espy_record_date_crime_source_icpsr, checked: true %>
+              <%= form.check_box :date_crime_source_icpsr, id: :espy_record_date_crime_source_icpsr %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -231,7 +232,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :age_source_icpsr, id: :espy_record_age_source_icpsr, checked: true %>
+              <% if @record.age.present? %> 
+                <%= form.check_box :age_source_icpsr, id: :espy_record_age_source_icpsr, checked: true %>
+              <% else %>
+                <%= form.check_box :age_source_icpsr, id: :espy_record_age_source_icpsr %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -255,7 +260,7 @@
             <strong><%= form.label :sex %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :sex, id: :espy_record_sex, value: @record.sex, class: "form-control" %>
+            <%= form.select(:sex, options_for_select(['Male', 'Female', 'Non-binary', 'Unknown'], @record.sex), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_sex }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -284,9 +289,9 @@
           </td>
           <td class="field" colspan="5">
             <% if @record.race == "Asian-Pacific Il" %>
-              <%= form.text_field :race, id: :espy_record_race, value: 'Asian-Pacific Islander', class: "form-control" %>
+              <%= form.select(:race, options_for_select(race_options, 'Asian-Pacific Islander'), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_race }) %>
             <% else %>
-              <%= form.text_field :race, id: :espy_record_race, value: @record.race, class: "form-control" %>
+              <%= form.select(:race, options_for_select(race_options, @record.race), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_race }) %>
             <% end %>
           </td>
           <td class="field">
@@ -315,7 +320,7 @@
             <strong><%= form.label :crime %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :crime, id: :espy_record_crime, value: @record.crime, class: "form-control" %>
+            <%= form.select(:crime, options_for_select(crime_options, @record.crime), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_crime }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -355,7 +360,7 @@
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
-              <%= form.check_box :slave_comp_index, id: :espy_record_slave_source_index %>
+              <%= form.check_box :slave_source_index, id: :espy_record_slave_source_index %>
               <strong>Index</strong>
             </label>
           </td>
@@ -385,7 +390,7 @@
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
-              <%= form.check_box :comp_comp_index, id: :espy_record_comp_source_index %>
+              <%= form.check_box :comp_source_index, id: :espy_record_comp_source_index %>
               <strong>Index</strong>
             </label>
           </td>
@@ -405,7 +410,7 @@
             <strong><%= form.label :execution_method %></strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :execution_method, id: :espy_record_execution_method, value: @record.execution_method, class: "form-control" %>
+            <%= form.select(:execution_method, options_for_select(execution_options, @record.execution_method), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -449,9 +454,9 @@
           <% end %>
           <td class="field" colspan="5">
             <% if @autoJuris == nil %>
-              <%= form.select(:jurisdiction, jurisdiction_options, {:id => :espy_record_jurisdiction }, class: "form-control") %>
+              <%= form.select(:jurisdiction, options_for_select(jurisdiction_options, @record.jurisdiction), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
             <% else %>
-              <%= form.text_field :jurisdiction, id: :espy_record_jurisdiction, value: @autoJuris, class: "form-control" %>
+              <%= form.select(:jurisdiction, options_for_select(jurisdiction_options, @autoJuris), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
             <% end %>
           </td>
           <td class="field">
@@ -573,7 +578,7 @@
 
     <div class="form-group">
       <div class="text-center">
-        <%= form.button '<i class="fa fa-check"></i> Make Espy Record'.html_safe, class: "btn btn-success" %>
+        <%= form.button '<i class="fa fa-check"></i> Make Espy Record'.html_safe, class: "btn btn-success", id: "makeEspy"%>
       </div>
     </div> 
 

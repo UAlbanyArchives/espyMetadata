@@ -23,6 +23,19 @@ module EspyRecordsHelper
 		]
 	end
 
+	def race_options
+		[
+			['Black'],
+			['White'],
+			['Native American'],
+			['Hispanic'],
+			['Asian'],
+			['Pacific Islander'],
+			['Asian-Pacific Islander'],
+			['Unknown']
+		]
+	end
+
 	def crime_options
 		[
 			['Unknown'],
@@ -66,6 +79,12 @@ module EspyRecordsHelper
 			['Forgery'],
 			['Theft-Stealing'],
 			['Other']
+		]
+	end
+
+	def execution_options
+		[
+			['Hanging'], ['Electrocution'], ['Asphyxiation-Gas'], ['Shot'], ['Injection'], ['Pressing'], ['Break on Wheel'], ['Burned'], ['Hung in Chains'], ['Bludgeoned'], ['Gibbetted'], ['Other'], ['Unknown']
 		]
 	end
 

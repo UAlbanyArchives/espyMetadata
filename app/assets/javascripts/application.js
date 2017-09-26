@@ -204,3 +204,20 @@ document.addEventListener("turbolinks:load", function() {
       }
 });
 });
+
+document.addEventListener("turbolinks:load", function() {
+  $('#espy_record_first_name').on('input',function(e){
+    if ($('#espy_record_first_name').val().length + $('#espy_record_last_name').val().length == 0) {
+      $("#makeEspy").attr("data-confirm", "This record has no name. Are you sure you want to continue?")
+    } else {
+      $("#makeEspy").removeAttr("data-confirm")
+    }
+  });
+  $('#espy_record_last_name').on('input',function(e){
+    if ($('#espy_record_first_name').val().length + $('#espy_record_last_name').val().length == 0) {
+      $("#makeEspy").attr("data-confirm", "This record has no name. Are you sure you want to continue?")
+    } else {
+      $("#makeEspy").removeAttr("data-confirm")
+    }
+  });
+});
