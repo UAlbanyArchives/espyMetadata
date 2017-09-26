@@ -22,6 +22,19 @@
 
 
   <div class="col">
+
+    <% if params[:action] == "edit" %>
+      <div class="container title-card ">
+        <div class="text-center">
+          <div class="btn-group col-md-auto">
+            <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path + "?state=" + espy_record.state_abbreviation, class: "btn btn-secondary"%>
+            <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, espy_record, class: "btn btn-primary"%>
+            <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="thirds-top">
 
       <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
@@ -122,14 +135,23 @@
 
     <table class="table table-sm espyTable">
     <thead>
+      <% if params[:action] == "new" %>
       <th colspan="1">
         <div class="btn-group col-md-auto">
-        <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary", id: "makeEspy" %>
+          <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary", id: "makeEspy" %>
+        
       </div>
       </th>
-      <th colspan="7" class="text-center align-middle">
-          <strong>Espy Record</strong>
-      </th>
+      <% end %>
+      <% if params[:action] != "new" %>
+        <th colspan="8" class="text-center align-middle">
+            <strong>Espy Record</strong>
+        </th>
+      <% else %>
+        <th colspan="7" class="text-center align-middle">
+            <strong>Espy Record</strong>
+        </th>
+      <% end %>
     </thead>
       <tbody>
 

@@ -13,7 +13,7 @@
   <div class="container title-card ">
     <div class="text-center">
       <div class="btn-group col-md-auto">
-        <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path, class: "btn btn-secondary"%>
+        <%= link_to '<i class="fa fa-list"></i> List'.html_safe, espy_records_path+ "?state=" + @espy_record.state_abbreviation, class: "btn btn-secondary"%>
         <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_espy_record_path(@espy_record), class: "btn btn-info"%>
         <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, @espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
       </div>
@@ -57,7 +57,7 @@
 <div class="col">
 
   <table class="table table-sm espyTable">
-    <thead><th colspan="6" class="text-center"><strong>Espy Record</strong></td></th></thead>
+    <thead><th colspan="8" class="text-center"><strong>Espy Record</strong></td></th></thead>
       <tbody>
 
         <tr>

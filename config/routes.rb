@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'icpsr_records#index'
+
   resources :references
   resources :big_cards
   resources :espy_records

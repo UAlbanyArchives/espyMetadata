@@ -67,6 +67,7 @@
       <tr>
         <td>
           <div class="btn-group">
+            <%= link_to '<i class="fa fa-check"></i> Make'.html_safe, "/espy_records/new?icpsr=" + icpsr_record.icpsr_id.to_s, class: "btn btn-success"%>
             <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, icpsr_record, class: "btn btn-primary"%>
             <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_icpsr_record_path(icpsr_record), class: "btn btn-info"%>
           </div>

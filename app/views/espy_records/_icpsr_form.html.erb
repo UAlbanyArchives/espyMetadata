@@ -17,19 +17,36 @@
   <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
 
   <div class="col">
-    <div class="thirds-top">
-      <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
+    <% if params[:card] %>
+      <div class="thirds-top">
+        <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
 
-      <div class="field ocrCheck">
-        <strong>OCR Fixed:</strong>
-        <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed %>
-      </div>
+        <div class="field ocrCheck">
+          <strong>OCR Fixed:</strong>
+          <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed %>
+        </div>
 
-      <div class="field">
-        <!--<%= form.label :ocr_text %>-->
-        <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "8" %>
+        <div class="field">
+          <!--<%= form.label :ocr_text %>-->
+          <%= form.text_area :ocr_text, id: :espy_record_ocr_text, :value => @this.ocr_text, class: "form-control ocr-fix", rows: "8" %>
+          <div class="field">
+            <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
+          </div>
+
+          <div class="field">
+            <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
+          </div>
+
+          <div class="field">
+            <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
+          </div>
+
+          <div class="field">
+            <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
+          </div>
+        </div>
       </div>
-    </div>
+    <% end %>
     <div class="thirds-top">
       <% if @record.big_id != nil %>
         <% @big_card = BigCard.find(@record.big_id) %>
@@ -64,21 +81,6 @@
       <%= form.hidden_field :icpsr_record_id, id: :espy_record_icpsr_record_id, :value => @record.id %>
     </div>
 
-    <div class="field">
-      <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
-    </div>
-
-    <div class="field">
-      <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
-    </div>
-
-    <div class="field">
-      <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
-    </div>
-
-    <div class="field">
-      <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
-    </div>
 
     <div class="field">
       <%= form.hidden_field :reference_material, id: :espy_record_reference_material %>

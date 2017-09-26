@@ -55,6 +55,7 @@
       <tr>
         <td>
           <div class="btn-group">
+            <%= link_to '<i class="fa fa-link"></i> Link'.html_safe, "link_big_cards?state=" + big_card.state_abbreviation + "&card=" + big_card.id.to_s, class: "btn btn-success"%>
             <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, big_card, class: "btn btn-primary"%>
             <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_big_card_path(big_card), class: "btn btn-info"%>
           </div>

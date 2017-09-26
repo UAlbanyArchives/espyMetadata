@@ -59,7 +59,11 @@ class EspyRecordsController < ApplicationController
           @icpsr_record.update_attribute :used_check, true
         end
 
-        format.html { redirect_to '/make?state=' + @espy_record.state_abbreviation }
+        if @espy_record.index_card == true
+          format.html { redirect_to '/make?state=' + @espy_record.state_abbreviation }
+        else
+          format.html { redirect_to '/icpsr_records?state=' + @espy_record.state_abbreviation }
+        end
         format.json { render :show, status: :created, location: @espy_record }
       else
         format.html { render :new }
