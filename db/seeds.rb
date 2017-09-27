@@ -98,7 +98,7 @@ bigData.each do |row|
 end
 
 puts "There are now #{BigCard.count} rows in the table"
-=end
+
 
 reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference.csv'))
 reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
@@ -114,3 +114,4 @@ reference.each do |row|
   puts "#{t.filename} saved"
 
 end
+=end
