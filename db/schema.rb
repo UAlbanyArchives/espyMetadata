@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926153015) do
+ActiveRecord::Schema.define(version: 20170927154651) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20170926153015) do
     t.string "jurisdiction"
     t.string "state"
     t.string "state_abbreviation"
-    t.integer "county_code"
+    t.string "county_code"
     t.string "county_name"
     t.boolean "compensation_case"
     t.integer "icpsr_state"

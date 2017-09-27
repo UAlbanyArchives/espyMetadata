@@ -1,3 +1,7 @@
+ApplicationController.helpers.states_list
+ApplicationController.helpers.states_abbr
+ApplicationController.helpers.fips_codes
+
 class EspyRecord < ApplicationRecord
 
 	validates :record_type, :jurisdiction, :county_name, :county_code, presence: true, allow_blank: false
@@ -6,7 +10,9 @@ class EspyRecord < ApplicationRecord
 	validate :icpsr_id, if: :is_icpsr_record?
 	validate :county_name, if: :has_county_label?
 	validates_inclusion_of :sex, :in => ['Male', 'Female', 'Non-binary', 'Unknown'], :message => "is invalid. Must be one of 'Male', 'Female', 'Non-binary', 'Unknown'.",  allow_blank: true
-	validates_inclusion_of :race, :in => ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], :message => "is invalid. Must be one of 'Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'.",  allow_blank: true
+	validates_inclusion_of :state, :in => ApplicationController.helpers.states_list, :message => "is invalid."
+	validates_inclusion_of :state_abbreviation, :in => ApplicationController.helpers.states_abbr, :message => "is invalid."
+	validates_inclusion_of :county_code, :in => ApplicationController.helpers.fips_codes, :message => "is invalid, not in list."
 
   
   def has_county_label?
