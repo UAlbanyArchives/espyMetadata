@@ -8,8 +8,8 @@
 
 require 'csv'
 
-=begin
-index_cards = File.read(Rails.root.join('lib', 'seeds', 'indexCardsAspace.csv'))
+
+index_cards = File.read(Rails.root.join('lib', 'seeds', 'indexCards.csv'))
 indexData = CSV.parse(index_cards, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 indexData.each do |row|
   t = IndexCard.new
@@ -28,7 +28,7 @@ end
 puts "There are now #{IndexCard.count} rows in the table"
 
 
-icpsr_records = File.read(Rails.root.join('lib', 'seeds', 'IcpsrRecords.csv'))
+icpsr_records = File.read(Rails.root.join('lib', 'seeds', 'icpsrData2.csv'))
 icpsrData = CSV.parse(icpsr_records, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 icpsrData.each do |row|
 
@@ -114,4 +114,3 @@ reference.each do |row|
   puts "#{t.filename} saved"
 
 end
-=end

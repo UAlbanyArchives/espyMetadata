@@ -12,8 +12,8 @@ gem 'rails', '~> 5.1.3'
 gem 'sqlite3'
 # Use Puma as the app server
 #gem 'puma', '~> 3.7'
-# Use Passenger for production
-gem 'passenger'
+# Use Passenger for production (insalled with YUM instead)
+#gem 'passenger'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
