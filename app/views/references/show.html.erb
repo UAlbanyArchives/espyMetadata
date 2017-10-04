@@ -9,7 +9,7 @@
 
     <div class="col-lg-6 col-md-12 text-center">
 
-    	<img class="plainImg" src="/images/reference/<%= @reference.filename %>"/>
+    	<img class="plainImg" src="/images/reference/<%= @reference.filename %>?+ <%=Time.now.getutc%>" />
 
     </div>
    	<div class="col-lg-6 col-md-12">
@@ -34,6 +34,17 @@
 		<p>
 		  <strong>Aspace:</strong>
 		  <%= @reference.aspace %>
+		</p>
+
+		<p>
+			<%= link_to '<i class="fa fa-repeat"></i> Rotate Image'.html_safe, "/rotate?item=" + @reference.id.to_s, class: "btn btn-warning", :data => { :'data-turbolinks' => 'false' } %>
+		</p>
+		<p>
+			Rotation: <%= @reference.rotation %>
+			<% if @reference.rotation == nil %>
+				Nope
+			<% end %>
+
 		</p>
 
 		<div class="container">

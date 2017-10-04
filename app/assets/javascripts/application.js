@@ -194,9 +194,9 @@ document.addEventListener("turbolinks:load", function() {
         var go = $(".left-link").attr("href")
       } else if (e.keyCode == 39) { 
         var go = $(".right-link").attr("href")
-      } else if (e.keyCode == 112) {
-        $(".add-link")[0].click();
       } else if (e.keyCode == 113) {
+        $(".add-link")[0].click();
+      } else if (e.keyCode == 114) {
         $(".back-link")[0].click();
       } 
       if (go.length > 0) {

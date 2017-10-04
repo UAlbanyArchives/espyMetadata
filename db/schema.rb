@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927154651) do
+ActiveRecord::Schema.define(version: 20171003155212) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 20170927154651) do
     t.string "folder_name"
     t.boolean "active"
     t.integer "icpsr_record_id"
+    t.integer "rotation"
   end
 
 end

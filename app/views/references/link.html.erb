@@ -100,7 +100,7 @@
 			  	<% end %>
 				<% if @this != nil %>
 					<a class="modalPreview" href="#" data-preview="<%= @this.filename.split(".")[0] %>">
-		    			<img class="plainImg" src="/images/reference/<%= @this.filename %>"/>
+		    			<img class="plainImg" src="/images/reference/<%= @this.filename %>?+ <%=Time.now.getutc%>" />
 		    		</a>
 		    	<% end %>
 		    	<% if @next != nil %>
@@ -141,6 +141,10 @@
 				<p>
 				  <strong>Used check:</strong>
 				  <%= render 'layouts/boolean_check', check: @this.used_check %>
+				</p>
+
+				<p>
+				<%= link_to '<i class="fa fa-repeat"></i> Rotate Image'.html_safe, "/rotate?folder=" + params[:folder] + "&item=" + @this.id.to_s, class: "btn btn-warning"%>
 				</p>
 				<%= form_with(model: @this, local: true) do |form| %>
 
@@ -298,7 +302,7 @@
 					<div class="modal-dialog modal-lg" role="document">
 						<div class="modal-content">
 							<div class="modal-body">
-								<img class="previewWindow" id="preview<%= @this.filename.split(".")[0] %>" src="/images/reference/<%= @this.filename %>" data-file="/images/reference/<%= @this.filename %>" />
+								<img class="previewWindow" id="preview<%= @this.filename.split(".")[0] %>" src="/images/reference/<%= @this.filename %>?+ <%=Time.now.getutc%>" data-file="/images/reference/<%= @this.filename %>?+ <%=Time.now.getutc%>" />
 							</div>
 						</div>
 					</div>

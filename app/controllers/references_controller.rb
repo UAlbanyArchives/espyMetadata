@@ -40,6 +40,25 @@ class ReferencesController < ApplicationController
   def edit
   end
 
+  def rotate
+    
+    @image = Reference.find(params[:item])
+
+    #raise @cmd
+    @cmd = 'convert -rotate 90 ~/espyMetadata/public/images/reference/' + @image.filename + ' ~/espyMetadata/public/images/reference/' + @image.filename
+    #rotate image 90
+    system(@cmd)
+    
+    @image.increment(:rotation, by = 1)
+    @image.save
+
+    if params[:folder]
+      redirect_to "/link_pdfs?folder=" + params[:folder] + "&item=" + params[:item]
+    else
+      redirect_to "/references/" + params[:item]
+    end
+  end
+
   def add_file
     @item = Reference.find(params[:item].to_i)
     if @item.active == true

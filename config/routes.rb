@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "/icpsr_records/:limit", to: "icpsr_records#index", as: "limit"
   get "/link_big_cards" => "big_cards#link"
   get "/link_pdfs" => "references#link"
+  get "/rotate" => "references#rotate"
   
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
