@@ -3,10 +3,13 @@ class SearchSuggestionsController < ApplicationController
   	if params.has_key?(:name)
   		t = IcpsrRecord.arel_table
   		if params[:name].scan(/ - /).count == 1
-  			render json: IcpsrRecord.find_by(t[:name].matches params[:name].split(' - ')[0])
+        @query = params[:name].split(' - ')[0]
+        @abbr = params[:name].split(' - ')[1]
   		else
-			 render json: IcpsrRecord.find_by(t[:name].matches params[:name].split(' - ')[1])
+        @query = params[:name].split(' - ')[1]
+        @abbr = params[:name].split(' - ')[2]
 		  end
+      render json: IcpsrRecord.where('lower(name) = ?', @query.downcase).where(state_abbreviation: @abbr)
   	else
     	render json: SearchSuggestion.terms_for(params[:term]).reverse
 	end
