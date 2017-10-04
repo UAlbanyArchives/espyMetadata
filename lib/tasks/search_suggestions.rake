@@ -6,4 +6,9 @@ namespace :search_suggestions do
     
   end
 
+  task add: :environment do
+    SearchSuggestion.add
+    
+  end
+
 end

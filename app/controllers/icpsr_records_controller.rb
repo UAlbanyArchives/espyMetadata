@@ -41,6 +41,27 @@ class IcpsrRecordsController < ApplicationController
     render json: IcpsrRecord.find(params[:id])
   end
 
+  def reindex
+
+    #Rake::Task['search_suggestions:add'].invoke
+    IcpsrRecord.where(:icpsr_id => nil).each do |record|
+      name = record.name
+      puts name
+      state = record.state_abbreviation
+      date = record.date_execution.to_s
+      1.upto(name.length) do |n|
+        prefix = name[0, n]
+        $redis.zadd 'search-suggestions:' + prefix.downcase, record.icpsr_id, name.downcase + " - " + state
+      end
+      1.upto(date.length) do |n|
+        prefix = date[0, n]
+        $redis.zadd 'search-suggestions:' + prefix.downcase, record.icpsr_id, date + " - " + name.downcase + " - " + state
+      end
+    end
+
+    redirect_to "/icpsr_records"
+  end
+
   # POST /icpsr_records
   # POST /icpsr_records.json
   def create
