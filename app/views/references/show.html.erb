@@ -37,12 +37,12 @@
 		</p>
 
 		<p>
-			<%= link_to '<i class="fa fa-repeat"></i> Rotate Image'.html_safe, "/rotate?item=" + @reference.id.to_s, class: "btn btn-warning", :data => { :'data-turbolinks' => 'false' } %>
+			<%= link_to '<i class="fa fa-repeat"></i> Rotate Image'.html_safe, "/rotate?item=" + @reference.id.to_s, class: "btn btn-warning" %>
 		</p>
 		<p>
-			Rotation: <%= @reference.rotation %>
+			<strong>Rotation:</strong> <%= @reference.rotation %>
 			<% if @reference.rotation == nil %>
-				Nope
+				0
 			<% end %>
 
 		</p>
