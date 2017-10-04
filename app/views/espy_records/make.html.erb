@@ -135,7 +135,11 @@
 					        'type' : 'GET',
 					        'success' : function(data) { 
 					        	var icpsr = $(".icpsr-field");
-					   			icpsr.val(data['icpsr_id']); 
+					        	if (data['icpsr_id'] == null) {
+					        		icpsr.val("ID" + data['id']); 
+					        	} else {
+						   			icpsr.val(data['icpsr_id']); 
+						   		}
 					   			if (data['used_check'] == true) {
 					   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
 					   				$("#used_check").attr("data-value", "used")

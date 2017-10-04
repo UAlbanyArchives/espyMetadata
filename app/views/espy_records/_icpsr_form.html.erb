@@ -14,7 +14,11 @@
     </div>
   <% end %>
 
-  <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
+  <% if params[:icpsr].include? "ID" %>
+    <% @record = IcpsrRecord.find(params[:icpsr].split("ID")[1].to_i) %>
+  <% else %>
+    <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
+  <% end %>
 
   <div class="col">
     <% if params[:card] %>

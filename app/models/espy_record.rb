@@ -72,6 +72,12 @@ class EspyRecord < ApplicationRecord
   	unless date_execution.length == 4 or date_execution.length == 7 or date_execution.length == 10
   		errors.add(:date_execution, "is invalid date, bad length.")
   	end
+  	if date_execution.include? "/"
+  		errors.add(:date_execution, "is invalid date, cannot contain '/'.")
+  	end
+  	if date_execution.include? "\\"
+  		errors.add(:date_execution, "is invalid date, cannot contain '\\'.")
+  	end
   	year = date_execution.split("-")[0].to_i
   	unless 1600 < year and year < 2017
   		errors.add(:date_execution, "is invalid date, outside of year range.")
@@ -106,6 +112,12 @@ class EspyRecord < ApplicationRecord
 	  		errors.add(:date_crime, "is invalid date.")
 	  	end
 	end
+	if date_crime.include? "/"
+  		errors.add(:date_crime, "is invalid date, cannot contain '/'.")
+  	end
+  	if date_crime.include? "\\"
+  		errors.add(:date_crime, "is invalid date, cannot contain '\\'.")
+  	end
   end
 
   def is_sourced
