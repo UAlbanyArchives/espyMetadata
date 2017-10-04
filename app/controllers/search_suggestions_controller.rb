@@ -9,7 +9,7 @@ class SearchSuggestionsController < ApplicationController
         @query = params[:name].split(' - ')[1]
         @abbr = params[:name].split(' - ')[2]
 		  end
-      render json: IcpsrRecord.where('lower(name) = ?', @query.downcase).where(state_abbreviation: @abbr)
+      render json: IcpsrRecord.where('lower(name) = ?', @query.downcase).where(state_abbreviation: @abbr)[0]
   	else
     	render json: SearchSuggestion.terms_for(params[:term]).reverse
 	end
