@@ -60,48 +60,28 @@ class BigCardsController < ApplicationController
           format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
         end
       else
-        @checkValid = false
-        if big_card_params[:first_name].present? or big_card_params[:last_name].present?
-          @checkValid = true
-        elsif big_card_params[:date_execution].present?
-          @checkValid = true
-        end         
-        
-        if @checkValid == true
-          @icpsr = IcpsrRecord.new
-          if big_card_params[:last_name].present?
-            if big_card_params[:first_name].present?
-              @newName = big_card_params[:last_name].to_s + " " + big_card_params[:first_name].to_s
-            else
-              @newName = big_card_params[:last_name].to_s
-            end
-            @icpsr.update_attribute :name, @newName
-          elsif big_card_params[:first_name].present?
-            @newName = big_card_params[:first_name].to_s
-            @icpsr.update_attribute :name, @newName
-          end
-          
-          @icpsr.update_attribute :date_execution, big_card_params[:date_execution]
-          @icpsr.update_attribute :race, big_card_params[:race]
-          @icpsr.update_attribute :sex, big_card_params[:sex]
-          @icpsr.update_attribute :state, big_card_params[:state]
-          @icpsr.update_attribute :state_abbreviation, big_card_params[:state_abbreviation]
-          @icpsr.update_attribute :county_name, big_card_params[:county_name]
-          @icpsr.update_attribute :big_id, params[:id].to_i
-          @big_card.update_attribute :used_check, big_card_params[:used_check]
+        if big_card_params[:first_name].present?
+          @newName = big_card_params[:last_name].to_s + " " + big_card_params[:first_name].to_s
+        else
+          @newName = big_card_params[:last_name].to_s
+        end
 
+        @icpsr = IcpsrRecord.create(name: @newName, date_execution: big_card_params[:date_execution], race: big_card_params[:race], sex: big_card_params[:sex], state: big_card_params[:state], state_abbreviation: big_card_params[:state_abbreviation], county_name: big_card_params[:county_name], big_id: params[:id].to_i)
+        if @icpsr.valid?
+          @big_card.update_attribute :used_check, big_card_params[:used_check]
           respond_to do |format|
-            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param], notice: 'Large Card was linked for: ' + @newName + '.' }
           end
         else
-          respond_to do |format|
-            if big_card_params[:card]
-              format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param] + "&card=" + big_card_params[:card], :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or an execution date. Please find or make a complete record and try again." }}
-            else
-              format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param], :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>You did not enter a name or an execution date. Please find or make a complete record and try again." }}
-            end
+          @errorMsg = "<strong class='errorHead'>Oh No!</strong><br/>You tried to make a new record, but it was invalid!<ul>"
+          @icpsr.errors.full_messages.each do |msg|
+            @errorMsg = @errorMsg + "<li>" + msg.to_s + "</li>"
           end
-        end 
+          @errorMsg = @errorMsg + "</ul>"
+          respond_to do |format|
+            format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param], :flash => { :error => @errorMsg }}
+          end
+        end
         
       end
     else
