@@ -109,17 +109,17 @@ class IcpsrRecordsController < ApplicationController
   # DELETE /icpsr_records/1
   # DELETE /icpsr_records/1.json
   def destroy
+    if not @icpsr_record.big_id.blank?
+      @big_card = BigCard.find(@icpsr_record.big_id)
+      @big_card.update_attribute :used_check, false
+    end
+    @icpsr_record.references.each do |refLink|
+      @ref = Reference.find(refLink.id)
+      @ref.used_check = false
+      @ref.save
+    end
     @icpsr_record.destroy
     respond_to do |format|
-      if not @icpsr_record.big_id.blank?
-        @big_card = BigCard.find(@icpsr_record.big_id)
-        @big_card.update_attribute :used_check, false
-      end
-      #@icpsr_records.references.each do |refLink|
-      #  @ref = Reference.find(refLink.id)
-      #  @ref.used_check = false
-      #  @ref.save
-      #end
       format.html { redirect_to icpsr_records_url, notice: 'Icpsr record was successfully destroyed.' }
       format.json { head :no_content }
     end

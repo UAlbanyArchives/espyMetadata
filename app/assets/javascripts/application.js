@@ -221,3 +221,42 @@ document.addEventListener("turbolinks:load", function() {
     }
   });
 });
+
+document.addEventListener("turbolinks:load", function() {
+  $('#firstName').focus(function() {
+    if ($(".addFile").has("li").length == 0) {
+      if ( $("#rotateWarning").has(".alert-warning").length > 0){
+        $(".alert-warning").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+      } else {
+        $("#rotateWarning").append("<div class='alert alert-warning' role='alert'><strong>Warning!</strong> No reference material is selected.</div>");
+      }
+    }
+  });
+  $('#lastName').focus(function() {
+    if ($(".addFile").has("li").length == 0) {
+      if ( $("#rotateWarning").has(".alert-warning").length > 0){
+        $(".alert-warning").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+      } else {
+        $("#rotateWarning").append("<div class='alert alert-warning' role='alert'><strong>Warning!</strong> No reference material is selected.</div>");
+      }
+    }
+  });
+  $('#espy_record_state').focus(function() {
+    if ($(".addFile").has("li").length == 0) {
+      if ( $("#rotateWarning").has(".alert-warning").length > 0){
+        $(".alert-warning").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+      } else {
+        $("#rotateWarning").append("<div class='alert alert-warning' role='alert'><strong>Warning!</strong> No reference material is selected.</div>");
+      }
+    }
+  });
+  $('#date_execution').focus(function() {
+    if ($(".addFile").has("li").length == 0) {
+      if ( $("#rotateWarning").has(".alert-warning").length > 0){
+        $(".alert-warning").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+      } else {
+        $("#rotateWarning").append("<div class='alert alert-warning' role='alert'><strong>Warning!</strong> No reference material is selected.</div>");
+      }
+    }
+  });
+});

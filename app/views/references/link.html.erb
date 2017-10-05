@@ -8,9 +8,9 @@
 
 <% if flash[:error] %>
   <div id="notice" class="container">
-    <p class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert">
     	<%= flash[:error].html_safe %>
-    </p>
+    </div>
   </div>
 <% end %>
 
@@ -143,7 +143,7 @@
 				  <%= render 'layouts/boolean_check', check: @this.used_check %>
 				</p>
 
-				<p>
+				<p id="rotateWarning">
 				<%= link_to '<i class="fa fa-repeat"></i> Rotate Image'.html_safe, "/rotate?folder=" + params[:folder] + "&item=" + @this.id.to_s, class: "btn btn-warning"%>
 				</p>
 				<%= form_with(model: @this, local: true) do |form| %>
@@ -191,19 +191,29 @@
 				    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 				    		<%= form.hidden_field :state, :value => params[:state] %>
 				    		<% @activeCount = 0 %>
+				    		<% @usedCount = 0 %>
 				    		<% Reference.where(active: true).each do |active| %>
 				    			<% if active.used_check == true %>
+				    				<% @usedCount = @usedCount + 1 %>
+				    			<% else %>
 				    				<% @activeCount = @activeCount + 1 %>
 				    			<% end %>
 				    		<% end %>
-				    		<% if @activeCount > 0 %>
-				    		<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success go-link" %>
+				    		<% if @usedCount > 0 %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success go-link" %>
+				    		<% elsif @activeCount == 0 %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:error => "noactive"}, class: "btn btn-success go-link" %>
 				    		<% else %>
 				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
 				    		<% end %>
 				    	</div>
+
 				    </div>
 				    <script type="text/javascript">
+				    $("[data-error='noactive']").click(function(e){
+					      e.preventDefault()
+					      alert("There is no reference material selected.");
+					 });
 				      $('.search-field').autocomplete({
 				        source: "/search_suggestions",
 				        select: function (event, ui) {
