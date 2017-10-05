@@ -115,6 +115,11 @@ class IcpsrRecordsController < ApplicationController
         @big_card = BigCard.find(@icpsr_record.big_id)
         @big_card.update_attribute :used_check, false
       end
+      #@icpsr_records.references.each do |refLink|
+      #  @ref = Reference.find(refLink.id)
+      #  @ref.used_check = false
+      #  @ref.save
+      #end
       format.html { redirect_to icpsr_records_url, notice: 'Icpsr record was successfully destroyed.' }
       format.json { head :no_content }
     end
