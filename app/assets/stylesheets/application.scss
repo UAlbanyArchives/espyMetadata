@@ -181,6 +181,8 @@ img {width: 100%; margin-bottom: 1rem;}
   display: inline-block;
   margin-left: 60px;
   margin-right: 60px;
+  max-height: 300px;
+  overflow-y: scroll;
 }
 #previewWindow {width: 100%; margin-bottom: 0px;}
 
