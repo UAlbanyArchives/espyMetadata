@@ -2,7 +2,7 @@ log/
 db/development.sqlite3
 config/secrets.yml
 lib/seeds/
-public/
+public/images/
 
 tmp/
 
