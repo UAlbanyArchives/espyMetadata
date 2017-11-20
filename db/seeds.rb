@@ -99,8 +99,37 @@ end
 
 puts "There are now #{BigCard.count} rows in the table"
 
-
 reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference.csv'))
+reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
+reference.each do |row|
+  t = Reference.new
+  t.filename = row['filename']
+  t.used_check = false
+  t.aspace = row['aspace']
+  t.folder_name = row['folder_name']
+  t.active = false
+  t.save
+  puts t.errors.full_messages
+  puts "#{t.filename} saved"
+
+end
+
+reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference-ship4.csv'))
+reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
+reference.each do |row|
+  t = Reference.new
+  t.filename = row['filename']
+  t.used_check = false
+  t.aspace = row['aspace']
+  t.folder_name = row['folder_name']
+  t.active = false
+  t.save
+  puts t.errors.full_messages
+  puts "#{t.filename} saved"
+
+end
+
+reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference-ship5.csv'))
 reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 reference.each do |row|
   t = Reference.new
