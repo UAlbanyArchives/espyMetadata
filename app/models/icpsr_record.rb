@@ -14,29 +14,34 @@ def has_county_label?
   end
 
 def is_dacs_date?
-  	unless date_execution.length == 4 or date_execution.length == 7 or date_execution.length == 10
+    if date_execution.start_with?('ca. ')
+      date_check = date_execution.split("a. ")[1]
+    else
+      date_check = date_execution
+    end
+  	unless date_check.length == 4 or date_check.length == 7 or date_check.length == 10
   		errors.add(:date_execution, "is invalid date, bad length.")
   	end
-  	if date_execution.include? "/"
+  	if date_check.include? "/"
   		errors.add(:date_execution, "is invalid date, cannot contain '/'.")
   	end
-  	if date_execution.include? "\\"
+  	if date_check.include? "\\"
   		errors.add(:date_execution, "is invalid date, cannot contain '\\'.")
   	end
-  	year = date_execution.split("-")[0].to_i
+  	year = date_check.split("-")[0].to_i
   	unless 1600 < year and year < 2017
   		errors.add(:date_execution, "is invalid date, outside of year range.")
   	end
-  	if date_execution.count('-') == 0
-  	elsif date_execution.count('-') == 1
-  		unless ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].include?(date_execution.split("-")[1])
+  	if date_check.count('-') == 0
+  	elsif date_check.count('-') == 1
+  		unless ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].include?(date_check.split("-")[1])
   			errors.add(:date_execution, "is invalid date, month is invalid.")
   		end
-  	elsif date_execution.count('-') == 2
-  		unless ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].include?(date_execution.split("-")[1])
+  	elsif date_check.count('-') == 2
+  		unless ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].include?(date_check.split("-")[1])
   			errors.add(:date_execution, "is invalid date, month is invalid.")
   		end
-  		day = date_execution.split("-")[2]
+  		day = date_check.split("-")[2]
   		if day.to_i > 31
   			errors.add(:date_execution, "is invalid date, day is over 31.")
   		elsif day.to_i < 10
