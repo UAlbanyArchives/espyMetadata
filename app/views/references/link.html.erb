@@ -200,11 +200,11 @@
 				    			<% end %>
 				    		<% end %>
 				    		<% if @usedCount > 0 %>
-				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success go-link" %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:confirm => @activeCount.to_s + " item(s) have already been used. Are you sure you want to make links to another record?"}, class: "btn btn-success go-link link-to" %>
 				    		<% elsif @activeCount == 0 %>
-				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:error => "noactive"}, class: "btn btn-success go-link" %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", data: {:error => "noactive"}, class: "btn btn-success go-link link-to" %>
 				    		<% else %>
-				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success" %>
+				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success link-to" %>
 				    		<% end %>
 				    	</div>
 
@@ -224,7 +224,13 @@
 						        'type' : 'GET',
 						        'success' : function(data) { 
 						        	var icpsr = $(".icpsr-field");
-						   			icpsr.val(data['icpsr_id']); 
+						        	if (icpsr.val()) {
+						        		icpsr.val(icpsr.val() + ";" + data['icpsr_id']);
+						        		var recordCount = (icpsr.val().match(/;/g) || []).length + 1;
+						        		$(".link-to").attr("data-confirm", "Are you sure you want to add this item to " + recordCount.toString() + " records?");
+						        	} else {
+						   				icpsr.val(data['icpsr_id']);
+						   			}
 						   			if (data['used_check'] == true) {
 						   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
 						   			} else {

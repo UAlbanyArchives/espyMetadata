@@ -198,7 +198,9 @@ document.addEventListener("turbolinks:load", function() {
         $(".add-link")[0].click();
       } else if (e.keyCode == 114) {
         $(".back-link")[0].click();
-      } 
+      } else if (e.keyCode == 46) {
+        $(".ui-autocomplete-input").val('');
+      }
       if (go.length > 0) {
         window.location = go
       }

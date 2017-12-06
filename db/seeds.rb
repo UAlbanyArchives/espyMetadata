@@ -8,7 +8,7 @@
 
 require 'csv'
 
-
+=begin
 index_cards = File.read(Rails.root.join('lib', 'seeds', 'indexCards.csv'))
 indexData = CSV.parse(index_cards, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 indexData.each do |row|
@@ -113,7 +113,7 @@ reference.each do |row|
   puts "#{t.filename} saved"
 
 end
-
+=end
 reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference-ship4.csv'))
 reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 reference.each do |row|

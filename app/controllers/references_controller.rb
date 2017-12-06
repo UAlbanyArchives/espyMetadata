@@ -117,23 +117,47 @@ class ReferencesController < ApplicationController
         @item = Reference.find(params[:id].to_i)
         @folder = @item.folder_name
         if reference_params[:icpsr].present?
-            @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
-            @active = false
+            if reference_params[:icpsr].include? ";"
+              reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
+                @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
+                @active = false
+                Reference.where(active: true).each do |active|
+                  @active = true
+                  @icpsr.references << active
+                end
+              end
+            else
+              @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
+              @active = false
+              Reference.where(active: true).each do |active|
+                @active = true
+                @icpsr.references << active
+              end
+            end
             Reference.where(active: true).each do |active|
-              @active = true
-              @icpsr.references << active
               active.used_check = true
               active.active = false
               active.save
-            end
+            end           
             respond_to do |format|
-              if @icpsr.name.present?
-                @icpsrRecord = @icpsr.name
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
-              elsif @icpsr.date_execution.present?
-                @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              if reference_params[:icpsr].include? ";"
+                @icpsrRecord = ""
+                reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
+                  @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
+                  if @icpsr.name.present?
+                    @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
+                  else
+                    @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
+                  end
+                end
+              else
+                if @icpsr.name.present?
+                  @icpsrRecord = @icpsr.name
+                elsif @icpsr.date_execution.present?
+                  @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+                end
               end
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
             end
         else
 
