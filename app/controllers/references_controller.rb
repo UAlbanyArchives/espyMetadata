@@ -106,7 +106,9 @@ class ReferencesController < ApplicationController
   # PATCH/PUT /references/1.json
   def update
     if reference_params[:first_name]
-      if Reference.where(active: true).empty?
+      @item = Reference.find(params[:id].to_i)
+      @folder = @item.folder_name
+      if Reference.where(folder_name: @item.folder_name).where(active: true).empty?
         respond_to do |format|
           @item = Reference.find(params[:id].to_i)
           @folder = @item.folder_name
@@ -114,14 +116,12 @@ class ReferencesController < ApplicationController
         end
       else
 
-        @item = Reference.find(params[:id].to_i)
-        @folder = @item.folder_name
         if reference_params[:icpsr].present?
             if reference_params[:icpsr].include? ";"
               reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
                 @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
                 @active = false
-                Reference.where(active: true).each do |active|
+                Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
                   @active = true
                   @icpsr.references << active
                 end
@@ -129,12 +129,12 @@ class ReferencesController < ApplicationController
             else
               @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
               @active = false
-              Reference.where(active: true).each do |active|
+              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
                 @active = true
                 @icpsr.references << active
               end
             end
-            Reference.where(active: true).each do |active|
+            Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
               active.used_check = true
               active.active = false
               active.save
@@ -172,14 +172,18 @@ class ReferencesController < ApplicationController
           end
           @icpsr = IcpsrRecord.create(name: @newName, date_execution: reference_params[:date_execution], race: reference_params[:race], sex: reference_params[:sex], state: reference_params[:state], state_abbreviation: reference_params[:state_abbreviation], county_name: reference_params[:county_name])
           if @icpsr.valid?
-            Reference.where(active: true).each do |active|
+            Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
               @icpsr.references << active
               active.used_check = true
               active.active = false
               active.save
             end
             respond_to do |format|
-              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+              if @newName.nil?
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to an Unnamed record.' }
+              else
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+              end
             end
           else
             @errorMsg = "<strong class='errorHead'>Oh No!</strong><br/>You tried to make a new record, but it was invalid!<ul>"

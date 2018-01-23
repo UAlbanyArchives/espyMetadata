@@ -155,7 +155,7 @@
 				    	<% end %>
 
 						<ul class="list-group addFile">
-							<% Reference.where(active: true).order(:updated_at).reverse.each do |active| %>
+							<% Reference.where(active: true).where(folder_name: @this.folder_name).order(:updated_at).reverse.each do |active| %>
 								<li class="list-group-item justify-content-between">
 									<a class="modalPreview" href="#" data-preview="<%= active.filename.split(".")[0] %>"><%= active.filename %></a>
 									<%= link_to "/remove_file?item=" + active.id.to_s + "&reload=" + @this.id.to_s, method: :put, class: "icon-hover-success back-link" do %>
@@ -192,7 +192,7 @@
 				    		<%= form.hidden_field :state, :value => params[:state] %>
 				    		<% @activeCount = 0 %>
 				    		<% @usedCount = 0 %>
-				    		<% Reference.where(active: true).each do |active| %>
+				    		<% Reference.where(active: true).where(folder_name: @this.folder_name).each do |active| %>
 				    			<% if active.used_check == true %>
 				    				<% @usedCount = @usedCount + 1 %>
 				    			<% else %>
