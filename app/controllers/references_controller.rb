@@ -61,17 +61,21 @@ class ReferencesController < ApplicationController
 
   def add_file
     @item = Reference.find(params[:item].to_i)
+    @forwardItem = 1 + params[:item].to_i
+    if not Reference.where(folder_name: @item.folder_name, id: @forwardItem.to_s).exists?
+      @forwardItem = params[:item].to_i
+    end
     if @item.active == true
       respond_to do |format|
         @folder = @item.folder_name
-        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item], alert: 'This item has already been added.' }
+        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, alert: 'This item has already been added.' }
       end
     else
       @item.active = true
       @item.save
       respond_to do |format|
         @folder = @item.folder_name
-        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:item] }
+        format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s }
       end
     end
   end

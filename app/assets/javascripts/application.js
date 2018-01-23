@@ -196,7 +196,7 @@ document.addEventListener("turbolinks:load", function() {
         var go = $(".right-link").attr("href")
       } else if (e.keyCode == 113) {
         $(".add-link")[0].click();
-      } else if (e.keyCode == 114) {
+      } else if (e.keyCode == 115) {
         $(".back-link")[0].click();
       } else if (e.keyCode == 46) {
         $(".ui-autocomplete-input").val('');
