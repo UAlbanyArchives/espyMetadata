@@ -161,7 +161,11 @@ class ReferencesController < ApplicationController
                   @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
                 end
               end
-              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              @forwardItem = 1 + params[:id].to_i
+              if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                @forwardItem = params[:id].to_i
+              end
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
             end
         else
 
@@ -183,10 +187,14 @@ class ReferencesController < ApplicationController
               active.save
             end
             respond_to do |format|
+              @forwardItem = 1 + params[:id].to_i
+              if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                @forwardItem = params[:id].to_i
+              end
               if @newName.nil?
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to an Unnamed record.' }
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to an Unnamed record.' }
               else
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
               end
             end
           else
