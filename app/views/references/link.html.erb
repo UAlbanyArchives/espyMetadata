@@ -14,7 +14,7 @@
   </div>
 <% end %>
 
-<% provide(:state, params[:folder]) %>
+<%# provide(:state, params[:folder]) %>
 <% @reference = Reference.where(folder_name: params[:folder]) %>
 
 <% if params[:folder] %>
@@ -120,7 +120,7 @@
 
 	    </div>
 	   	<div class="col-lg-6 col-md-12">
-
+	   		<!--
 	   		<form class="form-inline stateForm">
 			    <label for="selectState"><h4><strong>Folder: </strong></h4></label>
 			    <% if params.has_key?(:folder) && params[:folder] != "*" %>
@@ -129,7 +129,7 @@
 			      <%= collection_select(:folder, :folder_name, Reference.all.uniq{|x| x.folder_name} , :folder_name, :folder_name, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'link_pdfs?folder=' + this.value") %>
 			    <% end %>
 			</form>
-
+			-->
 			<% if params[:folder] %>
 
 
