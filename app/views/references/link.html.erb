@@ -224,6 +224,12 @@
 						        'type' : 'GET',
 						        'success' : function(data) { 
 						        	var icpsr = $(".icpsr-field");
+						        	var dup_id_field = $("#dup_id_field");
+						        	if (dup_id_field.val()) {
+						        		dup_id_field.val(dup_id_field.val() + ";" + data['id']);
+						        	} else {
+						        		dup_id_field.val(data['id']);
+						        	}
 						        	if (icpsr.val()) {
 						        		icpsr.val(icpsr.val() + ";" + data['icpsr_id']);
 						        		var recordCount = (icpsr.val().match(/;/g) || []).length + 1;
@@ -261,6 +267,12 @@
 			          <tbody>
 			            <tr>
 			              <td colspan="1">
+			                <strong>ID:</strong>
+			              </td>
+			              <td colspan="1">
+			                <%= form.text_field :dup_id, id: "dup_id_field", class: "form-control id-field", placeholder: 'ID' %>
+			              </td>
+			              <td colspan="1">
 			                <strong>Icpsr:</strong>
 			              </td>
 			              <td colspan="1">
@@ -275,30 +287,30 @@
 			              </td>
 			            </tr>
 			            <tr>
-			              <td colspan="2">
+			              <td colspan="3">
 			              	<strong>First name:</strong>
 			              	<%= form.text_field :first_name, id: :firstName, class: "form-control" %>
 			              </td>
-			              <td colspan="2">
+			              <td colspan="3">
 			              	<strong>Last name:</strong>
 			              	<%= form.text_field :last_name, id: :lastName, class: "form-control" %>
 			              </td>
 			            </tr>
 			            <tr>
 			              <td><strong>Date execution:</strong></td>
-			              <td colspan="3"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
+			              <td colspan="5"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Race:</strong></td>
-			              <td colspan="3"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
+			              <td colspan="5"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Sex:</strong></td>
-			              <td colspan="3"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
+			              <td colspan="5"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
 			            </tr>
 			            <tr>
 			              <td colspan="1"><strong>State:</strong></td>
-			              <td colspan="2"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
+			              <td colspan="4"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
 			              </td>
 			              <td colspan="1">
 			              	<%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
@@ -306,7 +318,7 @@
 			            </tr>
 			            <tr>
 			              <td><strong>County name:</strong></td>
-			              <td colspan="3"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
+			              <td colspan="5"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
 			            </tr> 
 			          </tbody>
 

@@ -168,43 +168,91 @@ class ReferencesController < ApplicationController
               format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
             end
         else
-
-          if reference_params[:last_name].present?
-            if reference_params[:first_name].present?
-              @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
+          if reference_params[:dup_id].present?
+            if reference_params[:dup_id].include? ";"
+              reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
+                @icpsr = IcpsrRecord.find_by_id(dupRecordID)
+                @active = false
+                Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                  @active = true
+                  @icpsr.references << active
+                end
+              end
             else
-              @newName = reference_params[:last_name].to_s
+              @icpsr = IcpsrRecord.find_by_id(reference_params[:dup_id])
+              @active = false
+              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                @active = true
+                @icpsr.references << active
+              end
             end
-          elsif reference_params[:first_name].present?
-            @newName = reference_params[:first_name].to_s
-          end
-          @icpsr = IcpsrRecord.create(name: @newName, date_execution: reference_params[:date_execution], race: reference_params[:race], sex: reference_params[:sex], state: reference_params[:state], state_abbreviation: reference_params[:state_abbreviation], county_name: reference_params[:county_name])
-          if @icpsr.valid?
             Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-              @icpsr.references << active
               active.used_check = true
               active.active = false
               active.save
             end
             respond_to do |format|
+              if reference_params[:dup_id].include? ";"
+                @icpsrRecord = ""
+                reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
+                  @icpsr = IcpsrRecord.find_by_id(dupRecordID)
+                  if @icpsr.name.present?
+                    @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
+                  else
+                    @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
+                  end
+                end
+              else
+                if @icpsr.name.present?
+                  @icpsrRecord = @icpsr.name
+                elsif @icpsr.date_execution.present?
+                  @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+                end
+              end
               @forwardItem = 1 + params[:id].to_i
               if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
                 @forwardItem = params[:id].to_i
               end
-              if @newName.nil?
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to an Unnamed record.' }
-              else
-                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
-              end
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
             end
           else
-            @errorMsg = "<strong class='errorHead'>Oh No!</strong><br/>You tried to make a new record, but it was invalid!<ul>"
-            @icpsr.errors.full_messages.each do |msg|
-              @errorMsg = @errorMsg + "<li>" + msg.to_s + "</li>"
+            if reference_params[:last_name].present?
+              if reference_params[:first_name].present?
+                @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
+              else
+                @newName = reference_params[:last_name].to_s
+              end
+            elsif reference_params[:first_name].present?
+              @newName = reference_params[:first_name].to_s
             end
-            @errorMsg = @errorMsg + "</ul>"
-            respond_to do |format|
-              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => @errorMsg }}
+            @icpsr = IcpsrRecord.create(name: @newName, date_execution: reference_params[:date_execution], race: reference_params[:race], sex: reference_params[:sex], state: reference_params[:state], state_abbreviation: reference_params[:state_abbreviation], county_name: reference_params[:county_name])
+            if @icpsr.valid?
+              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                @icpsr.references << active
+                active.used_check = true
+                active.active = false
+                active.save
+              end
+              respond_to do |format|
+                @forwardItem = 1 + params[:id].to_i
+                if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                  @forwardItem = params[:id].to_i
+                end
+                if @newName.nil?
+                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to an Unnamed record.' }
+                else
+                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+                end
+              end
+            else
+              @errorMsg = "<strong class='errorHead'>Oh No!</strong><br/>You tried to make a new record, but it was invalid!<ul>"
+              @icpsr.errors.full_messages.each do |msg|
+                @errorMsg = @errorMsg + "<li>" + msg.to_s + "</li>"
+              end
+              @errorMsg = @errorMsg + "</ul>"
+              respond_to do |format|
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => @errorMsg }}
+              end
             end
           end
 
@@ -241,6 +289,6 @@ class ReferencesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def reference_params
-      params.require(:reference).permit(:filename, :folder_name, :used_check, :aspace, :folder, :item, :state, :icpsr, :first_name, :last_name, :date_execution, :sex, :race, :county_name, :state_abbreviation)
+      params.require(:reference).permit(:filename, :folder_name, :used_check, :aspace, :folder, :item, :state, :icpsr, :dup_id, :first_name, :last_name, :date_execution, :sex, :race, :county_name, :state_abbreviation)
     end
 end
