@@ -129,7 +129,7 @@ reference.each do |row|
 
 end
 =end
-reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference-ship7.csv'))
+reference_data = File.read(Rails.root.join('lib', 'seeds', 'reference-ship10.csv'))
 reference = CSV.parse(reference_data, :headers => true, :encoding => 'ISO-8859-1', :col_sep => "|")
 reference.each do |row|
   t = Reference.new
