@@ -275,7 +275,7 @@
 			              <td colspan="1">
 			                <strong>Icpsr:</strong>
 			              </td>
-			              <td colspan="1">
+			              <td colspan="3">
 			                <%= form.text_field :icpsr, id: :big_card_icpsr, class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
 			                <% if @this != nil %>
 			                	<%= hidden_field_tag :card, @this.id.to_s %>
@@ -287,38 +287,38 @@
 			              </td>
 			            </tr>
 			            <tr>
-			              <td colspan="3">
+			              <td colspan="4">
 			              	<strong>First name:</strong>
 			              	<%= form.text_field :first_name, id: :firstName, class: "form-control" %>
 			              </td>
-			              <td colspan="3">
+			              <td colspan="4">
 			              	<strong>Last name:</strong>
 			              	<%= form.text_field :last_name, id: :lastName, class: "form-control" %>
 			              </td>
 			            </tr>
 			            <tr>
 			              <td><strong>Date execution:</strong></td>
-			              <td colspan="5"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
+			              <td colspan="7"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Race:</strong></td>
-			              <td colspan="5"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
+			              <td colspan="7"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
 			            </tr>
 			            <tr>
 			              <td><strong>Sex:</strong></td>
-			              <td colspan="5"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
+			              <td colspan="7"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
 			            </tr>
 			            <tr>
 			              <td colspan="1"><strong>State:</strong></td>
-			              <td colspan="4"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
+			              <td colspan="5"><%= form.select(:state, us_states, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_state }) %>
 			              </td>
-			              <td colspan="1">
+			              <td colspan="2">
 			              	<%= form.text_field :state_abbreviation, id: :espy_record_state_abbreviation, class: "form-control" %>
 			              </td>
 			            </tr>
 			            <tr>
 			              <td><strong>County name:</strong></td>
-			              <td colspan="5"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
+			              <td colspan="7"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
 			            </tr> 
 			          </tbody>
 
