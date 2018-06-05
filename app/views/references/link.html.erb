@@ -222,8 +222,12 @@
 						   $.ajax({
 						        'url': '/search_suggestions?name=' + label,
 						        'type' : 'GET',
-						        'success' : function(data) { 
-						        	var icpsr = $(".icpsr-field");
+						        'success' : function(response) { 
+						        	if (response.length > 1) {
+									alert("Hey! This returned multiple records. Try searching by date instead.");
+								}
+								data = response[0]
+								var icpsr = $(".icpsr-field");
 						        	var dup_id_field = $("#dup_id_field");
 						        	if (dup_id_field.val()) {
 						        		dup_id_field.val(dup_id_field.val() + ";" + data['id']);
@@ -262,28 +266,26 @@
 				    </script>
 				    
 				</div>
-				<div class="col-xl-8 col-lg-12 previewTable">	  					
+				<div class="col-xl-12 col-lg-12 previewTable">	  					
 					<table class="table table-sm">
 			          <tbody>
 			            <tr>
 			              <td colspan="1">
-			                <strong>ID:</strong>
+			                <strong>ID(s):</strong>
 			              </td>
-			              <td colspan="1">
+			              <td colspan="7">
 			                <%= form.text_field :dup_id, id: "dup_id_field", class: "form-control id-field", placeholder: 'ID' %>
 			              </td>
+				  </tr>  
+				  <tr>
 			              <td colspan="1">
-			                <strong>Icpsr:</strong>
+			                <strong>Icpsr ID(s):</strong>
 			              </td>
-			              <td colspan="3">
+			              <td colspan="7">
 			                <%= form.text_field :icpsr, id: :big_card_icpsr, class: "form-control icpsr-field", placeholder: 'ICPSR Record' %>
 			                <% if @this != nil %>
 			                	<%= hidden_field_tag :card, @this.id.to_s %>
 			                <% end %>
-			              </td>
-			              <td colspan="2">
-			                <strong>Used check:</strong>
-			                <span id="used_check"></span>
 			              </td>
 			            </tr>
 			            <tr>
@@ -297,15 +299,22 @@
 			              </td>
 			            </tr>
 			            <tr>
-			              <td><strong>Date execution:</strong></td>
-			              <td colspan="7"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
-			            </tr>
+			              <td colspan="1"><strong>Date execution:</strong></td>
+			              <td colspan="5"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
+			            
+				      <td colspan="1">
+                                        <strong>Used check:</strong>
+				      </td>
+				      <td colspan="1"> 
+                                        <span id="used_check"></span>
+                                      </td>	
+				   </tr>
 			            <tr>
-			              <td><strong>Race:</strong></td>
+			              <td colspan="1"><strong>Race:</strong></td>
 			              <td colspan="7"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Multiracial', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
 			            </tr>
 			            <tr>
-			              <td><strong>Sex:</strong></td>
+			              <td colspan="1"><strong>Sex:</strong></td>
 			              <td colspan="7"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
 			            </tr>
 			            <tr>
@@ -317,7 +326,7 @@
 			              </td>
 			            </tr>
 			            <tr>
-			              <td><strong>County name:</strong></td>
+			              <td colspan="1"><strong>County name:</strong></td>
 			              <td colspan="7"><%= form.text_field :county_name, id: :county_name, class: "form-control" %></td>
 			            </tr> 
 			          </tbody>

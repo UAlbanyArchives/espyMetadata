@@ -127,7 +127,9 @@ class ReferencesController < ApplicationController
                 @active = false
                 Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
                   @active = true
-                  @icpsr.references << active
+		  if not @icpsr.references.include?(active)
+                  	@icpsr.references << active
+		  end
                 end
               end
             else
@@ -135,7 +137,9 @@ class ReferencesController < ApplicationController
               @active = false
               Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
                 @active = true
-                @icpsr.references << active
+                if not @icpsr.references.include?(active)
+		  @icpsr.references << active
+		end
               end
             end
             Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
