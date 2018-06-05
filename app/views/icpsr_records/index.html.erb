@@ -41,6 +41,7 @@
   <thead>
     <tr>
       <th>Actions</th>
+      <th>ID</th>
       <th>Used check</th>
       <th>Icpsr</th>
       <th>Name</th>
@@ -73,6 +74,7 @@
             <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_icpsr_record_path(icpsr_record), class: "btn btn-info"%>
           </div>
         </td>
+	<td><%= icpsr_record.id %></td>
         <td>
           <%= render 'layouts/boolean_check', check: icpsr_record.used_check %>
         </td>
