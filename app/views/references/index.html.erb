@@ -73,7 +73,7 @@
                 <p style="margin-bottom:0px;"><a href="/icpsr_records/<%= link.id %>">Unnamed</a></p>
             <% end %> 
 	  <% end %>
-	  <% if reference.icpsr_records.length > 3 %>
+	  <% if reference.icpsr_records != nil && reference.icpsr_records.length > 3 %>
 	    ... [ <%= link_to 'View All'.html_safe, reference, class: ""%> ]
 	  <% end %>
         </td>

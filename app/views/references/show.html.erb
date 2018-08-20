@@ -33,7 +33,7 @@
 		</p>
 
 		<% @reference.icpsr_records.each do |link | %>
-		<% if link.name.length > 1 %>
+		<% if link.name != nil && link.name.length > 1 %>
            	<p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
         <% else %>
             <p><a href="/icpsr_records/<%= link.id %>">Unnamed</a></p>
