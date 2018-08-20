@@ -95,8 +95,11 @@
         <td><%= icpsr_record.county_name %></td>
         <td><a href="/big_cards/<%= icpsr_record.big_id %>"><%= icpsr_record.big_id %></a></td>
         <td>
-          <% icpsr_record.references.each do |ref| %>
-            <p><a href="/references/<%= ref.id %>"><%= ref.filename %></a></p>
+          <% icpsr_record.references[0..2].each do |ref| %>
+            <p style="margin-bottom:0px;"><a href="/references/<%= ref.id %>"><%= ref.filename %></a></p>
+          <% end %>
+          <% if icpsr_record.references.length > 3 %>
+            ... [ <%= link_to 'View All'.html_safe, icpsr_record, class: ""%> ]
           <% end %>
         </td>
 

@@ -66,9 +66,16 @@
         </td>
         <td><%= render 'layouts/boolean_check', check: reference.active %></td>
         <td>
-          <% reference.icpsr_records.each do |link | %>
-            <p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
-          <% end %>
+          <% reference.icpsr_records[0..2].each do |link | %>
+            <% if link.name != nil && link.name.length > 1 %>
+                <p style="margin-bottom:0px;"><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
+            <% else %>
+                <p style="margin-bottom:0px;"><a href="/icpsr_records/<%= link.id %>">Unnamed</a></p>
+            <% end %> 
+	  <% end %>
+	  <% if reference.icpsr_records.length > 3 %>
+	    ... [ <%= link_to 'View All'.html_safe, reference, class: ""%> ]
+	  <% end %>
         </td>
         <td><%= reference.aspace %></td>
       </tr>

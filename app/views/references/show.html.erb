@@ -27,9 +27,18 @@
 		  <%= render 'layouts/boolean_check', check: @reference.used_check %>
 		</p>
 
+		<p>
+		  <strong>All Linked IDs:</strong>
+		  <input type="text" class="form-control" value="<% @reference.icpsr_records.each do |link| %><% if link != @reference.icpsr_records.last %><%= link.id %>;<% else %><%= link.id %><% end %><% end %>"></input>  
+		</p>
+
 		<% @reference.icpsr_records.each do |link | %>
-            <p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
-         <% end %>
+		<% if link.name.length > 1 %>
+           	<p><a href="/icpsr_records/<%= link.id %>"><%= link.name %></a></p>
+        <% else %>
+            <p><a href="/icpsr_records/<%= link.id %>">Unnamed</a></p>
+        <% end %> 
+	<% end %>
 
 		<p>
 		  <strong>Aspace:</strong>
