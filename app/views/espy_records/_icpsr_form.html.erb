@@ -102,7 +102,6 @@
     <thead>
       <th colspan="1">
         <div class="btn-group col-md-auto">
-          <%= @this.state_abbreviation %>
           <%= link_to '<i class="fa fa-arrow-left"></i> Make'.html_safe, "/make?state=" + @this.state_abbreviation + "&card=" + @this.id.to_s, class: "btn btn-secondary"%>
         </div>
       </th>
