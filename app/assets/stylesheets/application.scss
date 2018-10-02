@@ -191,3 +191,12 @@ img {width: 100%; margin-bottom: 1rem;}
 .errorHead { font-size:32px; }
 
 #rotateWarning .alert { margin-top: 15px; width: 400px;}
+
+.carousel-indicators li {
+    height: 30px;
+    background-color: rgba(0,128,255,0.5);
+}
+
+.carousel-indicators .active {
+    background-color: rgba(0,128,255,1);
+} 

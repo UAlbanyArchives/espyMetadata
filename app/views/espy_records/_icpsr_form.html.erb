@@ -13,11 +13,17 @@
       </div>
     </div>
   <% end %>
+  
+  <% if params.has_key?(:icpsr) %>
 
-  <% if params[:icpsr].include? "ID" %>
-    <% @record = IcpsrRecord.find(params[:icpsr].split("ID")[1].to_i) %>
+      <% if params[:icpsr].include? "ID" %>
+        <% @record = IcpsrRecord.find(params[:icpsr].split("ID")[1].to_i) %>
+      <% else %>
+        <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
+      <% end %>
+      
   <% else %>
-    <% @record = IcpsrRecord.find_by_icpsr_id(params[:icpsr]) %>
+    <% @record = IcpsrRecord.find_by_id(params[:id]) %>
   <% end %>
 
   <div class="col">
@@ -138,7 +144,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr %>
+              <% else %>
+                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -172,7 +182,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :date_execution_source_icpsr, id: :espy_record_date_execution_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :date_execution_source_icpsr, id: :espy_record_date_execution_source_icpsr %>
+              <% else %>
+                <%= form.check_box :date_execution_source_icpsr, id: :espy_record_date_execution_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -238,7 +252,7 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <% if @record.age.present? %> 
+              <% if @record.age.present? and @record.icpsr_id.present? %> 
                 <%= form.check_box :age_source_icpsr, id: :espy_record_age_source_icpsr, checked: true %>
               <% else %>
                 <%= form.check_box :age_source_icpsr, id: :espy_record_age_source_icpsr %>
@@ -263,14 +277,18 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :sex %></strong>
+            <strong>Gender Assigned</strong>
           </td>
           <td class="field" colspan="5">
             <%= form.select(:sex, options_for_select(['Male', 'Female', 'Non-binary', 'Unknown'], @record.sex), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_sex }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :sex_source_icpsr, id: :espy_record_sex_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :sex_source_icpsr, id: :espy_record_sex_source_icpsr %>
+              <% else %>
+                <%= form.check_box :sex_source_icpsr, id: :espy_record_sex_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -302,7 +320,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :race_source_icpsr, id: :espy_record_race_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :race_source_icpsr, id: :espy_record_race_source_icpsr %>
+              <% else %>
+                <%= form.check_box :race_source_icpsr, id: :espy_record_race_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -323,14 +345,18 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :crime %></strong>
+            <strong>Crime Convicted of</strong>
           </td>
           <td class="field" colspan="5">
             <%= form.select(:crime, options_for_select(crime_options, @record.crime), {include_blank: ""}, { :class => 'form-control', :id => :espy_record_crime }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :crime_source_icpsr, id: :espy_record_crime_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :crime_source_icpsr, id: :espy_record_crime_source_icpsr %>
+              <% else %>
+                <%= form.check_box :crime_source_icpsr, id: :espy_record_crime_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -351,7 +377,7 @@
         </tr>
         <tr>
          <td class="field">
-            <strong><%= form.label :slave %></strong>
+            <strong>Enslaved</strong>
           </td>
           <td class="field">
             <% if @record.occupation == "Slave" %>
@@ -362,7 +388,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :slave_source_icpsr, id: :espy_record_slave_source_icpsr,  checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :slave_source_icpsr, id: :espy_record_slave_source_icpsr %>
+              <% else %>
+                <%= form.check_box :slave_source_icpsr, id: :espy_record_slave_source_icpsr,  checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -392,7 +422,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :comp_source_icpsr, id: :espy_record_comp_source_icpsr,  checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :comp_source_icpsr, id: :espy_record_comp_source_icpsr %>
+              <% else %>
+                <%= form.check_box :comp_source_icpsr, id: :espy_record_comp_source_icpsr,  checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -420,7 +454,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :execution_method_source_icpsr, id: :espy_record_execution_method_source_icpsr, checked: true%>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr %>
+              <% else %>
+                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -467,7 +505,11 @@
           </td>
           <td class="field">
             <label class="form-check-label">
-              <%= form.check_box :jurisdiction_source_icpsr, id: :espy_record_jurisdiction_source_icpsr, checked: true %>
+              <% if @record.icpsr_id.blank? %>
+                <%= form.check_box :jurisdiction_source_icpsr, id: :espy_record_jurisdiction_source_icpsr %>
+              <% else %>
+                <%= form.check_box :jurisdiction_source_icpsr, id: :espy_record_jurisdiction_source_icpsr, checked: true %>
+              <% end %>
               <strong>Icpsr</strong>
             </label>
             <label class="form-check-label">
@@ -529,7 +571,11 @@
               <% if @record.county_name == "Unknown" %>
                 <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr %>
               <% else %>
-                <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr, checked: true %>
+                <% if @record.icpsr_id.blank? %>
+                  <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr %>
+                <% else %>
+                  <%= form.check_box :county_source_icpsr, id: :espy_record_county_source_icpsr, checked: true %>
+                <% end %>
               <% end %>
               <strong>Icpsr</strong>
             </label>

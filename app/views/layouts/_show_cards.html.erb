@@ -2,6 +2,15 @@
 <% if file_group.split('; ').length > 1 %>
 
   <div id="<%= folder %>Controls" class="carousel slide d-inline-block" data-ride="carousel" data-interval="false">
+    <ol class="carousel-indicators">
+        <% file_group.split('; ').each_with_index do |file, index| %>
+          <% if index == 0 %>
+            <li data-target="#<%= folder %>Controls" data-slide-to="0" class="active"></li>
+          <% else %>
+            <li data-target="#<%= folder %>Controls" data-slide-to="<%= index %>"></li>
+          <% end %>
+        <% end %>
+    </ol>
     <div class="carousel-inner" role="listbox">
 
     <% file_group.split('; ').each_with_index do |file, index| %>

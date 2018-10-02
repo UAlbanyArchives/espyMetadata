@@ -166,14 +166,20 @@
 					   $.ajax({
 					        'url': '/search_suggestions?name=' + label,
 					        'type' : 'GET',
-					        'success' : function(data) { 
-					        	var icpsr = $(".icpsr-field");
+					        'success' : function(response) { 
+						        if (response.length > 1) {
+									alert("Hey! This returned multiple records. Try searching by date instead.");
+								}
+								data = response[0]
+                                var icpsr = $(".icpsr-field");
 					   			icpsr.val(data['icpsr_id']); 
 					   			if (data['used_check'] == true) {
 					   				$("#used_check").empty().append("<i class='fa fa-check fa-2x text-success'></i>")
 					   			} else {
 					   				$("#used_check").empty().append("<i class='fa fa-times fa-2x text-danger'></i>")
 					   			}
+                                console.log(data);
+                                console.log(data['name']);
 					   			if (data['name'].indexOf(" ") >= 1) {
 					   				$("#firstName").val(data['name'].split(' ')[1]);
 					   				$("#lastName").val(data['name'].split(' ')[0]);
