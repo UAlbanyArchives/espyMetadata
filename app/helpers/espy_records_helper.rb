@@ -2,8 +2,8 @@ module EspyRecordsHelper
 
 	def type_options
 		[
-			['Sourced'],
-			['Not Sourced'],
+			['Documented'],
+			['Underdocumented'],
 			['Not Executed'],
 			['Informational']
 		]

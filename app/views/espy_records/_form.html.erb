@@ -163,7 +163,7 @@
             <% if espy_record.record_type.present? %>
               <%= form.select(:record_type, type_options, {selected: :record_type}, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% else %>
-              <%= form.select(:record_type, type_options, {selected: "Sourced"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
+              <%= form.select(:record_type, type_options, {selected: "Documented"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% end %>
           </td>
           <td class="field" colspan="1">
@@ -300,7 +300,7 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :sex %></strong>
+            <strong>Gender Assigned</strong>
           </td>
           <td class="field" colspan="5">
             <% if espy_record.sex.present? %>
@@ -364,7 +364,7 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :crime %></strong>
+            <strong>Crime Convicted of</strong>
           </td>
           <td class="field" colspan="5">
             <%= form.select(:crime, crime_options, {include_blank: false}, { :class => 'form-control', :id => :espy_record_crime }) %>
@@ -392,7 +392,7 @@
         </tr>
         <tr>
           <td class="field">
-            <strong><%= form.label :slave %></strong>
+            <strong>Enslaved</strong>
           </td>
           <td class="field">
             <%= form.check_box :slave, id: :espy_record_slave %>
