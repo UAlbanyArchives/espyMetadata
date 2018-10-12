@@ -52,7 +52,14 @@ class BigCardsController < ApplicationController
     if big_card_params[:state]
       
       @big_card.update_attribute :ocr_text, big_card_params[:ocr_text]
-      if big_card_params[:icpsr].present?
+      if big_card_params[:dup_id].present?
+        @icpsr = IcpsrRecord.find_by_id(big_card_params[:dup_id])
+        @icpsr.update_attribute :big_id, params[:id].to_i
+        @big_card.update_attribute :used_check, big_card_params[:used_check]
+        respond_to do |format|
+          format.html { redirect_to "/link_big_cards?state=" + big_card_params[:state_param]}
+        end
+      elsif big_card_params[:icpsr].present?
         @icpsr = IcpsrRecord.find_by_icpsr_id(big_card_params[:icpsr])
         @icpsr.update_attribute :big_id, params[:id].to_i
         @big_card.update_attribute :used_check, big_card_params[:used_check]
@@ -135,6 +142,6 @@ class BigCardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def big_card_params
-      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :ocr_check, :used_check, :aspace, :state, :icpsr, :first_name, :last_name, :card, :date_execution, :sex, :race, :county_name, :state_param)
+      params.require(:big_card).permit(:state_abbreviation, :root_filename, :file_group, :ocr_text, :ocr_check, :used_check, :aspace, :state, :dup_id, :icpsr, :first_name, :last_name, :card, :date_execution, :sex, :race, :county_name, :state_param)
     end
 end

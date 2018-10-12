@@ -171,6 +171,8 @@
 									alert("Hey! This returned multiple records. Try searching by date instead.");
 								}
 								data = response[0]
+                                var dup_id_field = $("#dup_id_field");
+                                dup_id_field.val(data['id']);
                                 var icpsr = $(".icpsr-field");
 					   			icpsr.val(data['icpsr_id']); 
 					   			if (data['used_check'] == true) {
@@ -206,6 +208,12 @@
 			          <tbody>
 			            <tr>
 			              <td colspan="1">
+			                <strong>ID:</strong>
+			              </td>
+			              <td colspan="1">
+			                <%= form.text_field :dup_id, id: "dup_id_field", class: "form-control id-field", placeholder: 'ID' %>
+			              </td>
+                          <td colspan="1">
 			                <strong>Icpsr:</strong>
 			              </td>
 			              <td colspan="1">
@@ -213,11 +221,7 @@
 			                <% if @this != nil %>
 			                	<%= hidden_field_tag :card, @this.id.to_s %>
 			                <% end %>
-			              </td>
-			              <td colspan="2">
-			                <strong>Used check:</strong>
-			                <span id="used_check"></span>
-			              </td>
+			              </td>			              
 			            </tr>
 			            <tr>
 			              <td colspan="2">
@@ -230,9 +234,13 @@
 			              </td>
 			            </tr>
 			            <tr>
-			              <td><strong>Date execution:</strong></td>
-			              <td colspan="3"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
-			            </tr>
+			              <td colspan="1"><strong>Date execution:</strong></td>
+			              <td colspan="1"><%= form.text_field :date_execution, id: :date_execution, class: "form-control" %></td>
+                          <td colspan="2">
+			                <strong>Used check:</strong>
+			                <span id="used_check"></span>
+			              </td>
+                        </tr>
 			            <tr>
 			              <td><strong>Race:</strong></td>
 			              <td colspan="3"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
