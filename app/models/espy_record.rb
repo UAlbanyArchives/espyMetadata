@@ -149,7 +149,7 @@ class EspyRecord < ApplicationRecord
 	      errors.add(:age, "must have at least one source.")
 	    end
 	end
-	unless sex.blank?
+	unless sex.blank? || crime == "Unknown"
 	    unless sex_source_icpsr || sex_source_index || sex_source_big || sex_source_ref
 	      errors.add(:sex, "must have at least one source.")
 	    end
