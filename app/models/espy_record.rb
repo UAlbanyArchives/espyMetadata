@@ -30,46 +30,46 @@ class EspyRecord < ApplicationRecord
 	  	end
 	 else
 	 	unless date_execution_source_icpsr == false
-	 		errors.add(:date_execution_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:date_execution_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless jurisdiction_source_icpsr == false
-	 		errors.add(:jurisdiction_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:jurisdiction_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless county_source_icpsr == false
-	 		errors.add(:county_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:county_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless name_source_icpsr == false
-	 		errors.add(:name_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:name_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless date_crime_source_icpsr == false
 	 		errors.add(:date_crime_source_icpsr, " cannot be true if now ICPSR record is listed")
 	 	end
 	 	unless age_source_icpsr == false
-	 		errors.add(:age_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:age_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless sex_source_icpsr == false
-	 		errors.add(:sex_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:sex_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless race_source_icpsr == false
-	 		errors.add(:race_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:race_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless crime_source_icpsr == false
-	 		errors.add(:crime_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:crime_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless slave_source_icpsr == false
-	 		errors.add(:slave_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:slave_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless comp_source_icpsr == false
-	 		errors.add(:comp_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:comp_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	 	unless execution_method_source_icpsr == false
-	 		errors.add(:execution_method_source_icpsr, " cannot be true if now ICPSR record is listed")
+	 		errors.add(:execution_method_source_icpsr, " cannot be true if no ICPSR record is listed")
 	 	end
 	end
   end
 
   def is_dacs_date?
-  	unless date_execution.length == 4 or date_execution.length == 7 or date_execution.length == 10
+  	unless date_execution.length == 4 or date_execution.length == 7 or date_execution.length == 10 or date_execution.length == 0
   		errors.add(:date_execution, "is invalid date, bad length.")
   	end
   	if date_execution.include? "/"
@@ -79,9 +79,11 @@ class EspyRecord < ApplicationRecord
   		errors.add(:date_execution, "is invalid date, cannot contain '\\'.")
   	end
   	year = date_execution.split("-")[0].to_i
-  	unless 1600 < year and year < 2017
-  		errors.add(:date_execution, "is invalid date, outside of year range.")
-  	end
+    if date_execution.length > 0
+        unless 1600 < year and year < 2017
+            errors.add(:date_execution, "is invalid date, outside of year range.")
+        end
+    end
   	if date_execution.count('-') == 0
   	elsif date_execution.count('-') == 1
   		unless ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].include?(date_execution.split("-")[1])
@@ -121,8 +123,10 @@ class EspyRecord < ApplicationRecord
   end
 
   def is_sourced
-  	unless date_execution_source_icpsr || date_execution_source_index || date_execution_source_big || date_execution_source_ref
-      errors.add(:date_execution, "must have at least one source.")
+    unless date_execution.length == 0
+        unless date_execution_source_icpsr || date_execution_source_index || date_execution_source_big || date_execution_source_ref
+          errors.add(:date_execution, "must have at least one source.")
+        end
     end
     if jurisdiction == "Unknown"
     else
