@@ -46,7 +46,7 @@ gem 'jquery-ui-rails', '~> 6.0.1'
 
 #redis for autocomplete
 gem 'redis', '~> 3.0.7'
-
+gem "loofah", ">= 2.2.3"
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 group :development, :test do
