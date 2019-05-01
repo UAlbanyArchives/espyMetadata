@@ -10,7 +10,7 @@ class ReferencesController < ApplicationController
         @references = Reference.all
       else
         limiter = "folder_name = '" + params[:folder] + "'"
-        @references = Reference.all.where(limiter)
+        @references = Reference.all.where(limiter).order("id ASC")
       end
     else
       @references = Reference.none
@@ -109,114 +109,39 @@ class ReferencesController < ApplicationController
   # PATCH/PUT /references/1
   # PATCH/PUT /references/1.json
   def update
-    if reference_params[:first_name]
-      @item = Reference.find(params[:id].to_i)
-      @folder = @item.folder_name
-      if Reference.where(folder_name: @item.folder_name).where(active: true).empty?
-        respond_to do |format|
-          @item = Reference.find(params[:id].to_i)
-          @folder = @item.folder_name
-          format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>No reference material was selected." } }
-        end
-      else
-        if reference_params[:dup_id].present?
-          if reference_params[:dup_id].include? ";"
-            reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
-              @icpsr = IcpsrRecord.find_by_id(dupRecordID)
-              @active = false
-              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-                @active = true
-                @icpsr.references << active
-              end
-            end
-          else
-            @icpsr = IcpsrRecord.find_by_id(reference_params[:dup_id])
-            @active = false
-            Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-              @active = true
-              @icpsr.references << active
-            end
-          end
-          Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-            active.used_check = true
-            active.active = false
-            active.save
-          end
-          respond_to do |format|
-            if reference_params[:dup_id].include? ";"
-              @icpsrRecord = ""
-              reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
-                @icpsr = IcpsrRecord.find_by_id(dupRecordID)
-                if @icpsr.name.present?
-                  @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
-                else
-                  @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
+    if params[:link_single_item]
+        @item = Reference.find(params[:id].to_i)
+        @folder = @item.folder_name
+
+          if reference_params[:dup_id].present?
+              if reference_params[:dup_id].include? ";"
+                reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
+                  @icpsr = IcpsrRecord.find_by_id(dupRecordID)
+                  @icpsr.references << @item 
                 end
+              else
+                @icpsr = IcpsrRecord.find_by_id(reference_params[:dup_id])
+                @icpsr.references << @item
               end
-            else
-              if @icpsr.name.present?
-                @icpsrRecord = @icpsr.name
-              elsif @icpsr.date_execution.present?
-                @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+              @item.used_check = true
+              @item.save
+              respond_to do |format|
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record with ID: ' + reference_params[:dup_id] }
               end
-            end
-            @forwardItem = 1 + params[:id].to_i
-            if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
-              @forwardItem = params[:id].to_i
-            end
-            format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
-          end
-        else
-          if reference_params[:icpsr].present?
+          elsif reference_params[:icpsr].present?
             if reference_params[:icpsr].include? ";"
               reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
                 @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
-                @active = false
-                Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-                  @active = true
-                  if not @icpsr.references.include?(active)
-                    @icpsr.references << active
-                  end
-                end
+                @icpsr.references << @item
               end
             else
               @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
-              @active = false
-              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-                @active = true
-                if not @icpsr.references.include?(active)
-                  @icpsr.references << active
-                end
-              end
+              @icpsr.references << @item
             end
-            Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-              active.used_check = true
-              active.active = false
-              active.save
-            end           
+            @item.used_check = true
+            @item.save
             respond_to do |format|
-              if reference_params[:icpsr].include? ";"
-                @icpsrRecord = ""
-                reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
-                  @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
-                  if @icpsr.name.present?
-                    @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
-                  else
-                    @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
-                  end
-                end
-              else
-                if @icpsr.name.present?
-                  @icpsrRecord = @icpsr.name
-                elsif @icpsr.date_execution.present?
-                  @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
-                end
-              end
-              @forwardItem = 1 + params[:id].to_i
-              if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
-                @forwardItem = params[:id].to_i
-              end
-              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record with ICPSR ID: ' + reference_params[:icpsr] }
             end
           else
             if reference_params[:last_name].present?
@@ -230,21 +155,14 @@ class ReferencesController < ApplicationController
             end
             @icpsr = IcpsrRecord.create(name: @newName, date_execution: reference_params[:date_execution], race: reference_params[:race], sex: reference_params[:sex], state: reference_params[:state], state_abbreviation: reference_params[:state_abbreviation], county_name: reference_params[:county_name])
             if @icpsr.valid?
-              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
-                @icpsr.references << active
-                active.used_check = true
-                active.active = false
-                active.save
-              end
+              @icpsr.references << @item
+              @item.used_check = true
+              @item.save
               respond_to do |format|
-                @forwardItem = 1 + params[:id].to_i
-                if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
-                  @forwardItem = params[:id].to_i
-                end
                 if @newName.nil?
-                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to an Unnamed record.' }
+                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to an Unnamed record.' }
                 else
-                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
                 end
               end
             else
@@ -258,19 +176,171 @@ class ReferencesController < ApplicationController
               end
             end
           end
-
-        end
-      end
     else
-      respond_to do |format|
-        if @reference.update(reference_params)
-          format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
-          format.json { render :show, status: :ok, location: @reference }
+
+        if reference_params[:first_name]
+          @item = Reference.find(params[:id].to_i)
+          @folder = @item.folder_name
+          if Reference.where(folder_name: @item.folder_name).where(active: true).empty?
+            respond_to do |format|
+              @item = Reference.find(params[:id].to_i)
+              @folder = @item.folder_name
+              format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => "<strong class='errorHead'>Oh No!</strong><br/>No reference material was selected." } }
+            end
+          else
+            if reference_params[:dup_id].present?
+              if reference_params[:dup_id].include? ";"
+                reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
+                  @icpsr = IcpsrRecord.find_by_id(dupRecordID)
+                  @active = false
+                  Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                    @active = true
+                    @icpsr.references << active
+                  end
+                end
+              else
+                @icpsr = IcpsrRecord.find_by_id(reference_params[:dup_id])
+                @active = false
+                Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                  @active = true
+                  @icpsr.references << active
+                end
+              end
+              Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                active.used_check = true
+                active.active = false
+                active.save
+              end
+              respond_to do |format|
+                if reference_params[:dup_id].include? ";"
+                  @icpsrRecord = ""
+                  reference_params[:dup_id].split(";").uniq.each do |dupRecordID|
+                    @icpsr = IcpsrRecord.find_by_id(dupRecordID)
+                    if @icpsr.name.present?
+                      @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
+                    else
+                      @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
+                    end
+                  end
+                else
+                  if @icpsr.name.present?
+                    @icpsrRecord = @icpsr.name
+                  elsif @icpsr.date_execution.present?
+                    @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+                  end
+                end
+                @forwardItem = 1 + params[:id].to_i
+                if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                  @forwardItem = params[:id].to_i
+                end
+                format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+              end
+            else
+              if reference_params[:icpsr].present?
+                if reference_params[:icpsr].include? ";"
+                  reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
+                    @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
+                    @active = false
+                    Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                      @active = true
+                      if not @icpsr.references.include?(active)
+                        @icpsr.references << active
+                      end
+                    end
+                  end
+                else
+                  @icpsr = IcpsrRecord.find_by_icpsr_id(reference_params[:icpsr])
+                  @active = false
+                  Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                    @active = true
+                    if not @icpsr.references.include?(active)
+                      @icpsr.references << active
+                    end
+                  end
+                end
+                Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                  active.used_check = true
+                  active.active = false
+                  active.save
+                end           
+                respond_to do |format|
+                  if reference_params[:icpsr].include? ";"
+                    @icpsrRecord = ""
+                    reference_params[:icpsr].split(";").uniq.each do |icpsrRecordID|
+                      @icpsr = IcpsrRecord.find_by_icpsr_id(icpsrRecordID)
+                      if @icpsr.name.present?
+                        @icpsrRecord = @icpsrRecord + ", " + @icpsr.name
+                      else
+                        @icpsrRecord = @icpsrRecord + ", (" + @icpsr.date_execution + ")"
+                      end
+                    end
+                  else
+                    if @icpsr.name.present?
+                      @icpsrRecord = @icpsr.name
+                    elsif @icpsr.date_execution.present?
+                      @icpsrRecord = "Icpsr record " + @icpsr.id.to_s + " (" + @icpsr.date_execution + ")"
+                    end
+                  end
+                  @forwardItem = 1 + params[:id].to_i
+                  if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                    @forwardItem = params[:id].to_i
+                  end
+                  format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @icpsrRecord + '.' }
+                end
+              else
+                if reference_params[:last_name].present?
+                  if reference_params[:first_name].present?
+                    @newName = reference_params[:last_name].to_s + " " + reference_params[:first_name].to_s
+                  else
+                    @newName = reference_params[:last_name].to_s
+                  end
+                elsif reference_params[:first_name].present?
+                  @newName = reference_params[:first_name].to_s
+                end
+                @icpsr = IcpsrRecord.create(name: @newName, date_execution: reference_params[:date_execution], race: reference_params[:race], sex: reference_params[:sex], state: reference_params[:state], state_abbreviation: reference_params[:state_abbreviation], county_name: reference_params[:county_name])
+                if @icpsr.valid?
+                  Reference.where(folder_name: @item.folder_name).where(active: true).each do |active|
+                    @icpsr.references << active
+                    active.used_check = true
+                    active.active = false
+                    active.save
+                  end
+                  respond_to do |format|
+                    @forwardItem = 1 + params[:id].to_i
+                    if not Reference.where(folder_name: @folder, id: @forwardItem.to_s).exists?
+                      @forwardItem = params[:id].to_i
+                    end
+                    if @newName.nil?
+                      format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to an Unnamed record.' }
+                    else
+                      format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + @forwardItem.to_s, notice: 'Reference material was added to the record for: ' + @newName + '.' }
+                    end
+                  end
+                else
+                  @errorMsg = "<strong class='errorHead'>Oh No!</strong><br/>You tried to make a new record, but it was invalid!<ul>"
+                  @icpsr.errors.full_messages.each do |msg|
+                    @errorMsg = @errorMsg + "<li>" + msg.to_s + "</li>"
+                  end
+                  @errorMsg = @errorMsg + "</ul>"
+                  respond_to do |format|
+                    format.html { redirect_to "/link_pdfs?folder=" + @folder + "&item=" + params[:id].to_s, :flash => { :error => @errorMsg }}
+                  end
+                end
+              end
+
+            end
+          end
         else
-          format.html { render :edit }
-          format.json { render json: @reference.errors, status: :unprocessable_entity }
+          respond_to do |format|
+            if @reference.update(reference_params)
+              format.html { redirect_to @reference, notice: 'Reference was successfully updated.' }
+              format.json { render :show, status: :ok, location: @reference }
+            else
+              format.html { render :edit }
+              format.json { render json: @reference.errors, status: :unprocessable_entity }
+            end
+          end
         end
-      end
     end
   end
 

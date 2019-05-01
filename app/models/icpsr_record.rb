@@ -29,7 +29,7 @@ def is_dacs_date?
   		errors.add(:date_execution, "is invalid date, cannot contain '\\'.")
   	end
   	year = date_check.split("-")[0].to_i
-  	unless 1600 < year and year < 2017
+  	unless 1560 < year and year < 2017
   		errors.add(:date_execution, "is invalid date, outside of year range.")
   	end
   	if date_check.count('-') == 0

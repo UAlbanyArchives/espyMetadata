@@ -185,9 +185,11 @@
 				
 
 				<div class="form-group col-md-12">
-				    <div class="search-form link-form">
+				    <div class="search-form link-form col-md-12">
+                        <div class="col-md-6">
 				    		<%= search_field_tag 'search', nil, class: 'form-control search-field focus-field', placeholder: 'Find'  %>
-				    	<div class="text-center">
+				    	</div>
+                        <div class="col-md-2">
 				    		<%= form.hidden_field :used_check, id: :link_big_cards_used_check, :value => true %>
 				    		<%= form.hidden_field :state, :value => params[:state] %>
 				    		<% @activeCount = 0 %>
@@ -206,7 +208,11 @@
 				    		<% else %>
 				    			<%= form.button '<i class="fa fa-link"></i> Link Item'.html_safe, style: "cursor:pointer", class: "btn btn-success link-to" %>
 				    		<% end %>
-				    	</div>
+                        </div>
+                        <div class="col-md-4">
+                            <%= form.button '<i class="fa fa-link"></i> Link This Item'.html_safe, style: "cursor:pointer", class: "btn btn-primary pull-right", name: 'link_single_item' %>
+                            
+                        </div>
 
 				    </div>
 				    <script type="text/javascript">
@@ -314,7 +320,7 @@
 			              <td colspan="7"><%= form.select(:race, ['Black', 'White', 'Native American', 'Hispanic', 'Asian', 'Pacific Islander', 'Asian-Pacific Islander', 'Multiracial', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :race }) %></td>
 			            </tr>
 			            <tr>
-			              <td colspan="1"><strong>Sex:</strong></td>
+			              <td colspan="1"><strong>Gender assigned:</strong></td>
 			              <td colspan="7"><%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :id => :sex, :class => 'form-control' }) %></td>
 			            </tr>
 			            <tr>
