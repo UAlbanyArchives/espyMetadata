@@ -9,7 +9,7 @@ class EspyRecordsController < ApplicationController
         @espy_records = EspyRecord.all
       else
         limiter = "state_abbreviation = '" + params[:state].upcase + "'"
-        @espy_records = EspyRecord.all.where(limiter)
+        @espy_records = EspyRecord.all.where(limiter).order("id ASC")
       end
     else
       @espy_records = EspyRecord.none

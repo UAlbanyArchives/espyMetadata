@@ -9,7 +9,7 @@ class IndexCardsController < ApplicationController
         @index_cards = IndexCard.all
       else
         limiter = "state_abbreviation = '" + params[:state].upcase + "'"
-        @index_cards = IndexCard.all.where(limiter)
+        @index_cards = IndexCard.all.where(limiter).order("id ASC")
       end
     else
       @index_cards = IndexCard.none

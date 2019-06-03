@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "/link_pdfs" => "references#link"
   get "/rotate" => "references#rotate"
   get "/reindex" => "icpsr_records#reindex"
+  get "/dedup/:limiter", to: "icpsr_records#dedup", as: "limiter"
   
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

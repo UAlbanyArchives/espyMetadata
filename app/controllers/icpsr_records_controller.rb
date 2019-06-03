@@ -9,7 +9,38 @@ class IcpsrRecordsController < ApplicationController
         @icpsr_records = IcpsrRecord.all
       else
         limiter = "state_abbreviation = '" + params[:state].upcase + "'"
-        @icpsr_records = IcpsrRecord.all.where(limiter)
+        @icpsr_records = IcpsrRecord.all.where(limiter).order("id ASC")
+      end
+    else
+      @icpsr_records = IcpsrRecord.none
+    end
+  end
+  
+  # GET /dedup
+  # GET /dedup.json
+  def dedup
+    if params[:state]
+      if params[:state] == "*"
+        @icpsr_records = IcpsrRecord.all
+      else
+        limiter = "state_abbreviation = '" + params[:state].upcase + "'"
+        @records = IcpsrRecord.all.where(limiter)
+        
+        dups = []
+        dates = []
+        @records.each do |record|
+            if dates.include?(record.date_execution)
+                dups << record.id
+            else
+                dates << record.date_execution
+            end
+        
+        end
+
+        #@icpsr_records = dups
+        @icpsr_records = IcpsrRecord.find(dups)
+        #@icpsr_records = IcpsrRecord.none
+        #@icpsr_records = IcpsrRecord.all.where(limiter)
       end
     else
       @icpsr_records = IcpsrRecord.none

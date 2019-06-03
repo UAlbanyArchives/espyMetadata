@@ -19,6 +19,7 @@ module EspyRecordsHelper
 	      ['Military'],
 	      ['Native American'],
 	      ['Territorial'],
+	      ['Extrajudicial'],
 	      ['Other']
 		]
 	end
