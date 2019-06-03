@@ -25,6 +25,31 @@
   <% else %>
     <% @record = IcpsrRecord.find_by_id(params[:id]) %>
   <% end %>
+  
+  <% if @record.name.nil? || @record.name.empty? %>
+    <% @record.name = "" %>
+  <% end %>
+  <% if @record.name.gsub('(').count == 1 and @record.name.gsub(')').count == 1%>
+    <% @ownerName = @record.name.split("(")[1].split(")")[0] %>
+    <% @rumpName = (@record.name.split("(")[0] || "").strip + (@record.name.split(")")[1] || "").strip %>
+  <% else %>
+    <% @ownerName = "" %>
+    <% @rumpName = @record.name %>
+  <% end %>
+  <% if @rumpName.gsub(' ').count == 0 %>
+    <% if @rumpName.downcase == "unknown" %>
+        <% @firstName = "" %>
+    <% else %>
+        <% @firstName = @rumpName %>
+    <% end %>
+    <% @lastName = "" %>
+  <% elsif @rumpName.gsub(' ').count == 1 %>
+    <% @firstName = @rumpName.split(" ")[1] %>
+    <% @lastName = @rumpName.split(" ")[0] %>
+  <% else %>
+    <% @firstName = @rumpName.partition(" ").last.strip %>
+    <% @lastName = @rumpName.partition(" ").first.strip %>
+  <% end %>
 
   <div class="col">
     <% if params[:card] %>
@@ -136,11 +161,19 @@
           </td>
         </tr>
         <tr>
+           <td class="field" colspan="2">
+            <strong class="nameLabel">Name:</strong>
+           </td>
+           <td class="field" colspan="6">
+            <%= @record.name %>
+           </td>
+        </tr>
+        <tr>
           <td class="field" colspan="6">
             <strong class="nameLabel"><%= form.label :first_name %></strong>
-            <%= form.text_field :first_name, id: :espy_record_first_name, value: @record.name.split(" ")[1], class: "form-control nameWidth" %>
+            <%= form.text_field :first_name, id: :espy_record_first_name, value: @firstName, class: "form-control nameWidth" %>
             <strong class="nameLabel"><%= form.label :last_name %></strong>
-            <%= form.text_field :last_name, id: :espy_record_last_name, value: @record.name.split(" ")[0], class: "form-control nameWidth" %>
+            <%= form.text_field :last_name, id: :espy_record_last_name, value: @lastName, class: "form-control nameWidth" %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -172,7 +205,7 @@
             <strong class="nameLabel">Owner Name</strong>
           </td>
           <td class="field" colspan="5">
-            <%= form.text_field :owner_name, id: :espy_record_owner_name, class: "form-control" %>
+            <%= form.text_field :owner_name, id: :espy_record_owner_name, class: "form-control", value: @ownerName %>
           </td>
           <td class="field">
             <label class="form-check-label">
