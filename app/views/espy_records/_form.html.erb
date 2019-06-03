@@ -203,6 +203,34 @@
         </tr>
         <tr>
           <td class="field">
+            <strong class="nameLabel">Owner Name</strong>
+          </td>
+          <td class="field" colspan="5">
+            <%= form.text_field :owner_name, id: :espy_record_owner_name, class: "form-control" %>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :owner_source_icpsr, id: :espy_record_owner_source_icpsr %>
+              <strong>Icpsr</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :owner_source_index, id: :espy_record_name_source_index %>
+              <strong>Index</strong>
+            </label>
+          </td>
+          <td class="field">
+            <label class="form-check-label">
+              <%= form.check_box :owner_source_big, id: :espy_record_owner_source_big %>
+              <strong>Big</strong>
+            </label>
+            <label class="form-check-label">
+              <%= form.check_box :owner_source_ref, id: :espy_record_owner_source_ref %>
+              <strong>Ref</strong>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td class="field">
             <strong><%= form.label :date_execution %></strong>
           </td>
           <td class="field">

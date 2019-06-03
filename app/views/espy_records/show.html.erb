@@ -161,6 +161,29 @@
             </label>
           </td>
         </tr>
+        
+        <tr>
+          <td><strong>Owner name:</strong></td>
+          <td colspan="3">
+            <%= @espy_record.owner_name %>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Icpsr</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.owner_source_icpsr %>
+              <strong>Index</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.owner_source_index %>
+            </label>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <strong>Big</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.owner_source_big %>
+              <strong>Ref</strong>
+              <%= render 'layouts/small_boolean', check: @espy_record.owner_source_ref %>
+            </label>
+          </td>
+        </tr>
 
         <tr>
           <td><strong>Date execution:</strong></td>
