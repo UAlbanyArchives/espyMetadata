@@ -33,6 +33,7 @@ module EspyRecordsHelper
 			['Asian'],
 			['Pacific Islander'],
 			['Asian-Pacific Islander'],
+			['Two or more races'],
 			['Unknown']
 		]
 	end
