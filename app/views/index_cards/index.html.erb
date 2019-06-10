@@ -10,9 +10,9 @@
   <form class="form-inline stateForm">
     <label for="selectState"><strong>Select a State: </strong></label>
     <% if params.has_key?(:state) && params[:state] != "*" %>
-      <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
+      <%= collection_select(:state, :state_abbreviation, IndexCard.all.order('state_abbreviation ASC').uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
     <% else %>
-      <%= collection_select(:state, :state_abbreviation, IndexCard.all.uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
+      <%= collection_select(:state, :state_abbreviation, IndexCard.all.order('state_abbreviation ASC').uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'index_cards?state=' + this.value") %>
     <% end %>
     <a href="/index_cards?state=*" class="btn btn-info">See All</a>
   </form>

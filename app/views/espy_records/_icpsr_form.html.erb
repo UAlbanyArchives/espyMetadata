@@ -718,7 +718,7 @@
 
   </div>
 
-  <div class="col">
+  <div class="col refCol">
     <% if @record.references.length > 0 %>
       <% if @record.references.length > 1 %>
         <% @splitter = "; " %>
@@ -753,7 +753,23 @@
       <%= form.hidden_field :reference_material_files, id: :espy_record_reference_material_files, :value => @refGroup %>
       <%= form.hidden_field :reference_material_aspace, id: :espy_record_reference_material_aspace, :value => @refASpace %>
     <% end %>
+    <h4>Filename: <span id="referenceFileName"></span></h4>
+    <script>
+        $( document ).ready(function() {
+            $filename = $(".active").find('.modalPreview').attr("data-preview");
+            if (typeof $filename == 'undefined') {
+               $filename = $('.refCol').find('.modalPreview').attr("data-preview");
+            }
+            $("#referenceFileName").append($filename + ".jpg");
+            $('#referenceControls').on('slid.bs.carousel', function () {
+                $filename = $(".active").find('.modalPreview').attr("data-preview");
+                $("#referenceFileName").empty();
+                $("#referenceFileName").append($filename + ".jpg");
+            });
+        });
+    </script>
   </div>
+
     
 
 <% end %>

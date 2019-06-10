@@ -663,7 +663,7 @@
 
   </div>
 
-  <div class="col">
+  <div class="col refCol">
     <% if not @record == nil %>
       <%= "TEST" %>
       <% if @record.references.length > 1 %>
@@ -703,6 +703,21 @@
         <%= render 'layouts/show_cards', file_group: @espy_record.reference_material_files, folder: "reference" %>
       <% end %>
     <% end %>
+    <h4>Filename: <span id="referenceFileName"></span></h4>
+    <script>
+        $( document ).ready(function() {
+            $filename = $(".active").find('.modalPreview').attr("data-preview");
+            if (typeof $filename == 'undefined') {
+               $filename = $('.refCol').find('.modalPreview').attr("data-preview");
+            }
+            $("#referenceFileName").append($filename + ".jpg");
+            $('#referenceControls').on('slid.bs.carousel', function () {
+                $filename = $(".active").find('.modalPreview').attr("data-preview");
+                $("#referenceFileName").empty();
+                $("#referenceFileName").append($filename + ".jpg");
+            });
+        });
+    </script>
   </div>
 
 <% end %>
