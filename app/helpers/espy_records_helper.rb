@@ -20,6 +20,7 @@ module EspyRecordsHelper
 	      ['Native American'],
 	      ['Territorial'],
 	      ['Extrajudicial'],
+	      ['Unclear'],
 	      ['Other']
 		]
 	end
@@ -68,6 +69,7 @@ module EspyRecordsHelper
 			['Kidnap-Murdr-Rob'],
 			['Arson-Murder'],
 			['Rape-Robbery'],
+			['Robbery and Attempted Rape'],
 			['Kidnapping'],
 			['Prisn Brk-Kidnap'],
 			['Sodmy-Buggry-Bst'],
@@ -80,6 +82,8 @@ module EspyRecordsHelper
 			['Attempted Murder'],
 			['Forgery'],
 			['Theft-Stealing'],
+			['Conspiracy to Rebel'],
+			['Mutiny'],
 			['Other']
 		]
 	end
@@ -329,7 +333,8 @@ module EspyRecordsHelper
 
 	def fips_codes
 		[
-			"01001",
+"00000",
+"01001",
 "01003",
 "01005",
 "01007",

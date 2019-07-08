@@ -123,10 +123,10 @@ class IcpsrRecordsController < ApplicationController
   # PATCH/PUT /icpsr_records/1.json
   def update
     respond_to do |format|
-      if @icpsr_record.big_id.to_s != icpsr_record_params[:big_id].to_s
-        @big_card = BigCard.find(@icpsr_record.big_id.to_i)
-        @big_card.update_attribute :used_check, false
-      end
+      #if @icpsr_record.big_id.to_s != icpsr_record_params[:big_id].to_s
+      #  @big_card = BigCard.find(@icpsr_record.big_id.to_i)
+      #  @big_card.update_attribute :used_check, false
+      #end
       if @icpsr_record.update(icpsr_record_params)
         format.html { redirect_to @icpsr_record, notice: 'Icpsr record was successfully updated. Any linked big cards were marked unused.' }
         format.json { render :show, status: :ok, location: @icpsr_record }
