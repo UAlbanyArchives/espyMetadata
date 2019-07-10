@@ -86,7 +86,7 @@ class EspyRecordsController < ApplicationController
     @card.save
     
     respond_to do |format|
-        format.html { redirect_to "/espy_records/" + @espy_record.id + "/edit", notice: 'Check record with additional index card.' }
+        format.html { redirect_to "/espy_records/" + @espy_record.id.to_s + "/edit", notice: 'Check record with additional index card.' }
         #format.html { redirect_to :action => 'make', :state => @state, :card => @card.to_i + 1 }
     end
     
