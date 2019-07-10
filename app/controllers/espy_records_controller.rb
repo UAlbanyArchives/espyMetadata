@@ -71,6 +71,26 @@ class EspyRecordsController < ApplicationController
       end
     end
   end
+  
+  def mergecard
+    @state = params[:state]
+    @card = IndexCard.find(params[:card].to_s)
+    @espy_record = EspyRecord.where(icpsr_record_id: params[:merge].to_s)[0]
+    @merge = IndexCard.find(@espy_record.index_card_id)    
+    
+    @merge.file_group = @merge.file_group + "; " + @card.file_group
+    @merge.ocr_text = @merge.ocr_text + " " + @card.ocr_text
+    @merge.save
+    
+    @card.used_check = true
+    @card.save
+    
+    respond_to do |format|
+        format.html { redirect_to "/espy_records/" + @espy_record.id + "/edit", notice: 'Check record with additional index card.' }
+        #format.html { redirect_to :action => 'make', :state => @state, :card => @card.to_i + 1 }
+    end
+    
+  end
 
   # PATCH/PUT /espy_records/1
   # PATCH/PUT /espy_records/1.json

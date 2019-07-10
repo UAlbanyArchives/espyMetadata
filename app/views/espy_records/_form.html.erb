@@ -1,4 +1,11 @@
 <%= form_with(model: espy_record, local: true, class: "row") do |form| %>
+  
+  <% if notice %>
+    <div id="notice" class="container">
+      <p class="alert alert-warning" role="alert"><%= notice %></tr>
+    </div>
+  <% end %>
+  
   <% if espy_record.errors.any? %>
     <div class="col-md-12">
       <div class="alert alert-danger" role="alert">

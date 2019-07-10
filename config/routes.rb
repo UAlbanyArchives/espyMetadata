@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get "/rotate" => "references#rotate"
   get "/reindex" => "icpsr_records#reindex"
   get "/dedup/:limiter", to: "icpsr_records#dedup", as: "limiter"
+  get "/mergecard" => "espy_records#mergecard"
   
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

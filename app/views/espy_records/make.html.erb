@@ -161,7 +161,11 @@
 					   			$("#execution_method").empty().append(data['execution_method']);
 					   			$("#state").empty().append(data['state']);
 					   			$("#state_abbreviation").empty().append(data['state_abbreviation']);
-					   			$("#county_name").empty().append(data['county_name']);     
+					   			$("#county_name").empty().append(data['county_name']);
+                                
+                                var _href = $("#mergecard").attr("href");
+                                $("#mergecard").attr("href", _href + '&merge=' + data['id']);
+                                $("#mergecard").removeClass("disabled");
 					        },
 					    });
 					}
@@ -182,8 +186,15 @@
 					    <i class="fa fa-thumbs-up"></i> Select
 						<% end %>
 					<% end %>
-					<%= link_to '<i class="fa fa-thumbs-down"></i> No Record'.html_safe, "/espy_records/new?state=" + params[:state] + "&card=" + @this.id.to_s, class: "btn btn-secondary pull-right"%>
-				</div>
+                    <div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <%= link_to '<i class="fa fa-thumbs-down"></i> No Record'.html_safe, "/espy_records/new?state=" + params[:state] + "&card=" + @this.id.to_s, class: "btn btn-secondary pull-right"%>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <%= link_to '<i class="fa fa-compress"></i> Merge'.html_safe, "/mergecard?state=" + params[:state] + "&card=" + @this.id.to_s, id: "mergecard", class: "btn btn-info pull-right disabled", :confirm => 'Are you sure you want to merge this card?' %>
+                        </div>
+                    </div>
+                </div>
 				
 				<table class="table table-sm">
 
