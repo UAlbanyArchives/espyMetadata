@@ -516,9 +516,9 @@
           <td class="field">
             <label class="form-check-label">
               <% if @record.icpsr_id.blank? %>
-                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr %>
+                <%= form.check_box :execution_method_source_icpsr, id: :espy_record_name_source_icpsr %>
               <% else %>
-                <%= form.check_box :name_source_icpsr, id: :espy_record_name_source_icpsr, checked: true %>
+                <%= form.check_box :execution_method_source_icpsr, id: :espy_record_name_source_icpsr, checked: true %>
               <% end %>
               <strong>Icpsr</strong>
             </label>

@@ -24,7 +24,7 @@
   <thead>
     <tr>
       <th>Actions</th>
-      <th>Uuid</th>
+      <!--<th>Uuid</th>-->
       <th>Icpsr record</th>
       <th>Icpsr record</th>
       <th>Index card</th>
@@ -32,10 +32,11 @@
       <th>Big card</th>
       <th>Big card</th>
       <th>Reference material</th>
-      <th>Reference material</th>
+      <!--<th>Reference material</th>-->
       <th>OCR Fixed</th>
       <th>Icpsr</th>
       <th>Name</th>
+      <th>Owner</th>
       <th>Date execution</th>
       <th>Race</th>
       <th>Gender Assigned</th>
@@ -59,7 +60,7 @@
             <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
           </div>
         </td>
-        <td><%= espy_record.uuid %></td>
+        <!--<td><%# espy_record.uuid %></td>-->
         <td>
           <% if espy_record.icpsr_record == true %>
            <i class="fa fa-check fa-2x text-success"></i>
@@ -92,11 +93,11 @@
            <i class="fa fa-times fa-2x text-danger"></i>
           <% end %>
         </td>
-        <td>
+        <!--<td>
           <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
             <a href="/references/<%= refID %>"><%= refID %></a>
           <% end %>  
-        </td>
+        </td>-->
         <td>
           <% if espy_record.ocr_fixed == true %>
            <i class="fa fa-check fa-2x text-success"></i>
@@ -107,6 +108,7 @@
         <!--<td class="td-overflow"><%= espy_record.ocr_text %></td>-->
         <td><%= espy_record.icpsr_id %></td>
         <td><%= espy_record.first_name %> <%= espy_record.last_name %></td>
+        <td><%= espy_record.owner_name %></td>
         <td><%= espy_record.date_execution %></td>
         <td><%= espy_record.race %></td>
         <td><%= espy_record.sex %></td>
