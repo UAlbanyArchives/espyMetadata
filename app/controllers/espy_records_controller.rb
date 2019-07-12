@@ -79,7 +79,13 @@ class EspyRecordsController < ApplicationController
     @merge = IndexCard.find(@espy_record.index_card_id)    
     
     @merge.file_group = @merge.file_group + "; " + @card.file_group
-    @merge.ocr_text = @merge.ocr_text + " " + @card.ocr_text
+    unless @card.ocr_text.nil?
+        if @merge.ocr_text.nil?
+            @merge.ocr_text = @card.ocr_text
+        else
+            @merge.ocr_text = @merge.ocr_text + " " + @card.ocr_text
+        end
+    end
     @merge.save
     
     @card.used_check = true
