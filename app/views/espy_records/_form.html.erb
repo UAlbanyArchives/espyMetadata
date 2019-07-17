@@ -26,7 +26,9 @@
   <% if params.has_key?(:card) %>
     <% @this = IndexCard.find(params[:card]) %>
   <% else %>
-    <% @this = IndexCard.find(espy_record.index_card_id) %>
+    <% unless espy_record.index_card.nil? %>
+        <% @this = IndexCard.find(espy_record.index_card_id) %>
+    <% end %>
   <% end %>
 
 
@@ -45,13 +47,15 @@
     <% end %>
 
     <div class="thirds-top">
-
-      <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
-      
+        <% unless espy_record.index_card.nil? %>
+            <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
+        <% end %>
       
       
       <div class="field ocrCheck">
-        <%= link_to '<i class="fa fa-edit"></i> Edit Index Card'.html_safe, edit_index_card_path(@this.id), class: "btn btn-info pull-right"%>
+        <% unless espy_record.index_card.nil? %>
+            <%= link_to '<i class="fa fa-edit"></i> Edit Index Card'.html_safe, edit_index_card_path(@this.id), class: "btn btn-info pull-right"%>
+        <% end %>
         <strong>OCR Fixed:</strong>
         <%= form.check_box :ocr_fixed, id: :espy_record_ocr_fixed %>
       </div>
@@ -97,21 +101,23 @@
       <%= form.hidden_field :icpsr_record_id, id: :espy_record_icpsr_record_id %>
     </div>
 
-    <div class="field">
-      <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
-    </div>
+    <% unless espy_record.index_card.nil? %>
+        <div class="field">
+          <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
+        </div>
 
-    <div class="field">
-      <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
-    </div>
+        <div class="field">
+          <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
+        </div>
 
-    <div class="field">
-      <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
-    </div>
+        <div class="field">
+          <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
+        </div>
 
-    <div class="field">
-      <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
-    </div>
+        <div class="field">
+          <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
+        </div>
+    <% end %>
 
     <div class="field">
       <%= form.hidden_field :big_card, id: :espy_record_big_card %>

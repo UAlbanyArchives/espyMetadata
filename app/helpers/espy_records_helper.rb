@@ -5,6 +5,7 @@ module EspyRecordsHelper
 			['Documented'],
 			['Underdocumented'],
 			['Not Executed'],
+			['Execution Sentence Pending'],
 			['Informational']
 		]
 	end

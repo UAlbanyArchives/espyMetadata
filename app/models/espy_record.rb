@@ -80,7 +80,7 @@ class EspyRecord < ApplicationRecord
   	end
   	year = date_execution.split("-")[0].to_i
     if date_execution.length > 0
-        unless 1600 < year and year < 2017
+        unless 1600 < year and year < 2020
             errors.add(:date_execution, "is invalid date, outside of year range.")
         end
     end
