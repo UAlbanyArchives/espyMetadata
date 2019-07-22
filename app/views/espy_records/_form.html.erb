@@ -49,6 +49,10 @@
     <div class="thirds-top">
         <% unless espy_record.index_card.nil? %>
             <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
+        <% else %>
+            <% if params.has_key?(:card) %>
+                <%= render 'layouts/show_cards', file_group: @this.file_group, folder: "smallCards" %>
+            <% end %>
         <% end %>
       
       
@@ -117,6 +121,24 @@
         <div class="field">
           <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
         </div>
+    <% else %>
+        <% if params.has_key?(:card) %>
+            <div class="field">
+          <%= form.hidden_field :index_card, id: :espy_record_index_card, :value => true %>
+            </div>
+
+            <div class="field">
+              <%= form.hidden_field :index_card_id, id: :espy_record_index_card_id, :value => @this.id %>
+            </div>
+
+            <div class="field">
+              <%= form.hidden_field :index_card_files, id: :espy_record_index_card_files, :value => @this.file_group %>
+            </div>
+
+            <div class="field">
+              <%= form.hidden_field :index_card_aspace, id: :espy_record_index_card_aspace, :value => @this.aspace %>
+            </div>
+        <% end %>
     <% end %>
 
     <div class="field">
@@ -178,11 +200,7 @@
             <strong><%= form.label :record_type %></strong>
           </td>
           <td class="field" colspan="4">
-            <% if espy_record.record_type.present? %>
-              <%= form.select(:record_type, type_options, {selected: :record_type}, { :class => 'form-control', :id => :espy_record_record_type }) %>
-            <% else %>
-              <%= form.select(:record_type, type_options, {selected: "Documented"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
-            <% end %>
+            <%= form.select(:record_type, type_options, {include_blank: false}, { :class => 'form-control', :id => :espy_record_record_type }) %>
           </td>
           <td class="field" colspan="1">
             <strong><%= form.label :icpsr_id %></strong>
@@ -349,11 +367,7 @@
             <strong>Gender Assigned</strong>
           </td>
           <td class="field" colspan="5">
-            <% if espy_record.sex.present? %>
-              <%= form.text_field :sex, id: :espy_record_sex, class: "form-control" %>
-            <% else %>
-              <%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :class => 'form-control' }) %>
-            <% end %>
+            <%= form.select(:sex, ['Male', 'Female', 'Non-binary', 'Unknown'], {include_blank: ""}, { :class => 'form-control', :id => :espy_record_sex }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -381,11 +395,7 @@
             <strong><%= form.label :race %></strong>
           </td>
           <td class="field" colspan="5">
-            <% if espy_record.race.present? %>
-              <%= form.text_field :race, id: :espy_record_race, class: "form-control" %>
-            <% else %>
-              <%= form.select(:race, race_options, {include_blank: ""}, { :class => 'form-control', :id => 'espy_record_race' }) %>
-            <% end %>
+            <%= form.select(:race, race_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_race }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -495,11 +505,7 @@
             <strong><%= form.label :execution_method %></strong>
           </td>
           <td class="field" colspan="5">
-            <% if espy_record.execution_method.present? %>
-              <%= form.text_field :execution_method, id: :espy_record_execution_method, class: "form-control" %>
-            <% else %>
-              <%= form.select(:execution_method, execution_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
-            <% end %>
+            <%= form.select(:execution_method, execution_options, {include_blank: ""}, { :class => 'form-control', :id => :espy_record_execution_method }) %>
           </td>
           <td class="field">
             <label class="form-check-label">
@@ -527,11 +533,7 @@
             <strong><%= form.label :jurisdiction %></strong>
           </td>
           <td class="field" colspan="5">
-            <% if espy_record.jurisdiction.present? %>
-             <%= form.select(:jurisdiction, jurisdiction_options, {include_blank: false, selected: espy_record.jurisdiction}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
-            <% else %>
-              <%= form.select(:jurisdiction, jurisdiction_options, {include_blank: false}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
-            <% end %>
+            <%= form.select(:jurisdiction, jurisdiction_options, {include_blank: false}, { :class => 'form-control', :id => :espy_record_jurisdiction }) %>
           </td>
           <td class="field">
             <label class="form-check-label">

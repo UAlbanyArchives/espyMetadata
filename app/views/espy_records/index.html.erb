@@ -33,7 +33,6 @@
       <th>Big card</th>
       <th>Reference material</th>
       <!--<th>Reference material</th>-->
-      <th>OCR Fixed</th>
       <th>Icpsr</th>
       <th>Name</th>
       <th>Owner</th>
@@ -98,13 +97,6 @@
             <a href="/references/<%= refID %>"><%= refID %></a>
           <% end %>  
         </td>-->
-        <td>
-          <% if espy_record.ocr_fixed == true %>
-           <i class="fa fa-check fa-2x text-success"></i>
-          <% else %>
-           <i class="fa fa-times fa-2x text-danger"></i>
-          <% end %>
-        </td>
         <!--<td class="td-overflow"><%= espy_record.ocr_text %></td>-->
         <td><%= espy_record.icpsr_id %></td>
         <td><%= espy_record.first_name %> <%= espy_record.last_name %></td>

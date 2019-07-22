@@ -150,7 +150,8 @@
             <% if espy_record.record_type.present? %>
               <%= form.select(:record_type, type_options, {selected: :record_type}, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% else %>
-              <%= form.select(:record_type, type_options, {selected: "Sourced"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
+              <%# form.select(:record_type, type_options, {selected: "Documented"}, { :class => 'form-control', :id => :espy_record_record_type }) %>
+              <%= form.select(:record_type, type_options, { :class => 'form-control', :id => :espy_record_record_type }) %>
             <% end %>
           </td>
           <td class="field" colspan="1">
