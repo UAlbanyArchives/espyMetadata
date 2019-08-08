@@ -26,11 +26,17 @@ class IcpsrRecordsController < ApplicationController
         limiter = "state_abbreviation = '" + params[:state].upcase + "'"
         @records = IcpsrRecord.all.where(limiter)
         
+        unknownDates = []
         dups = []
         dates = []
         @records.each do |record|
             if dates.include?(record.date_execution)
                 dups << record.id
+            elsif record.name.downcase.include? "unknown" || record.name.blank?
+                if unknownDates.include?(record.date_execution)
+                    dups << record.id
+                end
+                unknownDates << record.date_execution
             else
                 dates << record.date_execution
             end
@@ -45,6 +51,12 @@ class IcpsrRecordsController < ApplicationController
     else
       @icpsr_records = IcpsrRecord.none
     end
+  end
+  
+  # GET /combine
+  # GET /combine.json
+  def combine
+    params[:state] 
   end
 
   # GET /icpsr_records/1

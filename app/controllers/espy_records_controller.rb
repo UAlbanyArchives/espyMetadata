@@ -43,12 +43,6 @@ class EspyRecordsController < ApplicationController
 
     respond_to do |format|
       if @espy_record.save
-        if @espy_record.icpsr_id.blank?
-          @espy_record.update_attribute :icpsr_record, false
-          @espy_record.update_attribute :icpsr_record_id, nil
-        else
-          @espy_record.update_attribute :icpsr_record, true
-        end
 
         if @espy_record.index_card == true
           @index_card = IndexCard.find(@espy_record.index_card_id)
@@ -62,7 +56,9 @@ class EspyRecordsController < ApplicationController
         if @espy_record.index_card == true
           format.html { redirect_to '/make?state=' + @espy_record.state_abbreviation }
         else
-          format.html { redirect_to '/icpsr_records?state=' + @espy_record.state_abbreviation }
+          #format.html { redirect_to '/icpsr_records?state=' + @espy_record.state_abbreviation }
+          # just so its faster
+          format.html { redirect_to '/icpsr_records' }
         end
         format.json { render :show, status: :created, location: @espy_record }
       else

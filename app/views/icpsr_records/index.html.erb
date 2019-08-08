@@ -49,14 +49,17 @@
       <th>Age</th>
       <th>Race</th>
       <th>Sex</th>
-      <th>Occupation</th>
+      
+      <th>Combine</th>
+      <!--<th>Occupation</th>
       <th>Comp Case</th>
       <th>Crime</th>
       <th>Execution method</th>
       <th>Jurisdiction</th>
       <th>State</th>
       <th>State abbreviation</th>
-      <th>County code</th>
+      <th>County code</th>-->
+      
       <th>County name</th>
       <th>Big Card ID</th>
       <th>Reference Material</th>
@@ -88,14 +91,25 @@
         <td><%= icpsr_record.age %></td>
         <td><%= icpsr_record.race %></td>
         <td><%= icpsr_record.sex %></td>
-        <td><%= icpsr_record.occupation %></td>
-        <td><%= render 'layouts/boolean_check', check: icpsr_record.compensation_case %></td>
-        <td><%= icpsr_record.crime %></td>
-        <td><%= icpsr_record.execution_method %></td>
-        <td><%= icpsr_record.jurisdiction %></td>
-        <td><%= icpsr_record.state %></td>
-        <td><%= icpsr_record.state_abbreviation %></td>
-        <td><%= icpsr_record.county_code %></td>
+        
+        <td>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="ID to combine with" aria-label="ID to combine with" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <a href="icpsr_records/combine?to=<%= icpsr_record.id %>&from=" class="btn btn-outline-primary" type="button">Combine</a>
+              </div>
+            </div>
+        </td>
+        
+        <!--<td><%# icpsr_record.occupation %></td>
+        <td><%# render 'layouts/boolean_check', check: icpsr_record.compensation_case %></td>
+        <td><%# icpsr_record.crime %></td>
+        <td><%# icpsr_record.execution_method %></td>
+        <td><%# icpsr_record.jurisdiction %></td>
+        <td><%# icpsr_record.state %></td>
+        <td><%# icpsr_record.state_abbreviation %></td>
+        <td><%# icpsr_record.county_code %></td>-->
+        
         <td><%= icpsr_record.county_name %></td>
         <td><a href="/big_cards/<%= icpsr_record.big_id %>"><%= icpsr_record.big_id %></a></td>
         <td>
