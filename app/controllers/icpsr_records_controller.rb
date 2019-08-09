@@ -63,7 +63,7 @@ class IcpsrRecordsController < ApplicationController
     if @to.big_id != @from.big_id
         unless @to.big_id.nil? || @from.big_id.nil?
             respond_to do |format|
-                format.html { redirect_to '/icpsr_records?state=' + @to.state_abbreviation, notice: 'ERROR: cannot combine with different big cards.' }
+                format.html { redirect_to '/icpsr_records', notice: 'ERROR: cannot combine with different big cards.' }
             end
         end
         if @to.big_id.nil?
@@ -76,14 +76,88 @@ class IcpsrRecordsController < ApplicationController
             @to.references << ref
         end
     end
+    toID = @to.id.to_s
+    fromID = @from.id.to_s
     
-    @from.deleted = true
-    @to.save
-    @from.save
+    espyTo = EspyRecord.where("icpsr_record_id": @to.id)
+    espyFrom = EspyRecord.where("icpsr_record_id": @from.id)
+    espyToID = espyTo.id.to_s
+    espyFromID = espyFrom.id.to_s
+    if espyTo.count == 0 and espyFrom.count == 0
+        @from.deleted = true
+        @to.save
+        @from.save        
+        respond_to do |format|
+            format.html { redirect_to '/icpsr_records', notice: 'Records were successfully combined.' }
+        end
+    elsif espyTo.count == 1 and espyFrom.count == 0
     
-    respond_to do |format|
-        format.html { redirect_to '/icpsr_records?state=' + @state, notice: 'Records were successfully combined.' }
+        refs = []
+        @to.references.each do |ref|
+            unless refs.include? ref
+                refs << ref
+            end
+        end
+        @from.references.each do |ref|
+            unless refs.include? ref
+                refs << ref
+            end
+        end
+        idList = []
+        fileList = []
+        refs.each do |ref|
+            idList << ref.id
+            fileList << ref.filename
+        end
+        espyTo.reference_material_id = idList.join("; ")
+        espyTo.reference_material_files = fileList.join("; ")
+        espyTo.save
+        
+        @from.deleted = true
+        @to.save
+        @from.save        
+        respond_to do |format|
+            format.html { redirect_to '/espy_records/' + espyTo.id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
+        end
+        
+    elsif espyTo.count == 0 and espyFrom.count == 1
+    
+       espyFrom.icpsr_record = true
+       espyFrom.icpsr_record_id = @to.id
+       refs = []
+        @to.references.each do |ref|
+            unless refs.include? ref
+                refs << ref
+            end
+        end
+        @from.references.each do |ref|
+            unless refs.include? ref
+                refs << ref
+            end
+        end
+        idList = []
+        fileList = []
+        refs.each do |ref|
+            idList << ref.id
+            fileList << ref.filename
+        end
+        espyFrom.reference_material_id = idList.join("; ")
+        espyFrom.reference_material_files = fileList.join("; ")
+        espyFrom.save
+        
+        @from.deleted = true
+        @to.save
+        @from.save        
+        respond_to do |format|
+            format.html { redirect_to '/espy_records/' + espyFrom.id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
+        end
+        
+    else
+        respond_to do |format|
+            format.html { redirect_to '/icpsr_records', notice: 'ERROR: Did nothing, as both Icpsr records (' toID +  ' & ' +  fromID + ') have been made into Espy Records (' espyToID +  ' & ' +  espyFromID + ').' }
+        end
     end
+    
   end
 
   # GET /icpsr_records/1

@@ -29,26 +29,39 @@ namespace :check do
     
         date = record.date_execution
         state = record.state_abbreviation
-        find = IcpsrRecord.where("state_abbreviation": state).where("date_execution": date)
+        
+        
+        find = IcpsrRecord.where("state_abbreviation": state).where("date_execution": date).where("deleted": nil)
         if find.count == 0
+        
+            puts record.last_name + " " + record.first_name + " " + record.id.to_s + " " + record.date_execution + " " + record.state_abbreviation
+            find.each do |thing|
+                puts "\t" + thing.name + " " + thing.id.to_s + " " + record.date_execution + " " + record.state_abbreviation
+            end
             
-        else
-            if find.count > 1
-
-                #puts find[0].name
-                puts record.last_name + " " + record.first_name + " " + record.id.to_s
-                find.each do |thing|
-                    puts "\t" + thing.name + " " + thing.id.to_s
-                end
-                
-                #nope
-                #unless find[0].icpsr_id.nil?
+        elsif find.count == 1
+            unless find[0].icpsr_id.nil?
+                puts find[0].name
                 #record.icpsr_record = true
                 #record.icpsr_record_id = find[0].id
                 #record.save
-
-                
             end
+        elsif find.count > 1
+
+            #puts find[0].name
+            puts record.last_name + " " + record.first_name + " " + record.id.to_s + " " + record.date_execution + " " + record.state_abbreviation
+            find.each do |thing|
+                puts "\t" + thing.name + " " + thing.id.to_s + " " + record.date_execution + " " + record.state_abbreviation
+            end
+            
+            #nope
+            #unless find[0].icpsr_id.nil?
+            #record.icpsr_record = true
+            #record.icpsr_record_id = find[0].id
+            #record.save
+
+            
+        
         end
         
     end
@@ -58,15 +71,18 @@ namespace :check do
     
   end
     
-  task :join, [:arg1] => :environment do |t, args|
+  task :join, [:arg1, :arg2] => :environment do |t, args|
     puts args[:arg1]
-  end
-  
-  task uncheck: :environment do
-  
-  
+    puts args[:arg2]
+    espy = EspyRecord.find(args[:arg1])
+    record = IcpsrRecord.find(args[:arg2])
     
+    espy.icpsr_record = true
+    espy.icpsr_record_id = record.id
+    espy.save
   end
+  
+  
 
 
 end
