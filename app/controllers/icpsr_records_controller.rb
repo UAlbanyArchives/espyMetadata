@@ -81,8 +81,7 @@ class IcpsrRecordsController < ApplicationController
     
     espyTo = EspyRecord.where("icpsr_record_id": @to.id)
     espyFrom = EspyRecord.where("icpsr_record_id": @from.id)
-    espyToID = espyTo.id.to_s
-    espyFromID = espyFrom.id.to_s
+    
     if espyTo.count == 0 and espyFrom.count == 0
         @from.deleted = true
         @to.save
@@ -91,6 +90,7 @@ class IcpsrRecordsController < ApplicationController
             format.html { redirect_to '/icpsr_records', notice: 'Records were successfully combined.' }
         end
     elsif espyTo.count == 1 and espyFrom.count == 0
+        espyToID = espyTo[0].id.to_s
     
         refs = []
         @to.references.each do |ref|
@@ -109,21 +109,22 @@ class IcpsrRecordsController < ApplicationController
             idList << ref.id
             fileList << ref.filename
         end
-        espyTo.reference_material_id = idList.join("; ")
-        espyTo.reference_material_files = fileList.join("; ")
-        espyTo.save
+        espyTo[0].reference_material_id = idList.join("; ")
+        espyTo[0].reference_material_files = fileList.join("; ")
+        espyTo[0].save
         
         @from.deleted = true
         @to.save
         @from.save        
         respond_to do |format|
-            format.html { redirect_to '/espy_records/' + espyTo.id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
+            format.html { redirect_to '/espy_records/' + espyTo[0].id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
         end
         
     elsif espyTo.count == 0 and espyFrom.count == 1
-    
-       espyFrom.icpsr_record = true
-       espyFrom.icpsr_record_id = @to.id
+       espyFromID = espyFrom[0].id.to_s
+       
+       espyTo[0].icpsr_record = true
+       espyTo[0].icpsr_record_id = @to.id
        refs = []
         @to.references.each do |ref|
             unless refs.include? ref
@@ -141,20 +142,20 @@ class IcpsrRecordsController < ApplicationController
             idList << ref.id
             fileList << ref.filename
         end
-        espyFrom.reference_material_id = idList.join("; ")
-        espyFrom.reference_material_files = fileList.join("; ")
-        espyFrom.save
+        espyTo[0].reference_material_id = idList.join("; ")
+        espyTo[0].reference_material_files = fileList.join("; ")
+        espyTo[0].save
         
         @from.deleted = true
         @to.save
         @from.save        
         respond_to do |format|
-            format.html { redirect_to '/espy_records/' + espyFrom.id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
+            format.html { redirect_to '/espy_records/' + espyTo[0].id.to_s + "/edit", notice: 'Records were successfully combined, be sure to review existing Espy Record.' }
         end
         
     else
         respond_to do |format|
-            format.html { redirect_to '/icpsr_records', notice: 'ERROR: Did nothing, as both Icpsr records (' + toID + ' & ' + fromID + ') have been made into Espy Records (' + espyToID + ' & ' + espyFromID + ').' }
+            format.html { redirect_to '/icpsr_records', notice: 'ERROR: Did nothing, as both Icpsr records (' + toID + ' & ' + fromID + ') have been made into Espy Records (' + espyTo[0].id.to_s + ' & ' + espyFrom[0].id.to_s + ').' }
         end
     end
     
