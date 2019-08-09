@@ -154,7 +154,7 @@ class IcpsrRecordsController < ApplicationController
         
     else
         respond_to do |format|
-            format.html { redirect_to '/icpsr_records', notice: 'ERROR: Did nothing, as both Icpsr records (' toID +  ' & ' +  fromID + ') have been made into Espy Records (' espyToID +  ' & ' +  espyFromID + ').' }
+            format.html { redirect_to '/icpsr_records', notice: 'ERROR: Did nothing, as both Icpsr records (' + toID + ' & ' + fromID + ') have been made into Espy Records (' + espyToID + ' & ' + espyFromID + ').' }
         end
     end
     
