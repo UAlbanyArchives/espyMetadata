@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "/link_pdfs" => "references#link"
   get "/rotate" => "references#rotate"
   get "/reindex" => "icpsr_records#reindex"
+  get "/icpsr_combine" => "icpsr_records#combine"
   get "/dedup/:limiter", to: "icpsr_records#dedup", as: "limiter"
   get "/mergecard" => "espy_records#mergecard"
   

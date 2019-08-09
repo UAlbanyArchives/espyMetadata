@@ -61,6 +61,12 @@ namespace :check do
   task :join, [:arg1] => :environment do |t, args|
     puts args[:arg1]
   end
+  
+  task uncheck: :environment do
+  
+  
+    
+  end
 
 
 end

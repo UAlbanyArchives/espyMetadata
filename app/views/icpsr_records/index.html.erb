@@ -1,7 +1,11 @@
 <% provide(:section, "List ICPSR Records") %>
 <% if notice %>
   <div id="notice" class="container">
-    <p class="alert alert-danger" role="alert"><%= notice %></p>
+    <% if notice.include? "successfully combined" %>
+        <p class="alert alert-success" role="alert"><%= notice %></p>
+    <% else %>
+        <p class="alert alert-danger" role="alert"><%= notice %></p>
+    <% end %>
   </div>
 <% end %>
 
@@ -69,59 +73,62 @@
 
   <tbody>
     <% @icpsr_records.each do |icpsr_record| %>
-      <tr>
-        <td>
-          <div class="btn-group">
-            <% if icpsr_record.icpsr_id.blank? %>
-                <%= link_to '<i class="fa fa-check"></i> Make'.html_safe, "/espy_records/new?id=" + icpsr_record.id.to_s, class: "btn btn-success"%>
-            <% else %>
-                <%= link_to '<i class="fa fa-check"></i> Make'.html_safe, "/espy_records/new?icpsr=" + icpsr_record.icpsr_id.to_s, class: "btn btn-success"%>
-            <% end %>
-            <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, icpsr_record, class: "btn btn-primary"%>
-            <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_icpsr_record_path(icpsr_record), class: "btn btn-info"%>
-          </div>
-        </td>
-	<td><%= icpsr_record.id %></td>
-        <td>
-          <%= render 'layouts/boolean_check', check: icpsr_record.used_check %>
-        </td>
-        <td><%= icpsr_record.icpsr_id %></td>
-        <td><%= icpsr_record.name %></td>
-        <td><%= icpsr_record.date_execution %></td>
-        <td><%= icpsr_record.age %></td>
-        <td><%= icpsr_record.race %></td>
-        <td><%= icpsr_record.sex %></td>
-        
-        <td>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="ID to combine with" aria-label="ID to combine with" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <a href="icpsr_records/combine?to=<%= icpsr_record.id %>&from=" class="btn btn-outline-primary" type="button">Combine</a>
+      <% unless icpsr_record.deleted == true %>
+          <tr>
+            <td>
+              <div class="btn-group">
+                <% if icpsr_record.icpsr_id.blank? %>
+                    <%= link_to '<i class="fa fa-check"></i> Make'.html_safe, "/espy_records/new?id=" + icpsr_record.id.to_s, class: "btn btn-success"%>
+                <% else %>
+                    <%= link_to '<i class="fa fa-check"></i> Make'.html_safe, "/espy_records/new?icpsr=" + icpsr_record.icpsr_id.to_s, class: "btn btn-success"%>
+                <% end %>
+                <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, icpsr_record, class: "btn btn-primary"%>
+                <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_icpsr_record_path(icpsr_record), class: "btn btn-info"%>
               </div>
-            </div>
-        </td>
-        
-        <!--<td><%# icpsr_record.occupation %></td>
-        <td><%# render 'layouts/boolean_check', check: icpsr_record.compensation_case %></td>
-        <td><%# icpsr_record.crime %></td>
-        <td><%# icpsr_record.execution_method %></td>
-        <td><%# icpsr_record.jurisdiction %></td>
-        <td><%# icpsr_record.state %></td>
-        <td><%# icpsr_record.state_abbreviation %></td>
-        <td><%# icpsr_record.county_code %></td>-->
-        
-        <td><%= icpsr_record.county_name %></td>
-        <td><a href="/big_cards/<%= icpsr_record.big_id %>"><%= icpsr_record.big_id %></a></td>
-        <td>
-          <% icpsr_record.references[0..2].each do |ref| %>
-            <p style="margin-bottom:0px;"><a href="/references/<%= ref.id %>"><%= ref.filename %></a></p>
-          <% end %>
-          <% if icpsr_record.references.length > 3 %>
-            ... [ <%= link_to 'View All'.html_safe, icpsr_record, class: ""%> ]
-          <% end %>
-        </td>
+            </td>
+        <td><%= icpsr_record.id %></td>
+            <td>
+              <%= render 'layouts/boolean_check', check: icpsr_record.used_check %>
+            </td>
+            <td><%= icpsr_record.icpsr_id %></td>
+            <td><%= icpsr_record.name %></td>
+            <td><%= icpsr_record.date_execution %></td>
+            <td><%= icpsr_record.age %></td>
+            <td><%= icpsr_record.race %></td>
+            <td><%= icpsr_record.sex %></td>
+            
+            <td>
+                <form action="icpsr_combine" method="get" class="form-inline">
+                    <input name="combineTo" type="hidden" value="<%= icpsr_record.id %>">
+                    <div class="form-group">
+                        <input type="text" name="combineFrom" class="form-control" placeholder="ID to combine" aria-label="ID to combine with" aria-describedby="basic-addon2">
+                        <button type="submit" class="btn btn-outline-success"><i class="fa fa-arrow-right"></i> Combine</button>
+                    </div>
+                </form>
+            </td>
+            
+            <!--<td><%# icpsr_record.occupation %></td>
+            <td><%# render 'layouts/boolean_check', check: icpsr_record.compensation_case %></td>
+            <td><%# icpsr_record.crime %></td>
+            <td><%# icpsr_record.execution_method %></td>
+            <td><%# icpsr_record.jurisdiction %></td>
+            <td><%# icpsr_record.state %></td>
+            <td><%# icpsr_record.state_abbreviation %></td>
+            <td><%# icpsr_record.county_code %></td>-->
+            
+            <td><%= icpsr_record.county_name %></td>
+            <td><a href="/big_cards/<%= icpsr_record.big_id %>"><%= icpsr_record.big_id %></a></td>
+            <td>
+              <% icpsr_record.references[0..2].each do |ref| %>
+                <p style="margin-bottom:0px;"><a href="/references/<%= ref.id %>"><%= ref.filename %></a></p>
+              <% end %>
+              <% if icpsr_record.references.length > 3 %>
+                ... [ <%= link_to 'View All'.html_safe, icpsr_record, class: ""%> ]
+              <% end %>
+            </td>
 
-      </tr>
+          </tr>
+        <% end %>
     <% end %>
   </tbody>
 </table>

@@ -56,7 +56,34 @@ class IcpsrRecordsController < ApplicationController
   # GET /combine
   # GET /combine.json
   def combine
-    params[:state] 
+    @to = IcpsrRecord.find(params[:combineTo])
+    @from = IcpsrRecord.find(params[:combineFrom])
+    @state = @to.state_abbreviation
+    
+    if @to.big_id != @from.big_id
+        unless @to.big_id.nil? || @from.big_id.nil?
+            respond_to do |format|
+                format.html { redirect_to '/icpsr_records?state=' + @to.state_abbreviation, notice: 'ERROR: cannot combine with different big cards.' }
+            end
+        end
+        if @to.big_id.nil?
+            @to.big_id = @from.big_id
+        end
+    end
+    
+    @from.references.each do |ref|
+        unless @to.references.include? ref
+            @to.references << ref
+        end
+    end
+    
+    @from.deleted = true
+    @to.save
+    @from.save
+    
+    respond_to do |format|
+        format.html { redirect_to '/icpsr_records?state=' + @state, notice: 'Records were successfully combined.' }
+    end
   end
 
   # GET /icpsr_records/1
@@ -176,6 +203,6 @@ class IcpsrRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def icpsr_record_params
-      params.require(:icpsr_record).permit(:used_check, :icpsr_id, :name, :date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state, :big_id, :ref_id)
+      params.require(:icpsr_record).permit(:used_check, :icpsr_id, :combineTo, :combineFrom, :name, :date_execution, :age, :race, :sex, :occupation, :crime, :execution_method, :location_execution, :jurisdiction, :state, :state_abbreviation, :county_code, :county_name, :compensation_case, :icpsr_state, :big_id, :ref_id)
     end
 end

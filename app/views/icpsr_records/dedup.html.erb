@@ -6,6 +6,17 @@
 <% end %>
 
 <div class="container">
+    <form action="icpsr_combine" method="get" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="combineFrom" class="form-control" placeholder="ID to combine" aria-label="ID to combine with" aria-describedby="basic-addon2">
+            <i style="margin: 20px;font-size: 25px;" class="fa fa-arrow-right fa-6"></i>
+            <input type="text" name="combineTO" class="form-control" placeholder="ID to combine into" aria-label="ID to combine with" aria-describedby="basic-addon2">
+            <button type="submit" class="btn btn-outline-success"><i class="fa fa-arrow-right"></i> Combine</button>
+        </div>
+    </form>
+</div>
+
+<div class="container">
   <form class="form-inline stateForm">
     <label for="selectState"><strong>Select a State: </strong></label>
     <% if params.has_key?(:state) && params[:state] != "*" %>
