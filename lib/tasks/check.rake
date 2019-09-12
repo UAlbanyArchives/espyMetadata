@@ -25,7 +25,7 @@ namespace :check do
   
   task icpsr: :environment do
   
-    EspyRecord.where("icpsr_record": false).where("index_card": nil).each do |record|
+    EspyRecord.where(reference_material: true).where(icpsr_record_id: nil).each do |record|
     
         date = record.date_execution
         state = record.state_abbreviation
@@ -66,7 +66,7 @@ namespace :check do
         
     end
     
-    puts EspyRecord.where("icpsr_record": false).where("index_card": nil).count
+    puts EspyRecord.where(reference_material: true).where(icpsr_record_id: nil).count
     
     
   end

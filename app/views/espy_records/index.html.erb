@@ -26,7 +26,8 @@
       <th>Actions</th>
       <!--<th>Uuid</th>-->
       <th>Icpsr record</th>
-      <th>Icpsr record</th>
+      <th>Icpsr ID</th>
+      <th>Icpsr Number</th>
       <th>Index card</th>
       <th>Index card</th>
       <th>Big card</th>
@@ -68,6 +69,7 @@
           <% end %>
         </td>
         <td><a href="/icpsr_records/<%= espy_record.icpsr_record_id %>"><%= espy_record.icpsr_record_id %></a></td>
+        <td><%= espy_record.icpsr_id %></td>
         <td>
           <% if espy_record.index_card == true %>
            <i class="fa fa-check fa-2x text-success"></i>

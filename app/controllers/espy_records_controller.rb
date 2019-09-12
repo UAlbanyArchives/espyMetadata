@@ -48,7 +48,8 @@ class EspyRecordsController < ApplicationController
           @index_card = IndexCard.find(@espy_record.index_card_id)
           @index_card.update_attribute :used_check, true
         end
-        if @espy_record.icpsr_record == true
+        
+        unless @espy_record.icpsr_record_id.nil?
           @icpsr_record = IcpsrRecord.find(@espy_record.icpsr_record_id)
           @icpsr_record.update_attribute :used_check, true
         end
