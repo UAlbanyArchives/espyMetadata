@@ -102,7 +102,6 @@ class EspyRecordsController < ApplicationController
       if @espy_record.update(espy_record_params)
         if @espy_record.icpsr_id.blank?
           @espy_record.update_attribute :icpsr_record, false
-          @espy_record.update_attribute :icpsr_record_id, nil
         else
           @espy_record.update_attribute :icpsr_record, true
           @find_id = IcpsrRecord.find_by_icpsr_id(@espy_record.icpsr_id)

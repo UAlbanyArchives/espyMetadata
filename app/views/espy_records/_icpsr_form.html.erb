@@ -109,7 +109,11 @@
     </div>
 
     <div class="field">
-      <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record, :value => true %>
+      <% if @record.icpsr_id.nil? %>
+        <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record, :value => false %>
+      <% else %>
+        <%= form.hidden_field :icpsr_record, id: :espy_record_icpsr_record, :value => true %>
+      <% end %>
     </div>
 
     <div class="field">
