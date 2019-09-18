@@ -17,7 +17,6 @@ namespace :export do
   
   task :data, [:arg1] => :environment do |t, args|
   
-    puts "Exporting " + args[:arg1].to_s + "..."
     fields = [
     "id",
     "uuid",
@@ -32,11 +31,6 @@ namespace :export do
     "name_source_index",
     "name_source_big",
     "name_source_ref",
-    "owner_name",
-    "owner_source_icpsr",
-    "owner_source_index",
-    "owner_source_big",
-    "owner_source_ref",
     "circa_date_execution",
     "date_execution",
     "date_execution_source_icpsr",
@@ -74,6 +68,11 @@ namespace :export do
     "enslaved_source_index",
     "enslaved_source_big",
     "enslaved_source_ref",
+    "owner_name",
+    "owner_source_icpsr",
+    "owner_source_index",
+    "owner_source_big",
+    "owner_source_ref",
     "compensation_case",
     "comp_source_icpsr",
     "comp_source_index",
@@ -123,9 +122,6 @@ namespace :export do
         
     #puts fields
     
-    #EspyRecord.where("state_abbreviation": args[:arg1].to_s).each do |record|
-    
-    record = EspyRecord.find(110)
     change_list = {
     "gender_assigned" => "sex",
     "gender_source_icpsr" => "sex_source_icpsr",
@@ -140,42 +136,116 @@ namespace :export do
     "enslaved_source_ref" => "slave_source_icpsr",
     "notes" => "note"
     }
-    
     pass_list = ["index_card_download", "big_card_download", "reference_material_download"]
     
-    fields.each do |field|
-        puts field
-        if change_list.key?(field)
-            value = record.send(change_list[field]).to_s
-        elsif pass_list.include? field
+    count = 0
+    total_count = EspyRecord.where("state_abbreviation": args[:arg1].to_s).count
+    puts "Exporting " + total_count.to_s + " records from " + args[:arg1].to_s + "..."
+    
+    CSV.open("/home/gw234478/exports/espy" + args[:arg1].to_s + ".csv", "wb") do |csv|
+        csv << fields
         
-        elsif field == "index_card_uri"
-            if record.index_card
-                url = %Q[https://archives.albany.edu/catalog?utf8=✓&search_field=all_fields&search_field=all_fields&format=json&q="#{record.index_card_files.to_s}"]
-                response = HTTParty.get(URI.escape(url), :verify => false)
-                index_id = response.parsed_response["response"]["docs"][0]["id"].to_s
-                value = "https://archives.albany.edu/concern/daos/" + index_id
-                url2 = value + "?format=jsonld"
-                response = HTTParty.get(URI.escape(url2), :verify => false, format: :json)
-                response.parsed_response["@graph"].each do |part|
-                    if part.key? "ebucore:hasRelatedImage"
-                        index_download_id = part["ebucore:hasRelatedImage"]["@id"].split("/catalog/")[1]
-                        index_download = "https://archives.albany.edu/downloads/" + index_download_id
-                        puts index_download
+        #record = EspyRecord.find(118)
+        EspyRecord.where("state_abbreviation": args[:arg1].to_s).each do |record|
+            count += 1
+            count_string = "(" + count.to_s + "/" + total_count.to_s + ")"
+            puts count_string + " Exporting " + record.first_name + " " + record.last_name + " " + record.date_execution + "..."
+            record_attributes = []
+            
+            fields.each do |field|
+                #puts field
+                if change_list.key?(field)
+                    value = record.send(change_list[field]).to_s
+                    record_attributes << value
+                elsif pass_list.include? field
+                
+                elsif field.include? "aspace"
+                    aspace_id = record.send(field).to_s
+                    if aspace_id.length > 0
+                        value = []
+                        aspace_id.split("; ").each do |aspace|
+                            value << "https://archives.albany.edu/description/catalog/apap301aspace_" + aspace
+                        end
+                        record_attributes << aspace_id
+                    else
+                        record_attributes << nil
                     end
+                elsif field == "index_card_uri"
+                    if record.index_card
+                        value, download = get_uris(record.index_card_files)
+                        record_attributes << value
+                        record_attributes << download
+                    else
+                        record_attributes << false
+                        record_attributes << nil
+                    end
+                elsif field == "big_card_uri"
+                    if record.big_card
+                        value, download = get_uris(record.big_card_files)
+                        record_attributes << value
+                        record_attributes << download
+                    else
+                        record_attributes << false
+                        record_attributes << nil
+                    end
+                elsif field == "reference_material_uri"
+                    if record.reference_material
+                        #puts record.reference_material_files
+                        value, download = get_uris(record.reference_material_files)
+                        record_attributes << value
+                        record_attributes << download
+                    else
+                        record_attributes << false
+                        record_attributes << nil
+                    end
+                else
+                    value = record.send(field).to_s
+                    record_attributes << value
                 end
+                #puts "\t" + value.to_s
             end
-        elsif field == "big_card_uri"
-        
-        elsif field == "reference_material_uri"
-        
-        else
-            value = record.send(field).to_s
+            
+            csv << record_attributes
+            
         end
     end
-    #end
+  end
+  
+  def get_uris(files)
+  
+    if files.include? "; "
+        value_list = []
+        download = []
+        files.split("; ").each do |file|
+            file_value, file_download = query_hyrax(file)
+            value_list << file_value
+            download << file_download
+        end
+        value = value_list.join("; ")
+    else
+        value, download = query_hyrax(files)
+    end
     
-  end 
+    return value, download.join("; ")
+  end
+  
+  def query_hyrax(files)
+  
+    url = %Q[https://archives.albany.edu/catalog?utf8=✓&search_field=all_fields&search_field=all_fields&format=json&q="#{files.to_s}"]
+    response = HTTParty.get(URI.escape(url), :verify => false)
+    file_id = response.parsed_response["response"]["docs"][0]["id"].to_s
+    value = "https://archives.albany.edu/concern/daos/" + file_id
+    url2 = value + "?format=jsonld"
+    response = HTTParty.get(URI.escape(url2), :verify => false, format: :json)
+    download = []
+    response.parsed_response["@graph"].each do |part|
+        if part.key? "ore:proxyFor"
+            download_id = part["ore:proxyFor"]["@id"].split("/catalog/")[1]
+            download << "https://archives.albany.edu/downloads/" + download_id
+        end
+    end
+    return value, download
+  end
   
   task :raw, [:arg1] => :environment do |t, args|
   
