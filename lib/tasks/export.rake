@@ -142,6 +142,10 @@ namespace :export do
     total_count = EspyRecord.where("state_abbreviation": args[:arg1].to_s).count
     puts "Exporting " + total_count.to_s + " records from " + args[:arg1].to_s + "..."
     
+    puts "Reading espyIDs.csv..."
+    csv_text = File.read("/opt/lib/espyIDs.csv")
+    espy_ids = CSV.parse(csv_text, :headers => true)
+    
     CSV.open("/home/gw234478/exports/espy" + args[:arg1].to_s + ".csv", "wb") do |csv|
         csv << fields
         
@@ -166,24 +170,44 @@ namespace :export do
                         aspace_id.split("; ").each do |aspace|
                             value << "https://archives.albany.edu/description/catalog/apap301aspace_" + aspace
                         end
-                        record_attributes << aspace_id
+                        record_attributes << value.join("; ")
                     else
                         record_attributes << nil
                     end
                 elsif field == "index_card_uri"
                     if record.index_card
-                        value, download = get_uris(record.index_card_files)
+                        #puts "looking for " + record.index_card_files.to_s
+                        filenames = record.index_card_files.split("; ")
+                        download = []
+                        espy_ids.each do |row|
+                            if row[0].split("|").sort == filenames.sort
+                                row[1].split("|").each do |fs|
+                                    download << "https://archives.albany.edu/downloads/" + fs
+                                end
+                                value = "https://archives.albany.edu/concern/daos/" + row[2]
+                            end
+                        end
                         record_attributes << value
-                        record_attributes << download
+                        record_attributes << download.join("; ")
                     else
                         record_attributes << false
                         record_attributes << nil
                     end
                 elsif field == "big_card_uri"
                     if record.big_card
-                        value, download = get_uris(record.big_card_files)
+                        #puts "looking for " + record.big_card_files.to_s
+                        filenames = record.big_card_files.split("; ")
+                        download = []
+                        espy_ids.each do |row|
+                            if row[0].split("|").sort == filenames.sort
+                                row[1].split("|").each do |fs|
+                                    download << "https://archives.albany.edu/downloads/" + fs
+                                end
+                                value = "https://archives.albany.edu/concern/daos/" + row[2]
+                            end
+                        end
                         record_attributes << value
-                        record_attributes << download
+                        record_attributes << download.join("; ")
                     else
                         record_attributes << false
                         record_attributes << nil
@@ -191,9 +215,19 @@ namespace :export do
                 elsif field == "reference_material_uri"
                     if record.reference_material
                         #puts record.reference_material_files
-                        value, download = get_uris(record.reference_material_files)
-                        record_attributes << value
-                        record_attributes << download
+                        value = []
+                        download = []
+                        record.reference_material_files.split("; ").each do |filename|
+                            #puts "looking for " + filename
+                            espy_ids.each do |row|
+                                if row[0] == filename
+                                    download << "https://archives.albany.edu/downloads/" + row[1]
+                                    value << "https://archives.albany.edu/concern/daos/" + row[2]
+                                end
+                            end
+                        end
+                        record_attributes << value.join("; ")
+                        record_attributes << download.join("; ")
                     else
                         record_attributes << false
                         record_attributes << nil
@@ -211,41 +245,6 @@ namespace :export do
     end
   end
   
-  def get_uris(files)
-  
-    if files.include? "; "
-        value_list = []
-        download = []
-        files.split("; ").each do |file|
-            file_value, file_download = query_hyrax(file)
-            value_list << file_value
-            download << file_download
-        end
-        value = value_list.join("; ")
-    else
-        value, download = query_hyrax(files)
-    end
-    
-    return value, download.join("; ")
-  end
-  
-  def query_hyrax(files)
-  
-    url = %Q[https://archives.albany.edu/catalog?utf8=✓&search_field=all_fields&search_field=all_fields&format=json&q="#{files.to_s}"]
-    response = HTTParty.get(URI.escape(url), :verify => false)
-    file_id = response.parsed_response["response"]["docs"][0]["id"].to_s
-    value = "https://archives.albany.edu/concern/daos/" + file_id
-    url2 = value + "?format=jsonld"
-    response = HTTParty.get(URI.escape(url2), :verify => false, format: :json)
-    download = []
-    response.parsed_response["@graph"].each do |part|
-        if part.key? "ore:proxyFor"
-            download_id = part["ore:proxyFor"]["@id"].split("/catalog/")[1]
-            download << "https://archives.albany.edu/downloads/" + download_id
-        end
-    end
-    return value, download
-  end
   
   task :raw, [:arg1] => :environment do |t, args|
   
