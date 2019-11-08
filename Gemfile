@@ -38,7 +38,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 # bootstrap/styling
-gem 'bootstrap', '~> 4.0.0.beta'
+gem 'bootstrap', '~> 4.3.1'
 gem 'sprockets-rails', '>= 2.3.2', :require => 'sprockets/railtie'
 gem 'font-awesome-rails'
 
