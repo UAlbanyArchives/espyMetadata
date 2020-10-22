@@ -7,7 +7,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.3'
+gem 'rails', '~> 5.2.4.4'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 gem 'pg', '0.20'
@@ -61,7 +61,8 @@ gem "rails-html-sanitizer", "~> 1.3.0"
 gem "sprockets", "~> 3.7.2"
 gem "ffi", "~> 1.11.1"
 gem "bootstrap", "~> 4.3.1"
-gem "rack", "~> 2.0.7"
+gem "rack", "~> 2.1.4"
+gem "websocket-extensions", ">= 0.1.5"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
