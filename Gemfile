@@ -13,7 +13,7 @@ gem 'sqlite3'
 gem 'pg', '0.20'
 gem 'sequel'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.12.6'
 # Use Passenger for production (insalled with YUM instead)
 #gem 'passenger'
 # Use SCSS for stylesheets
