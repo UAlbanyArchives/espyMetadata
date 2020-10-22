@@ -37,7 +37,7 @@
 		<% @stop = false %>
 		<% @next_index = 0 %>
 		<% @next = nil %>
-		<% @index_card.each_with_index do |card, index| %>
+		<% @index_card.order(:id).each_with_index do |card, index| %>
 			<% if @stop == true %>
 				<% if index == @next_index %>
 					<% @next = card %>

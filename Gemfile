@@ -38,7 +38,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 # bootstrap/styling
-gem 'bootstrap', '~> 4.0.0.beta'
+#gem 'bootstrap', '~> 4.0.0.beta'
 gem 'sprockets-rails', '>= 2.3.2', :require => 'sprockets/railtie'
 gem 'font-awesome-rails'
 
@@ -48,13 +48,20 @@ gem 'jquery-ui-rails', '~> 6.0.1'
 
 #redis for autocomplete
 gem 'redis', '~> 3.0.7'
-gem "loofah", "~> 2.3.1"
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 gem 'httparty'
+gem 'http'
 
 # dependency gems updated for issues
 gem 'nokogiri', '~> 1.10.5'
+gem "loofah", "~> 2.3.1"
+gem "rubyzip", "~> 1.3.0"
+gem "rails-html-sanitizer", "~> 1.3.0"
+gem "sprockets", "~> 3.7.2"
+gem "ffi", "~> 1.11.1"
+gem "bootstrap", "~> 4.3.1"
+gem "rack", "~> 2.0.7"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
