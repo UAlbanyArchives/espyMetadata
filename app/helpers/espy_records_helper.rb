@@ -115,7 +115,6 @@ module EspyRecordsHelper
 	      ['Colorado'],
 	      ['Connecticut'],
 	      ['Delaware'],
-	      ['District of Columbia'],
 	      ['Florida'],
 	      ['Georgia'],
 	      ['Guam'],
@@ -156,6 +155,7 @@ module EspyRecordsHelper
 	      ['Vermont'],
 	      ['Virginia'],
 	      ['Washington'],
+          ['Washington, D.C.'],
 	      ['West Virginia'],
 	      ['Wisconsin'],
 	      ['Wyoming']
