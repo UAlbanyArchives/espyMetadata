@@ -179,9 +179,9 @@ namespace :export do
                 
                 elsif field == "name"
                     unless record.last_name == '' and record.first_name == ''
-                        if record.first_name.downcase.strip == "unknown" and record.last_name == '':
+                        if record.first_name.downcase.strip == "unknown" and record.last_name == ''
                             record_attributes << "Unknown Person"
-                        elsif record.last_name.downcase.strip == "unknown" and record.first_name == '':
+                        elsif record.last_name.downcase.strip == "unknown" and record.first_name == ''
                             record_attributes << "Unknown Person"
                         elsif record.first_name == ''
                             record_attributes << record.last_name
