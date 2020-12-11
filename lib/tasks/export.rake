@@ -146,7 +146,12 @@ namespace :export do
     
     puts "Reading espyIDs.csv..."
     csv_text = File.read("/opt/lib/espyIDs.csv")
+    espy_lookup = {}
     espy_ids = CSV.parse(csv_text, :headers => true)
+    espy_ids.each do |row|
+        espy_key = row[2].split("|").sort
+        espy_lookup[espy_key.join("|")] = [row[0], row[1]]
+    end
     
     headers = []
     fields.each do |field|
@@ -210,16 +215,26 @@ namespace :export do
                         #puts "looking for " + record.index_card_files.to_s
                         filenames = record.index_card_files.split("; ")
                         download = []
-                        espy_ids.each do |row|
-                            if row[2].split("|").sort == filenames.sort
-                                row[1].split("|").each do |fs|
-                                    download << "https://archives.albany.edu/downloads/" + fs
-                                end
-                                value = "https://archives.albany.edu/concern/daos/" + row[0]
+                        #puts filenames
+                        #puts "\t" + filenames.sort.join("|")
+                        daoID, fsID = espy_lookup[filenames.sort.join("|")]
+                        if daoID.nil? || fsID.nil?
+                            value = []
+                            filenames.each do |filename|
+                                daoID, fsID = espy_lookup[filename]
+                                download << "https://archives.albany.edu/downloads/" + fsID
+                                value << "https://archives.albany.edu/concern/daos/" + daoID
                             end
+                            record_attributes << value.join("; ")
+                            record_attributes << download.join("; ")
+                        else
+                            fsID.split("|").each do |fs|
+                                download << "https://archives.albany.edu/downloads/" + fs
+                            end
+                            value = "https://archives.albany.edu/concern/daos/" + daoID
+                            record_attributes << value
+                            record_attributes << download.join("; ")
                         end
-                        record_attributes << value
-                        record_attributes << download.join("; ")
                     else
                         record_attributes << false
                         record_attributes << nil
@@ -229,14 +244,11 @@ namespace :export do
                         #puts "looking for " + record.big_card_files.to_s
                         filenames = record.big_card_files.split("; ")
                         download = []
-                        espy_ids.each do |row|
-                            if row[2].split("|").sort == filenames.sort
-                                row[1].split("|").each do |fs|
-                                    download << "https://archives.albany.edu/downloads/" + fs
-                                end
-                                value = "https://archives.albany.edu/concern/daos/" + row[0]
-                            end
+                        daoID, fsID = espy_lookup[filenames.sort.join("|")]
+                        fsID.split("|").each do |fs|
+                            download << "https://archives.albany.edu/downloads/" + fs
                         end
+                        value = "https://archives.albany.edu/concern/daos/" + daoID
                         record_attributes << value
                         record_attributes << download.join("; ")
                     else
@@ -251,16 +263,15 @@ namespace :export do
                         uuids = []
                         record.reference_material_files.split("; ").each do |filename|
                             #puts "\tlooking for " + filename
-                            espy_ids.each do |row|
-                                if row[2] == filename
-                                    download << "https://archives.albany.edu/downloads/" + row[1]
-                                    value << "https://archives.albany.edu/concern/daos/" + row[0]
-                                    response = HTTP.get("https://archives.albany.edu/concern/daos/" + row[0] + "/manifest", :ssl_context => ctx).body
-                                    uuid = JSON.parse(response)["sequences"][0]["canvases"][0]["images"][0]["resource"]["@id"]
-                                    #puts uuid.split("%2Ffiles%2F")[1].split("/full")[0]
-                                    uuids << uuid.split("%2Ffiles%2F")[1].split("/full")[0]
-                                end
-                            end
+                            daoID, fsID = espy_lookup[filename]
+                            download << "https://archives.albany.edu/downloads/" + fsID
+                            value << "https://archives.albany.edu/concern/daos/" + daoID
+                            #puts "\t" + daoID
+                            response = HTTP.get("https://archives.albany.edu/concern/daos/" + daoID + "/manifest", :ssl_context => ctx).body
+                            uuid = JSON.parse(response)["sequences"][0]["canvases"][0]["images"][0]["resource"]["@id"]
+                            #puts uuid.split("%2Ffiles%2F")[1].split("/full")[0]
+                            uuids << uuid.split("%2Ffiles%2F")[1].split("/full")[0]
+                            
                         end
                         record_attributes << value.join("; ")
                         record_attributes << download.join("; ")
