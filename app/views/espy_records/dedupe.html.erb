@@ -28,6 +28,7 @@
 <table class="table table-hover table-sm">
   <thead>
     <tr>
+      <th>Check</th>
       <th>ID</th>
       <th>Actions</th>
       <th>Icpsr ID</th>
@@ -49,43 +50,48 @@
 
   <tbody>
     <% @espy_records.sort_by{|e| e[:first_name]}.each do |espy_record| %>
-      <tr>
-        <td><%= espy_record.id %></td>
-        <td>
-          <div class="btn-group">
-            <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, espy_record, class: "btn btn-primary"%>
-            <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_espy_record_path(espy_record), class: "btn btn-info"%>
-            <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
-          </div>
-        </td>
-        <td><a href="/icpsr_records/<%= espy_record.icpsr_record_id %>"><%= espy_record.icpsr_record_id %></a></td>
-        <td><a href="/index_cards/<%= espy_record.index_card_id %>"><%= espy_record.index_card_id %></a></td>
-        <td>
-          <a href="/big_cards/<%= espy_record.big_card_id %>"><%= espy_record.big_card_id %></a>
-        <td>
-          <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
-            <a href="/references/<%= refID %>"><%= refID %></a>
-          <% end %>  
-        </td>
-        <td><%= espy_record.first_name %> <%= espy_record.last_name %></td>
-        <td><%= espy_record.date_execution %></td>
-        <td><%= espy_record.race %></td>
-        <td><%= espy_record.sex %></td>
-        <td><%= espy_record.crime %></td>
-        <td><%= espy_record.execution_method %></td>
-        <td><%= espy_record.jurisdiction %></td>
-        <td><%= espy_record.county_name %></td>
-        <td>
-            <form action="espy_combine" method="get" class="form-inline">
-                <input name="combineTo" type="hidden" value="<%= espy_record.id %>">
-                <div class="form-group" style="flex-flow: row;">
-                    <input type="text" style="width:100px;" name="combineFrom" class="form-control" placeholder="ID" aria-label="ID" aria-describedby="basic-addon2">
-                    <button type="submit" style="cursor: pointer;" class="btn btn-outline-success">Combine Refs</button>
-                </div>
-            </form>
-        </td>
+      <% unless espy_record.dupe_check %>
+        <tr>
+          <td>
+          <%= link_to '<i class="fa fa-check"></i> Check'.html_safe, "/check_dupe?id=" + espy_record.id.to_s, class: "btn btn-success"%>
+          </td>
+          <td><%= espy_record.id %></td>
+          <td>
+            <div class="btn-group">
+              <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, espy_record, class: "btn btn-primary"%>
+              <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_espy_record_path(espy_record), class: "btn btn-info"%>
+              <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, espy_record_path(espy_record, :dupe_check => 1), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+            </div>
+          </td>
+          <td><a href="/icpsr_records/<%= espy_record.icpsr_record_id %>"><%= espy_record.icpsr_record_id %></a></td>
+          <td><a href="/index_cards/<%= espy_record.index_card_id %>"><%= espy_record.index_card_id %></a></td>
+          <td>
+            <a href="/big_cards/<%= espy_record.big_card_id %>"><%= espy_record.big_card_id %></a>
+          <td>
+            <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
+              <a href="/references/<%= refID %>"><%= refID %></a>
+            <% end %>  
+          </td>
+          <td><%= espy_record.first_name %> <%= espy_record.last_name %></td>
+          <td><%= espy_record.date_execution %></td>
+          <td><%= espy_record.race %></td>
+          <td><%= espy_record.sex %></td>
+          <td><%= espy_record.crime %></td>
+          <td><%= espy_record.execution_method %></td>
+          <td><%= espy_record.jurisdiction %></td>
+          <td><%= espy_record.county_name %></td>
+          <td>
+              <form action="espy_combine" method="get" class="form-inline">
+                  <input name="combineTo" type="hidden" value="<%= espy_record.id %>">
+                  <div class="form-group" style="flex-flow: row;">
+                      <input type="text" style="width:100px;" name="combineFrom" class="form-control" placeholder="ID" aria-label="ID" aria-describedby="basic-addon2">
+                      <button type="submit" style="cursor: pointer;" class="btn btn-outline-success">Combine Refs</button>
+                  </div>
+              </form>
+          </td>
 
-      </tr>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

@@ -36,6 +36,12 @@
         <%= @espy_record.ocr_text %>
       <% end %>
     </div>
+    <div class="field col-md-10 mx-auto">
+      <div class="ocrCheck">
+        <strong>Duplicate Checked:</strong>
+        <%= render 'layouts/boolean_check', check: @espy_record.dupe_check %>
+      </div>
+    </div>
   </div>
   <div class="thirds-top">
     <% if @espy_record.big_card == true%>

@@ -71,6 +71,12 @@
           <%= form.text_area :ocr_text, id: :espy_record_ocr_text, class: "form-control ocr-fix", rows: "8" %>
         <% end %>
       </div>
+
+      <div class="field ocrCheck">
+        <strong>Duplicate Checked:</strong>
+        <%= form.check_box :dupe_check, id: :espy_record_dupe_check %>
+      </div>
+
     </div>
     <div class="thirds-top">
       <% if espy_record.big_card == true %>

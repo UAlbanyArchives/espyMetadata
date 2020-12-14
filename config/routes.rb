@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "/rotate" => "references#rotate"
   get "/reindex" => "icpsr_records#reindex"
   get "/espy_combine" => "espy_records#combine"
+  get "/check_dupe" => "espy_records#check_dupe"
   get "/icpsr_combine" => "icpsr_records#combine"
   get "/dedup/:limiter", to: "icpsr_records#dedup", as: "limiter"
   get "/mergecard" => "espy_records#mergecard"
