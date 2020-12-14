@@ -225,7 +225,7 @@ namespace :export do
                                 #puts espy_lookup[filename]
                                 daoID, fsID = espy_lookup[filename]
                                 espy_ids.each do |row|
-                                    if row[2].include filename
+                                    if row[2].include? filename
                                         daoID = row[0]
                                         fsID = row[1]
                                     end
@@ -272,6 +272,10 @@ namespace :export do
                         record.reference_material_files.split("; ").each do |filename|
                             #puts "\tlooking for " + filename
                             daoID, fsID = espy_lookup[filename]
+                            if fsID.nil? and daoID.nil?
+                                #not sure why, but a tiny few are actually tifs
+                                daoID, fsID = espy_lookup[filename.split(".")[0] + ".tif"]
+                            end
                             download << "https://archives.albany.edu/downloads/" + fsID
                             value << "https://archives.albany.edu/concern/daos/" + daoID
                             #puts "\t" + daoID
