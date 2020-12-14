@@ -7,12 +7,14 @@ Rails.application.routes.draw do
   resources :icpsr_records
   resources :index_cards
   get "/make" => "espy_records#make"
+  get "/dedupe" => "espy_records#dedupe"
   get "/index_cards/:state", to: "index_cards#index", as: "state"
   get "/icpsr_records/:limit", to: "icpsr_records#index", as: "limit"
   get "/link_big_cards" => "big_cards#link"
   get "/link_pdfs" => "references#link"
   get "/rotate" => "references#rotate"
   get "/reindex" => "icpsr_records#reindex"
+  get "/espy_combine" => "espy_records#combine"
   get "/icpsr_combine" => "icpsr_records#combine"
   get "/dedup/:limiter", to: "icpsr_records#dedup", as: "limiter"
   get "/mergecard" => "espy_records#mergecard"

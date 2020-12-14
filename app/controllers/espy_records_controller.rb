@@ -26,6 +26,45 @@ class EspyRecordsController < ApplicationController
     @index_card = IndexCard.all
   end
 
+  # GET /espy_records/dedupe
+  def dedupe
+    if params[:state]
+      if params[:state] == "*"
+        @recs = EspyRecord.all
+      else
+        limiter = "state_abbreviation = '" + params[:state].upcase + "'"
+        @recs = EspyRecord.all.where(limiter).order("id ASC")
+      end
+    else
+      @recs = EspyRecord.none
+    end
+    @dupes = []
+    @previous = {}
+    @recs.each do |rec|
+      @name = rec.first_name.strip + " " + rec.last_name.strip
+      if @name.strip.empty? || @name.nil?
+        if @previous.key?(rec.date_execution)
+          unless @dupes.include? @previous[rec.date_execution][0]
+            @dupes << @previous[rec.date_execution][0]
+          end
+          @dupes << rec.id
+        else
+          @previous[rec.date_execution] = [rec.id, rec.date_execution]
+        end
+      else
+        if @previous.key?(@name)
+          unless @dupes.include? @previous[@name][0]
+            @dupes << @previous[@name][0]
+          end
+          @dupes << rec.id
+        else
+          @previous[@name] = [rec.id, rec.date_execution]
+        end
+      end
+    end
+    @espy_records = @dupes.collect {|i| EspyRecord.where(:id => i) }.flatten
+  end
+
   # GET /espy_records/new
   def new
     @espy_record = EspyRecord.new
@@ -67,6 +106,115 @@ class EspyRecordsController < ApplicationController
         format.json { render json: @espy_record.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /combine
+  # GET /combine.json
+  def combine
+    @to = EspyRecord.find(params[:combineTo])
+    @from = EspyRecord.find(params[:combineFrom])
+    @state = @to.state_abbreviation
+
+    unless params[:combineTo] != params[:combineFrom]
+      respond_to do |format|
+        format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine refs for the same record.' }
+      end
+    else
+      if @from.index_card
+        @to.index_card = true
+      end
+      if @to.index_card
+        @from.index_card = true
+      end
+      if @to.index_card_id != @from.index_card_id
+        unless @to.index_card_id.nil? || @from.index_card_id.nil?
+            respond_to do |format|
+                format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different index cards.' }
+            end
+        end
+        if @to.index_card_id.nil?
+            @to.index_card_id = @from.index_card_id
+        end
+        if @from.index_card_id.nil?
+          @from.index_card_id = @to.index_card_id
+        end
+        if @to.index_card_files.nil?
+          @to.index_card_files = @from.index_card_files
+        end
+        if @from.index_card_files.nil?
+          @from.index_card_files = @to.index_card_files
+        end
+      end
+      
+      if @from.big_card
+        @to.big_card = true
+      end
+      if @to.big_card
+        @from.big_card = true
+      end
+      if @to.big_card_id != @from.big_card_id
+          unless @to.big_card_id.nil? || @from.big_card_id.nil?
+              respond_to do |format|
+                  format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different big cards.' }
+              end
+          end
+          if @to.big_card_id.nil?
+              @to.big_card_id = @from.big_big_card_idid
+          end
+          if @from.big_card_id.nil?
+            @from.big_card_id = @to.big_card_id
+          end
+          if @to.big_card_files.nil?
+            @to.big_card_files = @from.big_card_files
+          end
+          if @from.big_card_files.nil?
+            @from.big_card_files = @to.big_card_files
+          end
+      end
+      
+      if @from.reference_material
+        @to.reference_material = true
+      end
+      if @to.reference_material
+        @from.reference_material = true
+      end
+      from_ref_files = @from.reference_material_files.split("; ")
+      to_ref_files = @to.reference_material_files.split("; ")
+      from_ref_files.each do |ref|
+          unless to_ref_files.include? ref.strip
+            to_ref_files << ref.strip
+          end
+      end
+      to_ref_files.each do |ref|
+        unless from_ref_files.include? ref.strip
+          from_ref_files << ref.strip
+        end
+      end
+      @from.reference_material_files = from_ref_files.join("; ")
+      @to.reference_material_files = to_ref_files.join("; ")
+
+      from_ref_id = @from.reference_material_id.split("; ")
+      to_ref_id = @to.reference_material_id.split("; ")
+      from_ref_id.each do |ref|
+        unless to_ref_id.include? ref.strip
+          to_ref_id << ref.strip
+        end
+      end
+      to_ref_id.each do |ref|
+        unless from_ref_id.include? ref.strip
+          from_ref_id << ref.strip
+        end
+      end
+      @from.reference_material_id = from_ref_id.join("; ")
+      @to.reference_material_id = to_ref_id.join("; ")
+
+      @to.save
+      @from.save
+      respond_to do |format|
+          format.html { redirect_to '/dedupe?state=' + @state, success: 'Records were successfully combined, be sure to review the changes.' }
+      end
+    end
+    
   end
   
   def mergecard

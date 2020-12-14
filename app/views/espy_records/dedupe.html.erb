@@ -1,0 +1,93 @@
+<% provide(:section, "Duplicate Espy Records") %>
+
+<% if notice %>
+  <div id="notice" class="container">
+    <p class="alert alert-danger" role="alert"><%= notice %></p>
+  </div>
+<% end %>
+<% if success %>
+  <div id="notice" class="container">
+    <p class="alert alert-success" role="alert"><%= success %></p>
+  </div>
+<% end %>
+
+<div class="container">
+  <form class="form-inline stateForm">
+    <label for="selectState"><strong>Select a State: </strong></label>
+    <% if params.has_key?(:state) && params[:state] != "*" %>
+      <%= collection_select(:state, :state_abbreviation, EspyRecord.all.order('state_abbreviation ASC').uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true, :selected => params[:state]}, class: 'form-control', :onchange => "location.href = 'dedupe?state=' + this.value") %>
+    <% else %>
+      <%= collection_select(:state, :state_abbreviation, EspyRecord.all.order('state_abbreviation ASC').uniq{|x| x.state_abbreviation} , :state_abbreviation, :state_abbreviation, {:prompt => true}, class: 'form-control', :onchange => "location.href = 'dedupe?state=' + this.value") %>
+    <% end %>
+    <a href="/dedupe?state=*" class="btn btn-info">All States</a>
+  </form>
+</div>
+
+<% provide(:state, params[:state]) %>
+
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Actions</th>
+      <th>Icpsr ID</th>
+      <th>Index card</th>
+      <th>Big card</th>
+      <th>Reference material</th>
+      <th>Name</th>
+      <th>Date execution</th>
+      <th>Race</th>
+      <th>Gender Assigned</th>
+      <th>Crime Convicted of</th>
+      <th>Execution method</th>
+      <th>Jurisdiction</th>
+      <th>County name</th>
+      <th>Combine Refs</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @espy_records.sort_by{|e| e[:first_name]}.each do |espy_record| %>
+      <tr>
+        <td><%= espy_record.id %></td>
+        <td>
+          <div class="btn-group">
+            <%= link_to '<i class="fa fa-info-circle"></i> View'.html_safe, espy_record, class: "btn btn-primary"%>
+            <%= link_to '<i class="fa fa-edit"></i> Edit'.html_safe, edit_espy_record_path(espy_record), class: "btn btn-info"%>
+            <%= link_to '<i class="fa fa-times"></i> Delete'.html_safe, espy_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+          </div>
+        </td>
+        <td><a href="/icpsr_records/<%= espy_record.icpsr_record_id %>"><%= espy_record.icpsr_record_id %></a></td>
+        <td><a href="/index_cards/<%= espy_record.index_card_id %>"><%= espy_record.index_card_id %></a></td>
+        <td>
+          <a href="/big_cards/<%= espy_record.big_card_id %>"><%= espy_record.big_card_id %></a>
+        <td>
+          <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
+            <a href="/references/<%= refID %>"><%= refID %></a>
+          <% end %>  
+        </td>
+        <td><%= espy_record.first_name %> <%= espy_record.last_name %></td>
+        <td><%= espy_record.date_execution %></td>
+        <td><%= espy_record.race %></td>
+        <td><%= espy_record.sex %></td>
+        <td><%= espy_record.crime %></td>
+        <td><%= espy_record.execution_method %></td>
+        <td><%= espy_record.jurisdiction %></td>
+        <td><%= espy_record.county_name %></td>
+        <td>
+            <form action="espy_combine" method="get" class="form-inline">
+                <input name="combineTo" type="hidden" value="<%= espy_record.id %>">
+                <div class="form-group" style="flex-flow: row;">
+                    <input type="text" style="width:100px;" name="combineFrom" class="form-control" placeholder="ID" aria-label="ID" aria-describedby="basic-addon2">
+                    <button type="submit" style="cursor: pointer;" class="btn btn-outline-success">Combine Refs</button>
+                </div>
+            </form>
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

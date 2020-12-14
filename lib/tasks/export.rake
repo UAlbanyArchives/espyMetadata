@@ -221,7 +221,15 @@ namespace :export do
                         if daoID.nil? || fsID.nil?
                             value = []
                             filenames.each do |filename|
+                                #puts filename
+                                #puts espy_lookup[filename]
                                 daoID, fsID = espy_lookup[filename]
+                                espy_ids.each do |row|
+                                    if row[2].include filename
+                                        daoID = row[0]
+                                        fsID = row[1]
+                                    end
+                                end
                                 download << "https://archives.albany.edu/downloads/" + fsID
                                 value << "https://archives.albany.edu/concern/daos/" + daoID
                             end
