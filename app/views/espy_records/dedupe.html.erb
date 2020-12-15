@@ -68,7 +68,7 @@
           <td>
             <a href="/big_cards/<%= espy_record.big_card_id %>"><%= espy_record.big_card_id %></a>
           <td>
-            <% espy_record.reference_material_id.to_s.split("; ").each do |refID| %>
+            <% espy_record.reference_material_id.to_s.split("; ").sort.each do |refID| %>
               <a href="/references/<%= refID %>"><%= refID %></a>
             <% end %>  
           </td>

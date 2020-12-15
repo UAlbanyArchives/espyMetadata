@@ -5,6 +5,7 @@ ApplicationController.helpers.fips_codes
 class EspyRecord < ApplicationRecord
 
 	validates :record_type, :jurisdiction, :county_name, :county_code, presence: true, allow_blank: false
+	validates_presence_of :date_execution, :if => lambda { |o| o.record_type == "Documented" || o.record_type == "Underdocumented" }
 	validate :date_execution, if: :is_dacs_date?
 	validate :is_sourced
 	validate :icpsr_id, if: :is_icpsr_record?

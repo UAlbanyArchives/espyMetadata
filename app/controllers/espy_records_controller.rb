@@ -114,12 +114,31 @@ class EspyRecordsController < ApplicationController
     @to = EspyRecord.find(params[:combineTo])
     @from = EspyRecord.find(params[:combineFrom])
     @state = @to.state_abbreviation
+    @error_switch = false
 
     unless params[:combineTo] != params[:combineFrom]
       respond_to do |format|
+        @error_switch = true
         format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine refs for the same record.' }
       end
     else
+
+      if @to.icpsr_record_id != @from.icpsr_record_id
+          unless @to.icpsr_record_id.nil? || @from.icpsr_record_id.nil?
+              respond_to do |format|
+                @error_switch = true
+                format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different ICPSR Record IDs.' }
+              end
+          else
+            if @to.icpsr_record_id.nil?
+                @to.icpsr_record_id = @from.icpsr_record_id
+            end
+            if @from.icpsr_record_id.nil?
+              @from.icpsr_record_id = @to.icpsr_record_id
+            end
+          end
+      end
+
       if @from.index_card
         @to.index_card = true
       end
@@ -129,20 +148,26 @@ class EspyRecordsController < ApplicationController
       if @to.index_card_id != @from.index_card_id
         unless @to.index_card_id.nil? || @from.index_card_id.nil?
             respond_to do |format|
+                @error_switch = true
                 format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different index cards.' }
             end
-        end
-        if @to.index_card_id.nil?
-            @to.index_card_id = @from.index_card_id
-        end
-        if @from.index_card_id.nil?
-          @from.index_card_id = @to.index_card_id
-        end
-        if @to.index_card_files.nil?
-          @to.index_card_files = @from.index_card_files
-        end
-        if @from.index_card_files.nil?
-          @from.index_card_files = @to.index_card_files
+        else
+          if @to.index_card_id.nil?
+              @to.index_card_id = @from.index_card_id
+              @to.ocr_text = @from.ocr_text
+              @to.index_card_aspace = @from.index_card_aspace
+          end
+          if @from.index_card_id.nil?
+            @from.index_card_id = @to.index_card_id
+            @from.ocr_text = @to.ocr_text
+            @from.index_card_aspace = @to.index_card_aspace
+          end
+          if @to.index_card_files.nil?
+            @to.index_card_files = @from.index_card_files
+          end
+          if @from.index_card_files.nil?
+            @from.index_card_files = @to.index_card_files
+          end
         end
       end
       
@@ -155,20 +180,26 @@ class EspyRecordsController < ApplicationController
       if @to.big_card_id != @from.big_card_id
           unless @to.big_card_id.nil? || @from.big_card_id.nil?
               respond_to do |format|
+                  @error_switch = true
                   format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different big cards.' }
               end
-          end
-          if @to.big_card_id.nil?
-              @to.big_card_id = @from.big_big_card_idid
-          end
-          if @from.big_card_id.nil?
-            @from.big_card_id = @to.big_card_id
-          end
-          if @to.big_card_files.nil?
-            @to.big_card_files = @from.big_card_files
-          end
-          if @from.big_card_files.nil?
-            @from.big_card_files = @to.big_card_files
+          else
+            if @to.big_card_id.nil?
+                @to.big_card_id = @from.big_big_card_id
+                @to.big_ocr = @from.big_ocr
+                @to.big_card_aspace = @from.big_card_aspace
+            end
+            if @from.big_card_id.nil?
+              @from.big_card_id = @to.big_card_id
+              @from.big_ocr = @to.big_ocr
+              @from.big_card_aspace = @to.big_card_aspace
+            end
+            if @to.big_card_files.nil?
+              @to.big_card_files = @from.big_card_files
+            end
+            if @from.big_card_files.nil?
+              @from.big_card_files = @to.big_card_files
+            end
           end
       end
       
@@ -193,6 +224,21 @@ class EspyRecordsController < ApplicationController
       @from.reference_material_files = from_ref_files.join("; ")
       @to.reference_material_files = to_ref_files.join("; ")
 
+      from_ref_aspace = @from.reference_material_aspace.split("; ")
+      to_ref_aspace = @to.reference_material_aspace.split("; ")
+      from_ref_aspace.each do |ref|
+        unless to_ref_aspace.include? ref.strip
+          to_ref_aspace << ref.strip
+        end
+      end
+      to_ref_aspace.each do |ref|
+        unless from_ref_aspace.include? ref.strip
+          from_ref_aspace << ref.strip
+        end
+      end
+      @from.reference_material_aspace = from_ref_aspace.join("; ")
+      @to.reference_material_aspace = to_ref_aspace.join("; ")
+
       from_ref_id = @from.reference_material_id.split("; ")
       to_ref_id = @to.reference_material_id.split("; ")
       from_ref_id.each do |ref|
@@ -208,10 +254,34 @@ class EspyRecordsController < ApplicationController
       @from.reference_material_id = from_ref_id.join("; ")
       @to.reference_material_id = to_ref_id.join("; ")
 
-      @to.save
-      @from.save
-      respond_to do |format|
-          format.html { redirect_to '/dedupe?state=' + @state, success: 'Records were successfully combined, be sure to review the changes.' }
+      if @from.icpsr_record
+        @to.icpsr_record = true
+      end
+      if @to.icpsr_record
+        @from.icpsr_record = true
+      end
+      if @to.icpsr_id != @from.icpsr_id
+          unless @to.icpsr_id.nil? || @from.icpsr_id.nil?
+              respond_to do |format|
+                  @error_switch = true
+                  format.html { redirect_to '/dedupe?state=' + @state, notice: 'ERROR: cannot combine with different ICPSR IDs.' }
+              end
+          else
+            if @to.icpsr_id.nil?
+              @to.icpsr_id = @from.icpsr_id
+            end
+            if @from.icpsr_id.nil?
+              @from.icpsr_id = @to.icpsr_id
+            end
+          end
+      end
+
+      unless @error_switch
+        @to.save
+        @from.save
+        respond_to do |format|
+            format.html { redirect_to '/dedupe?state=' + @state, success: 'Records were successfully combined, be sure to review the changes.' }
+        end
       end
     end
     
