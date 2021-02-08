@@ -51,6 +51,7 @@ gem 'redis', '~> 3.0.7'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
 gem 'devise'
+gem 'devise-bootstrap-views', '~> 1.0'
 gem 'httparty'
 gem 'http'
 
