@@ -55,7 +55,7 @@ gem 'httparty'
 gem 'http'
 
 # dependency gems updated for issues
-gem 'nokogiri', '~> 1.10.5'
+gem 'nokogiri', '~> 1.11.0'
 gem "loofah", "~> 2.3.1"
 gem "rubyzip", "~> 1.3.0"
 gem "rails-html-sanitizer", "~> 1.3.0"
