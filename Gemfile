@@ -50,6 +50,7 @@ gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'redis', '~> 3.0.7'
 gem 'listen', '>= 3.0.5', '< 3.2'
 
+gem 'devise'
 gem 'httparty'
 gem 'http'
 

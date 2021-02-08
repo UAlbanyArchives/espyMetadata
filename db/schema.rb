@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003155212) do
+ActiveRecord::Schema.define(version: 2020_12_14_173958) do
 
   create_table "big_cards", force: :cascade do |t|
     t.string "state_abbreviation"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20171003155212) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "ocr_check"
+    t.index ["state_abbreviation"], name: "index_big_cards_on_state_abbreviation"
   end
 
   create_table "espy_records", force: :cascade do |t|
@@ -117,6 +118,13 @@ ActiveRecord::Schema.define(version: 20171003155212) do
     t.boolean "slave_source_index"
     t.boolean "slave_source_big"
     t.boolean "slave_source_ref"
+    t.string "owner_name"
+    t.boolean "owner_source_icpsr"
+    t.boolean "owner_source_index"
+    t.boolean "owner_source_big"
+    t.boolean "owner_source_ref"
+    t.boolean "dupe_check"
+    t.index ["state_abbreviation"], name: "index_espy_records_on_state_abbreviation"
   end
 
   create_table "icpsr_records", force: :cascade do |t|
@@ -142,6 +150,8 @@ ActiveRecord::Schema.define(version: 20171003155212) do
     t.datetime "updated_at", null: false
     t.integer "big_id"
     t.integer "ref_id"
+    t.boolean "deleted"
+    t.index ["state_abbreviation"], name: "index_icpsr_records_on_state_abbreviation"
   end
 
   create_table "icpsr_records_references", id: false, force: :cascade do |t|
@@ -158,6 +168,7 @@ ActiveRecord::Schema.define(version: 20171003155212) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "aspace"
+    t.index ["state_abbreviation"], name: "index_index_cards_on_state_abbreviation"
   end
 
   create_table "references", force: :cascade do |t|
